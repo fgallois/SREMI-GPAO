@@ -1,0 +1,18 @@
+<section>
+    <div class="container-fluid">
+        <ul class="nav nav-tabs">
+            <li ng-class="{ active:tab.isSet(1) }">
+                <a href ng-click="tab.setTab(1)">Bons de Livraison</a>
+            </li>
+            <li ng-class="{ active:tab.isSet(2) }">
+                <a href ng-click="tab.setTab(2)">Administration</a>
+            </li>
+        </ul>
+
+        <!--  Bon de livraisons Tab's Content  -->
+        <home-bl ng-show="tab.isSet(1)"></home-bl>
+
+        <!--  Admin Tab's Content  -->
+        <home-admin ng-show="tab.isSet(2)"></home-admin>
+    </div>
+</section>

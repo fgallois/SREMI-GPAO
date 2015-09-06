@@ -1,0 +1,26 @@
+/*.body {*/
+    /*background-color: navy;*/
+/*}*/
+
+/*.tab-content {*/
+    /*border: 1px solid #ddd;*/
+    /*border-width: 0 1px 1px;  *//*Removes the top border*/
+    /*padding: 1px;*/
+/*}*/
+/*.nav-tabs > li {*/
+    /*float: left;*/
+/*}*/
+/*.nav-tabs > li > a {*/
+    /*margin-right: 0;*/
+    /*margin-left: 2px;*/
+/*}*/
+
+.page-header{
+    background-color: #ffff00;
+}
+
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
