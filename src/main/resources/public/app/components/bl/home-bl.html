@@ -3,22 +3,15 @@
     <div class="row">
         <div class="col-md-12">
             <div class="btn-group">
-                <!--<label for="referenceCde">Référence Commande:</label>-->
                 <button class="btn btn-default dropdown-toggle" type="button" id="referenceCde"
                         data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="true">
-                    Référence Commande
+                    {{blCtrl.cdeListLabel}}
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu scrollable-menu" aria-labelledby="referenceCde">
                     <li ng-repeat="commande in blCtrl.commandes"><a ng-click="blCtrl.commandeSelected(commande)">{{commande.commandeReference}}</a></li>
                 </ul>
-                <!--<ul class="dropdown-menu" aria-labelledby="referenceCde">-->
-                <!--<li><a href="#">Action</a></li>-->
-                <!--<li><a href="#">Another action</a></li>-->
-                <!--<li><a href="#">Something else here</a></li>-->
-                <!--<li><a href="#">Separated link</a></li>-->
-                <!--</ul>-->
                 <button class="btn btn-default">
                     <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Rafraichir
                 </button>
@@ -27,40 +20,17 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <table id="tableCde" data-toggle="table">
+            <table id="tableCde" data-method="load" data-height="499" data-toggle="table">
                 <thead>
                 <tr>
-                    <th data-align="center">Ligne</th>
-                    <th>Article</th>
-                    <th>Description</th>
-                    <th data-align="center">Quantité</th>
-                    <th>Echéance</th>
+                    <th data-field="line" data-align="center">Ligne</th>
+                    <th data-field="reference">Article</th>
+                    <th data-field="description">Description</th>
+                    <th data-field="quantity" data-align="center">Quantité</th>
+                    <th data-field="dueDate">Echéance</th>
                     <th data-checkbox="true">Test</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>John</td>
-                    <td>Carter</td>
-                    <td>Carter</td>
-                    <td>johncarter@mail.com</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Peter</td>
-                    <td>Parker</td>
-                    <td>Parker</td>
-                    <td>peterparker@mail.com</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>John</td>
-                    <td>Rambo</td>
-                    <td>johnrambo@mail.com</td>
-                    <td>johnrambo@mail.com</td>
-                </tr>
-                </tbody>
             </table>
         </div>
     </div>
@@ -81,4 +51,22 @@
 //            $table.bootstrapTable('destroy');
 //        });
     });
+
+//    $(".dropdown-menu li a").click(function(){
+//        $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+//        $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+//    });
+
+//    $(".dropdown-menu li a").click(function(){
+//
+//        $(this).parents(".btn-group").find('.selection').text($(this).text());
+//        $(this).parents(".btn-group").find('.selection').val($(this).text());
+//
+//    });
+
+    $(".dropdown-menu li a").click(function(){
+        var selText = $(this).text();
+        $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+    });
+
 </script>

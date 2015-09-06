@@ -49,13 +49,18 @@
     app.controller('BLController',  ['$http', function($http){
         var bl = this;
         bl.commandes = {};
+        bl.cdeListLabel = 'Référence Commande';
+
         $http.get('./orders.json').success(function(data){
-            console.log("data = " + data);
             bl.commandes = data;
         });
 
         this.commandeSelected = function(commande) {
-            alert('Commande ref = ' + commande.commandeReference);
+            bl.cdeListLabel = commande.commandeReference;
+            $http.get('./order.json/'+commande.commandeReference).success(function(data){
+                console.log("data = " + data);
+                $('#tableCde').bootstrapTable($('#tableCde').data('method'), data);
+            });
         };
     }]);
 })();
