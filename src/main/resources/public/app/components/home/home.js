@@ -48,16 +48,16 @@
 
     app.controller('BLController',  ['$http', function($http){
         var bl = this;
-        bl.commandes = {};
-        bl.cdeListLabel = 'Référence Commande';
+        bl.orders = {};
+        bl.orderListLabel = 'Référence Commande';
 
         $http.get('./orders.json').success(function(data){
-            bl.commandes = data;
+            bl.orders = data;
         });
 
-        this.commandeSelected = function(commande) {
-            bl.cdeListLabel = commande.commandeReference;
-            $http.get('./order.json/'+commande.commandeReference).success(function(data){
+        this.orderSelected = function(order) {
+            bl.orderListLabel = order.orderReference;
+            $http.get('./order.json/' + order.orderReference).success(function(data){
                 console.log("data = " + data);
                 $('#tableCde').bootstrapTable($('#tableCde').data('method'), data);
             });

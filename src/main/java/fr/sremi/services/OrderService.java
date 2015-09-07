@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import fr.sremi.data.OrderData;
 import org.springframework.stereotype.Component;
 
-import fr.sremi.data.CommandeData;
 import fr.sremi.data.OrderDetailData;
 import fr.sremi.exception.ExcelException;
 import fr.sremi.model.Command;
@@ -18,13 +18,13 @@ import fr.sremi.model.ItemCommand;
  * Created by fgallois on 9/6/15.
  */
 @Component
-public class CommandeService {
+public class OrderService {
 
     @Resource
     ConfigurationService configurationService;
 
-    public List<CommandeData> getAvailableCommandes() {
-        List<CommandeData> result = new ArrayList<>();
+    public List<OrderData> getAvailableOrders() {
+        List<OrderData> result = new ArrayList<>();
 
         ExcelParserService excelParser = new ExcelParserService();
 
@@ -32,7 +32,7 @@ public class CommandeService {
         try {
             List<Command> commands = excelParser.getCommandsFromExcelFile(excelFile);
             for (Command command : commands) {
-                result.add(new CommandeData(1, command.getReference()));
+                result.add(new OrderData(1, command.getReference()));
             }
         } catch (ExcelException e) {
             e.printStackTrace();
@@ -40,7 +40,7 @@ public class CommandeService {
         return result;
     }
 
-    public List<OrderDetailData> getCommandeDetails(String commandeRef) {
+    public List<OrderDetailData> getOrderDetails(String orderRef) {
         List<OrderDetailData> result = new ArrayList<>();
 
         ExcelParserService excelParser = new ExcelParserService();
@@ -49,7 +49,7 @@ public class CommandeService {
         try {
             List<Command> commands = excelParser.getCommandsFromExcelFile(excelFile);
             for (Command command : commands) {
-                if (commandeRef.equalsIgnoreCase(command.getReference())) {
+                if (orderRef.equalsIgnoreCase(command.getReference())) {
                     for (ItemCommand itemCommand : command.getItems()) {
                         OrderDetailData detail = new OrderDetailData();
                         detail.setLine(itemCommand.getLine());

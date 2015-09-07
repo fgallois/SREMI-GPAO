@@ -1,23 +1,30 @@
 <!--  Bon de Livraison Tab's Content  -->
 <div ng-show="tab.isSet(1)" ng-controller="BLController as blCtrl" class="ng-scope">
+    <br>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="btn-group">
                 <button class="btn btn-default dropdown-toggle" type="button" id="referenceCde"
                         data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="true">
-                    {{blCtrl.cdeListLabel}}
+                    {{blCtrl.orderListLabel}}
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu scrollable-menu" aria-labelledby="referenceCde">
-                    <li ng-repeat="commande in blCtrl.commandes"><a ng-click="blCtrl.commandeSelected(commande)">{{commande.commandeReference}}</a></li>
+                    <li ng-repeat="order in blCtrl.orders"><a ng-click="blCtrl.orderSelected(order)">{{order.orderReference}}</a></li>
                 </ul>
-                <button class="btn btn-default">
-                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Rafraichir
+                <button class="btn btn-primary">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
                 </button>
             </div>
         </div>
+        <div class="col-md-6">
+            <button class="btn btn-primary pull-right">
+                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Bon de Livraison
+            </button>
+        </div>
     </div>
+    <br>
     <div class="row">
         <div class="col-md-12">
             <table id="tableCde" data-method="load" data-height="499" data-toggle="table">

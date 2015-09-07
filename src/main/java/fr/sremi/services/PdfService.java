@@ -22,7 +22,9 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import fr.sremi.exception.PdfException;
 import fr.sremi.model.ItemValueObject;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PdfService {
 	
 	public void generatePdf(String invoiceNumber, String referenceCommand, 
