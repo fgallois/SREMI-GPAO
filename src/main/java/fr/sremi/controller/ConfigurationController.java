@@ -2,24 +2,23 @@ package fr.sremi.controller;
 
 import javax.annotation.Resource;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import fr.sremi.services.ConfigurationService;
 
 /**
  * Created by fgallois on 8/23/15.
  */
-@Controller
+@RestController
 public class ConfigurationController {
 
     @Resource
     private ConfigurationService configurationService;
 
     @RequestMapping(value = "/configuration.json", method = RequestMethod.GET)
-    public @ResponseBody GpaoConfiguration gpaoConfiguration() {
+    public GpaoConfiguration gpaoConfiguration() {
         return new GpaoConfiguration(configurationService.getInvoiceNumber(), configurationService.getArchivePath(),
                 configurationService.getExcelPath());
     }

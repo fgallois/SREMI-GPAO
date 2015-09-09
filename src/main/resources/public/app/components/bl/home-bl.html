@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <button class="btn btn-primary pull-right">
+            <button id="blButton" class="btn btn-primary pull-right" ng-click="blCtrl.printBL()">
                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Bon de Livraison
             </button>
         </div>
@@ -27,14 +27,14 @@
     <br>
     <div class="row">
         <div class="col-md-12">
-            <table id="tableCde" data-method="load" data-height="499" data-toggle="table">
+            <table id="tableCde" data-method="load" data-height="499" data-toggle="table" data-click-to-select="true">
                 <thead>
                 <tr>
                     <th data-field="line" data-align="center">Ligne</th>
                     <th data-field="reference">Article</th>
                     <th data-field="description">Description</th>
                     <th data-field="quantity" data-align="center">Quantité</th>
-                    <th data-field="dueDate">Echéance</th>
+                    <th data-field="dueDate" data-align="center" data-formatter="dateFormatter">Echéance</th>
                     <th data-checkbox="true">Test</th>
                 </tr>
                 </thead>
@@ -44,12 +44,8 @@
 </div>
 
 <script>
-    //    $(document).ready(function() {
-    //        $('tableCde').bootstrapTable();
-    //    });
-
     $(function () {
-        $('#tableCde').bootstrapTable();
+        $table = $('#tableCde').bootstrapTable();
 //        var $table = $('#table-transform');
 //        $('#transform').click(function () {
 //            $table.bootstrapTable();
@@ -57,23 +53,13 @@
 //        $('#destroy').click(function () {
 //            $table.bootstrapTable('destroy');
 //        });
+
+//        $('#blButton').click(function () {
+//            alert('Selected values: ' + JSON.stringify($table.bootstrapTable('getSelections')));
+//        });
     });
 
-//    $(".dropdown-menu li a").click(function(){
-//        $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-//        $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-//    });
-
-//    $(".dropdown-menu li a").click(function(){
-//
-//        $(this).parents(".btn-group").find('.selection').text($(this).text());
-//        $(this).parents(".btn-group").find('.selection').val($(this).text());
-//
-//    });
-
-    $(".dropdown-menu li a").click(function(){
-        var selText = $(this).text();
-        $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
-    });
-
+    function dateFormatter(value) {
+        return moment(value).locale('fr').format('LL');
+    }
 </script>

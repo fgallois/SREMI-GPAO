@@ -4,8 +4,6 @@ import java.util.Date;
 
 public class ItemValueObject {
 	private boolean selected;
-//	private String provider;
-//	private String commandReference;
 	private int commandLine;
 	private String itemReference;
 	private String itemLabel;
@@ -26,18 +24,6 @@ public class ItemValueObject {
 		this.version = itemCommand.getVersion();
 	}
 	
-//	public String getProvider() {
-//		return provider;
-//	}
-//	public void setProvider(String provider) {
-//		this.provider = provider;
-//	}
-//	public String getCommandReference() {
-//		return commandReference;
-//	}
-//	public void setCommandReference(String commandReference) {
-//		this.commandReference = commandReference;
-//	}
 	public int getCommandLine() {
 		return commandLine;
 	}
