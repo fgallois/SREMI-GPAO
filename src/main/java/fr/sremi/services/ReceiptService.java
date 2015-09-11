@@ -14,7 +14,7 @@ import fr.sremi.exception.PdfException;
  * Created by fgallois on 9/7/15.
  */
 @Component
-public class BLService {
+public class ReceiptService {
 
     @Resource
     private PdfService pdfService;
@@ -23,11 +23,12 @@ public class BLService {
     private ConfigurationService configurationService;
 
     public String createBL(BLData blData) {
-        String filename = "bl-" + configurationService.getInvoiceNumber() + ".pdf";
+        int invoiceNumber = configurationService.getInvoiceNumber();
+        String filename = "BL-" + invoiceNumber + ".pdf";
         try {
             File archiveFile = new File(configurationService.getArchivePath() + filename);
 
-            pdfService.generatePdf(String.valueOf(configurationService.getInvoiceNumber()), blData.getOrderRef(),
+            pdfService.generatePdf(String.valueOf(invoiceNumber), blData.getOrderRef(),
                     blData.getLines(), archiveFile);
         } catch (PdfException e) {
             e.printStackTrace();

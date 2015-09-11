@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import fr.sremi.data.BLData;
-import fr.sremi.services.BLService;
+import fr.sremi.services.ReceiptService;
 
 /**
  * Created by fgallois on 9/7/15.
@@ -27,12 +27,12 @@ import fr.sremi.services.BLService;
 public class ReceiptController {
 
     @Resource
-    private BLService blService;
+    private ReceiptService receiptService;
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> createBonLivraison(@RequestBody BLData blData) {
 
-        String filename = blService.createBL(blData);
+        String filename = receiptService.createBL(blData);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{filename}")
@@ -42,7 +42,7 @@ public class ReceiptController {
 
     @RequestMapping(value = "/{filename}", method = RequestMethod.GET, produces = "application/pdf")
     public ResponseEntity<InputStreamResource> readBonLivraison(@PathVariable String filename) throws IOException {
-        org.springframework.core.io.Resource pdfFile = blService.readBL(filename + ".pdf");
+        org.springframework.core.io.Resource pdfFile = receiptService.readBL(filename + ".pdf");
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
