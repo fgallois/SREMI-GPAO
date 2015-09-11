@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.annotation.Resource;
 
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 
 import fr.sremi.data.BLData;
@@ -23,18 +24,25 @@ public class BLService {
 
     public String createBL(BLData blData) {
         String filename = "bl-" + configurationService.getInvoiceNumber() + ".pdf";
-        // FileInputStream result = null;
         try {
             File archiveFile = new File(configurationService.getArchivePath() + filename);
-            // File archiveFile = new File(configurationService.getArchivePath() + "bl.pdf");
 
             pdfService.generatePdf(String.valueOf(configurationService.getInvoiceNumber()), blData.getOrderRef(),
                     blData.getLines(), archiveFile);
-            // outputstream.toByteArray()
-            // result = new FileInputStream(archiveFile);
         } catch (PdfException e) {
             e.printStackTrace();
         }
         return filename;
+    }
+
+    public org.springframework.core.io.Resource readBL(String filename) {
+        org.springframework.core.io.Resource resource = null;
+
+        String uri = configurationService.getArchivePath() + filename;
+        File file = new File(uri);
+        if (file.exists()) {
+            resource = new FileSystemResource(uri);
+        }
+        return resource;
     }
 }

@@ -67,19 +67,9 @@
         this.printBL = function () {
             var lineSelection = $('#tableCde').bootstrapTable('getSelections');
             var dataBL = JSON.stringify({orderRef: bl.orderListLabel, lines:lineSelection});
-//            alert('dataBL = ' + dataBL);
             $http.post('./bonLivraison', dataBL)
                 .success(function (data, status, headers, config) {
-                    console.log("success = " + data);
-                    console.log("status = " + status);
-                    console.log("headers = " + headers('Location'));
-
                     window.open(headers('Location'), "_blank");
-//                    var uriString = parseReturn(returnData);
-//                    console.location("uriString = " + uriString);
-//                    location.href = uriString;
-//                    window.open("data:application/pdf, " + data, "_blank");
-                    //                    window.open(data);
                 })
                 .error(function (data) {
                     console.log('Error = ' + data);
