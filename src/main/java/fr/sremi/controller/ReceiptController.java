@@ -24,7 +24,7 @@ import fr.sremi.services.BLService;
  */
 @RestController
 @RequestMapping("/bonLivraison")
-public class BlController {
+public class ReceiptController {
 
     @Resource
     private BLService blService;
