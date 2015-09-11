@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by fgallois on 9/7/15.
  */
-public class BLData {
+public class ReceiptData {
     private String orderRef;
     private List<OrderDetailData> lines;
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.annotation.Resource;
 
+import fr.sremi.data.ReceiptData;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import fr.sremi.data.BLData;
 import fr.sremi.services.ReceiptService;
 
 /**
@@ -30,9 +30,9 @@ public class ReceiptController {
     private ReceiptService receiptService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> createBonLivraison(@RequestBody BLData blData) {
+    public ResponseEntity<?> createBonLivraison(@RequestBody ReceiptData receiptData) {
 
-        String filename = receiptService.createBL(blData);
+        String filename = receiptService.createBL(receiptData);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{filename}")

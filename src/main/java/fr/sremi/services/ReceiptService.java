@@ -4,10 +4,10 @@ import java.io.File;
 
 import javax.annotation.Resource;
 
+import fr.sremi.data.ReceiptData;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 
-import fr.sremi.data.BLData;
 import fr.sremi.exception.PdfException;
 
 /**
@@ -22,14 +22,14 @@ public class ReceiptService {
     @Resource
     private ConfigurationService configurationService;
 
-    public String createBL(BLData blData) {
+    public String createBL(ReceiptData receiptData) {
         int invoiceNumber = configurationService.getInvoiceNumber();
         String filename = "BL-" + invoiceNumber + ".pdf";
         try {
             File archiveFile = new File(configurationService.getArchivePath() + filename);
 
-            pdfService.generatePdf(String.valueOf(invoiceNumber), blData.getOrderRef(),
-                    blData.getLines(), archiveFile);
+            pdfService.generatePdf(String.valueOf(invoiceNumber), receiptData.getOrderRef(),
+                    receiptData.getLines(), archiveFile);
         } catch (PdfException e) {
             e.printStackTrace();
         }
