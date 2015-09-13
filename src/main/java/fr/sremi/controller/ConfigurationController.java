@@ -2,6 +2,7 @@ package fr.sremi.controller;
 
 import javax.annotation.Resource;
 
+import fr.sremi.services.GeneratorService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +18,12 @@ public class ConfigurationController {
     @Resource
     private ConfigurationService configurationService;
 
+    @Resource
+    private GeneratorService generatorService;
+
     @RequestMapping(value = "/configuration.json", method = RequestMethod.GET)
     public GpaoConfiguration gpaoConfiguration() {
-        return new GpaoConfiguration(configurationService.getInvoiceNumber(), configurationService.getArchivePath(),
+        return new GpaoConfiguration(generatorService.getCurrentReceiptNumber(), configurationService.getArchivePath(),
                 configurationService.getExcelPath());
     }
 

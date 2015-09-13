@@ -22,8 +22,11 @@ public class ReceiptService {
     @Resource
     private ConfigurationService configurationService;
 
+    @Resource
+    private GeneratorService generatorService;
+
     public String createBL(ReceiptData receiptData) {
-        int invoiceNumber = configurationService.getInvoiceNumber();
+        int invoiceNumber = generatorService.getNewReceiptNumber();
         String filename = "BL-" + invoiceNumber + ".pdf";
         try {
             File archiveFile = new File(configurationService.getArchivePath() + filename);

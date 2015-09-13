@@ -92,6 +92,31 @@
     <orderEntry type="library" exported="" name="Gradle: bctsp-jdk14-1.38" level="project" />
     <orderEntry type="library" exported="" name="Gradle: poi-3.12" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-codec-1.9" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-boot-starter-data-jpa-1.2.5.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: hibernate-jpa-2.1-api-1.0.0.Final" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-boot-starter-aop-1.2.5.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-boot-starter-jdbc-1.2.5.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: hibernate-entitymanager-4.3.10.Final" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: javax.transaction-api-1.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-orm-4.1.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-data-jpa-1.7.3.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-aspects-4.1.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: aspectjrt-1.8.6" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: aspectjweaver-1.8.6" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-jdbc-4.1.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: tomcat-jdbc-8.0.23" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-tx-4.1.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jboss-logging-annotations-1.2.0.Beta1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: hibernate-core-4.3.10.Final" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: dom4j-1.6.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: hibernate-commons-annotations-4.0.5.Final" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: javassist-3.18.1-GA" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-data-commons-1.9.3.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: tomcat-juli-8.0.23" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: antlr-2.7.7" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jandex-1.1.0.Final" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: xml-apis-1.0.b2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: mysql-connector-java-5.1.36" level="project" />
   </component>
 </module>
 

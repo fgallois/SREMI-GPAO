@@ -9,18 +9,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConfigurationService {
 
-    @Value("${invoice.number}")
-    private int invoiceNumber;
-
     @Value("${excel.file.path}")
     private String excelPath;
 
     @Value("${archive.file.path}")
     private String archivePath;
-
-    public int getInvoiceNumber() {
-        return invoiceNumber;
-    }
 
     public String getExcelPath() {
         return excelPath;
