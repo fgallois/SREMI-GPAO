@@ -11,6 +11,13 @@
         };
     });
 
+    app.directive("homeCatalog", function () {
+        return {
+            restrict: 'E',
+            templateUrl: "app/components/catalog/home-catalog.html"
+        };
+    });
+
     app.directive("homeAdmin", function () {
         return {
             restrict: 'E',
