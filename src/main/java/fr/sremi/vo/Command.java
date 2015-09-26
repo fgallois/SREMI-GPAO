@@ -1,4 +1,6 @@
-package fr.sremi.model;
+package fr.sremi.vo;
+
+import fr.sremi.vo.ItemCommand;
 
 import java.util.ArrayList;
 import java.util.List;

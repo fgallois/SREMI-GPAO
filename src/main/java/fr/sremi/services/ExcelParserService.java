@@ -17,8 +17,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import fr.sremi.exception.ExcelException;
-import fr.sremi.model.Command;
-import fr.sremi.model.ItemCommand;
+import fr.sremi.vo.Command;
+import fr.sremi.vo.ItemCommand;
 
 public class ExcelParserService {
 

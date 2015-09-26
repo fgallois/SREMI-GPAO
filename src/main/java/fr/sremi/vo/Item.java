@@ -1,4 +1,4 @@
-package fr.sremi.model;
+package fr.sremi.vo;
 
 public class Item {
     private String reference;

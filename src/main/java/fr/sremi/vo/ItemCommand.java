@@ -1,4 +1,4 @@
-package fr.sremi.model;
+package fr.sremi.vo;
 
 import java.util.Date;
 

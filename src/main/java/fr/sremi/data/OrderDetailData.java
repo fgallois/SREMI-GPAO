@@ -1,7 +1,5 @@
 package fr.sremi.data;
 
-import fr.sremi.model.Item;
-
 import java.util.Date;
 
 /**

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import fr.sremi.data.OrderDetailData;
 import fr.sremi.exception.ExcelException;
-import fr.sremi.model.Command;
-import fr.sremi.model.ItemCommand;
+import fr.sremi.vo.Command;
+import fr.sremi.vo.ItemCommand;
 
 /**
  * Created by fgallois on 9/6/15.
