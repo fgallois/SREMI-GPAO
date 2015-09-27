@@ -101,8 +101,11 @@ public class ImportController {
         return result;
     }
 
-    private String getReference(String reference) {
-        return StringUtils.substringBefore(reference, "/");
+    private String getReference(final String reference) {
+        String result = StringUtils.substringBefore(reference, "/");
+        result = StringUtils.substringBefore(result, " ");
+        result = StringUtils.remove(result, ".");
+        return result;
     }
 
     private String getModification(String reference) {
