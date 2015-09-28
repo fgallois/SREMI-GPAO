@@ -45,7 +45,11 @@
 
 <script>
     $(function () {
-        $table = $('#tableCde').bootstrapTable();
+        $('#tableCde').bootstrapTable();
+
+        $(window).resize(function () {
+            $('#tableCde').bootstrapTable('resetView');
+        });
 //        var $table = $('#table-transform');
 //        $('#transform').click(function () {
 //            $table.bootstrapTable();
