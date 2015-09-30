@@ -1,4 +1,69 @@
 <!--  Catalog Tab's Content  -->
 <div ng-show="tab.isSet(2)" class="ng-scope">
-    CATALOG!!!
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table id="tableCatalog" data-url="parts.json" data-height="600" data-toggle="table"
+                   data-click-to-select="true" data-search="true" data-pagination="true" data-detail-view="true"
+                   data-page-list="[10, 25, 50, 100]" data-side-pagination="server">
+                <thead>
+                <tr>
+                    <th data-field="reference">Reference</th>
+                    <th data-field="indice" data-align="center">Indice</th>
+                    <th data-field="isPlanTableau" data-align="center" data-formatter="booleanFormatter">Plan Tableau</th>
+                    <th data-field="description">Description</th>
+                    <th data-field="comment">Commentaire</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
 </div>
+
+<script>
+    $(function () {
+        var $table = $('#tableCatalog').bootstrapTable();
+
+//        $table.on('expand-row.bs.table', function (e, index, row, $detail) {
+//            if (index % 2 == 1) {
+//                $detail.html('Loading from ajax request...');
+//                $.get('LICENSE', function (res) {
+//                    $detail.html(res.replace(/\n/g, '<br>'));
+//                });
+//            }
+//        });
+
+        $(window).resize(function () {
+            $('#tableCatalog').bootstrapTable('resetView');
+        });
+    });
+
+    function referenceFormatter(value) {
+        var formattedReference = value.substr(0, 3);
+        formattedReference += '.';
+        formattedReference += value.substr(3, 3);
+        formattedReference += '.';
+        formattedReference += value.substr(6, 2);
+        var subString = value.substr(8, 2);
+        if (subString.length > 0) {
+            formattedReference += '.';
+            formattedReference += subString;
+        }
+        subString = value.substr(10, 2);
+        if (subString.length > 0) {
+            formattedReference += '.';
+            formattedReference += subString;
+        }
+
+        return formattedReference;
+    }
+
+    function booleanFormatter(value) {
+        var result = '';
+        if (value) {
+            result = '<i class="glyphicon glyphicon-ok"></i> ';
+        }
+        return result;
+    }
+</script>
