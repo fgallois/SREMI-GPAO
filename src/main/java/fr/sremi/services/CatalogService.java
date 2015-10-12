@@ -23,28 +23,17 @@ public class CatalogService {
     @Resource
     private PartRepository partRepository;
 
-    public PartPaginationData getPartsByReferencePaginated(final String reference, final int pageNumber,
+    public PartPaginationData getPartsByReferenceOrDescriptionPaginated(final String search, final int pageNumber,
             final int pageSize) {
         List<PartData> partDatas = new ArrayList<>();
-        Page<Part> parts = partRepository.findByReferenceContaining(reference, new PageRequest(pageNumber, pageSize));
+        Page<Part> parts = partRepository.findByReferenceStartingWithOrDescriptionStartingWith(search, search,
+                new PageRequest(pageNumber, pageSize));
 
         for (Part part : parts) {
             PartData partData = new PartData(part.getReference(), part.getModification(), part.getIsPlanTableau(),
                     part.getDescription(), part.getComment());
             partDatas.add(partData);
         }
-        return new PartPaginationData(partRepository.count(), partDatas);
-    }
-
-    public List<PartData> getAllParts() {
-        List<PartData> result = new ArrayList<>();
-        Iterable<Part> iterator = partRepository.findAll();
-
-        for (Part part : iterator) {
-            PartData partData = new PartData(part.getReference(), part.getModification(), part.getIsPlanTableau(),
-                    part.getDescription(), part.getComment());
-            result.add(partData);
-        }
-        return result;
+        return new PartPaginationData(parts.getTotalElements(), partDatas);
     }
 }

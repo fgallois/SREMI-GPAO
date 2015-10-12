@@ -23,7 +23,7 @@ public class CatalogController {
     public PartPaginationData gpaoConfiguration(@RequestParam("order") String order, @RequestParam("limit") int limit,
             @RequestParam("offset") int offset,
             @RequestParam(value = "search", required = false, defaultValue = "") String search) {
-        return catalogService.getPartsByReferencePaginated(search, offset / limit, limit);
+        return catalogService.getPartsByReferenceOrDescriptionPaginated(search, offset / limit, limit);
     }
 
 }

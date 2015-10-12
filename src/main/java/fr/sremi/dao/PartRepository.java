@@ -11,5 +11,5 @@ import fr.sremi.model.Part;
  */
 public interface PartRepository extends PagingAndSortingRepository<Part, Long> {
 
-    Page<Part> findByReferenceContaining(String reference, Pageable pageable);
+    Page<Part> findByReferenceStartingWithOrDescriptionStartingWith(String reference, String description, Pageable pageable);
 }
