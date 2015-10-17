@@ -2,7 +2,9 @@ package fr.sremi.controller;
 
 import javax.annotation.Resource;
 
+import fr.sremi.data.InvoiceNumber;
 import fr.sremi.services.GeneratorService;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +27,16 @@ public class ConfigurationController {
     public GpaoConfiguration gpaoConfiguration() {
         return new GpaoConfiguration(generatorService.getCurrentReceiptNumber(), configurationService.getArchivePath(),
                 configurationService.getExcelPath());
+    }
+
+    @RequestMapping(value = "/invoiceNumber.json", method = RequestMethod.GET)
+    public int currentInvoiceNumber() {
+        return generatorService.getCurrentReceiptNumber();
+    }
+
+    @RequestMapping(value = "/invoiceNumber", method = RequestMethod.POST)
+    public void updateInvoiceNumber(@RequestBody InvoiceNumber invoiceNumber) {
+        generatorService.saveReceiptNumber(invoiceNumber.getInvoiceNumber());
     }
 
     private class GpaoConfiguration {

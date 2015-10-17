@@ -25,25 +25,30 @@ public class GeneratorService {
         Generator generator = generatorRepository.findByType(RECEIPT_TYPE);
         if (generator == null) {
             generator = new Generator(receiptNumber, RECEIPT_TYPE);
-            generatorRepository.save(generator);
         } else {
             receiptNumber = generator.getNumber() + 1;
             generator.setNumber(receiptNumber);
-            generatorRepository.save(generator);
         }
+        generatorRepository.save(generator);
         return receiptNumber;
     }
 
     public int getCurrentReceiptNumber() {
-        int receiptNumber = 1;
+        int receiptNumber = -1;
         Generator generator = generatorRepository.findByType(RECEIPT_TYPE);
-        if (generator == null) {
-            generator = new Generator(receiptNumber, RECEIPT_TYPE);
-            generatorRepository.save(generator);
-        } else {
+        if (generator != null) {
             receiptNumber = generator.getNumber();
         }
         return receiptNumber;
+    }
 
+    public void saveReceiptNumber(int receiptNumber) {
+        Generator generator = generatorRepository.findByType(RECEIPT_TYPE);
+        if (generator == null) {
+            generator = new Generator(receiptNumber, RECEIPT_TYPE);
+        } else {
+            generator.setNumber(receiptNumber);
+        }
+        generatorRepository.save(generator);
     }
 }

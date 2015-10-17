@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.annotation.Resource;
 
 import fr.sremi.data.ReceiptData;
+import fr.sremi.services.GeneratorService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,9 @@ public class ReceiptController {
     @Resource
     private ReceiptService receiptService;
 
+    @Resource
+    private GeneratorService generatorService;
+
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> createBonLivraison(@RequestBody ReceiptData receiptData) {
 
@@ -37,6 +41,7 @@ public class ReceiptController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{filename}")
                 .buildAndExpand(filename).toUri());
+        httpHeaders.set("receiptNumber", String.valueOf(generatorService.getCurrentReceiptNumber()));
         return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
     }
 

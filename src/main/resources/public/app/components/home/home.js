@@ -57,9 +57,15 @@
         var bl = this;
         bl.orders = {};
         bl.orderListLabel = 'Référence Commande';
+        bl.invoiceNumber = 0;
 
         $http.get('./orders.json').success(function (data) {
             bl.orders = data;
+        });
+
+        $http.get('./invoiceNumber.json').success(function (data) {
+            console.log("Invoice # = " + data);
+            bl.invoiceNumber = data;
         });
 
         this.orderSelected = function (order) {
@@ -76,6 +82,7 @@
             var dataBL = JSON.stringify({orderRef: bl.orderListLabel, lines:lineSelection});
             $http.post('./bonLivraison', dataBL)
                 .success(function (data, status, headers, config) {
+                    bl.invoiceNumber = parseInt(headers('receiptNumber'));
                     window.open(headers('Location'), "_blank");
                 })
                 .error(function (data) {
@@ -83,5 +90,16 @@
                 });
         };
 
+        this.updateInvoiceNumber = function () {
+            var newNumber = JSON.stringify({invoiceNumber: bl.invoiceNumber});
+            console.log("invoiceNumber " + newNumber);
+            $http.post('./invoiceNumber', newNumber)
+                .success(function (data) {
+                   console.log("SUCCESS");
+                })
+                .error(function (data) {
+                    console.log("ERROR");
+                });
+        };
     }]);
 })();
