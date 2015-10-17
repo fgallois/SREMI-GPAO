@@ -24,12 +24,8 @@
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">BL</span>
                 <input type="number" class="form-control" id="invoiceNumber" ng-model="blCtrl.invoiceNumber"
+                       ng-model-options="{ updateOn: 'blur' }" ng-change="blCtrl.updateInvoiceNumber()"
                        aria-describedby="basic-addon1">
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" type="button" ng-click="blCtrl.updateInvoiceNumber()">
-                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                    </button>
-                </span>
             </div>
         </div>
         <div class="col-md-2">
