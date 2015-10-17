@@ -41,7 +41,7 @@ public class ReceiptController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{filename}")
                 .buildAndExpand(filename).toUri());
-        httpHeaders.set("receiptNumber", String.valueOf(generatorService.getCurrentReceiptNumber()));
+        httpHeaders.set("receiptNumber", String.valueOf(generatorService.getNextReceiptNumber()));
         return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
     }
 

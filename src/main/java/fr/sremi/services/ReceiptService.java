@@ -26,13 +26,14 @@ public class ReceiptService {
     private GeneratorService generatorService;
 
     public String createBL(ReceiptData receiptData) {
-        int invoiceNumber = generatorService.getNewReceiptNumber();
+        int invoiceNumber = generatorService.getNextReceiptNumber();
         String filename = "BL-" + invoiceNumber + ".pdf";
         try {
             File archiveFile = new File(configurationService.getArchivePath() + filename);
 
             pdfService.generatePdf(String.valueOf(invoiceNumber), receiptData.getOrderRef(),
                     receiptData.getLines(), archiveFile);
+            generatorService.saveReceiptNumber(invoiceNumber);
         } catch (PdfException e) {
             e.printStackTrace();
         }

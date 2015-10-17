@@ -31,7 +31,7 @@ public class ConfigurationController {
 
     @RequestMapping(value = "/invoiceNumber.json", method = RequestMethod.GET)
     public int currentInvoiceNumber() {
-        return generatorService.getCurrentReceiptNumber();
+        return generatorService.getNextReceiptNumber();
     }
 
     @RequestMapping(value = "/invoiceNumber", method = RequestMethod.POST)

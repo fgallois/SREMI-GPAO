@@ -20,21 +20,17 @@ public class GeneratorService {
     @Resource
     private GeneratorRepository generatorRepository;
 
-    public int getNewReceiptNumber() {
-        int receiptNumber = 1;
+    public int getNextReceiptNumber() {
+        int receiptNumber = 0;
         Generator generator = generatorRepository.findByType(RECEIPT_TYPE);
-        if (generator == null) {
-            generator = new Generator(receiptNumber, RECEIPT_TYPE);
-        } else {
+        if (generator != null) {
             receiptNumber = generator.getNumber() + 1;
-            generator.setNumber(receiptNumber);
         }
-        generatorRepository.save(generator);
         return receiptNumber;
     }
 
     public int getCurrentReceiptNumber() {
-        int receiptNumber = -1;
+        int receiptNumber = 0;
         Generator generator = generatorRepository.findByType(RECEIPT_TYPE);
         if (generator != null) {
             receiptNumber = generator.getNumber();
