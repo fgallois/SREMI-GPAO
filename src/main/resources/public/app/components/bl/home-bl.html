@@ -16,10 +16,11 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu scrollable-menu" aria-labelledby="referenceCde">
-                    <li ng-repeat="order in blCtrl.orders"><a ng-click="blCtrl.orderSelected(order)">{{order.orderReference}}</a>
+                    <li ng-repeat="order in blCtrl.orders">
+                        <a ng-click="blCtrl.orderSelected(order)">{{order.orderReference}}</a>
                     </li>
                 </ul>
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" ng-click="blCtrl.refreshOrderList()">
                     <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
                 </button>
             </div>

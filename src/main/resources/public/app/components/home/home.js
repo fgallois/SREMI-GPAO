@@ -59,10 +59,6 @@
         bl.orderListLabel = 'Référence Commande';
         bl.invoiceNumber = 0;
 
-        $http.get('./orders.json').success(function (data) {
-            bl.orders = data;
-        });
-
         $http.get('./invoiceNumber.json').success(function (data) {
             console.log("Invoice # = " + data);
             bl.invoiceNumber = data;
@@ -76,6 +72,13 @@
                     $('#tableCde').bootstrapTable($('#tableCde').data('method'), data);
                 });
         };
+
+        this.refreshOrderList = function () {
+            $http.get('./orders.json').success(function (data) {
+                bl.orders = data;
+            });
+        };
+        this.refreshOrderList();
 
         this.printBL = function () {
             var lineSelection = $('#tableCde').bootstrapTable('getSelections');
