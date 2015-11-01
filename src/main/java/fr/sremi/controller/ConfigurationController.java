@@ -36,7 +36,7 @@ public class ConfigurationController {
 
     @RequestMapping(value = "/invoiceNumber", method = RequestMethod.POST)
     public void updateInvoiceNumber(@RequestBody InvoiceNumber invoiceNumber) {
-        generatorService.saveReceiptNumber(invoiceNumber.getInvoiceNumber());
+        generatorService.saveReceiptNumber(invoiceNumber.getInvoiceNumber() - 1);
     }
 
     private class GpaoConfiguration {
