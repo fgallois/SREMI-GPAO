@@ -30,11 +30,11 @@ public class PdfFooterEvent extends PdfPageEventHelper {
         footer.setTotalWidth(page.getWidth() - document.leftMargin() - document.rightMargin());
         PdfPCell cell = new PdfPCell(
                 new Phrase(
-                        "Les mat�riels livr�s restent la propri�t� du vendeur jusqu'au paiement"
-                                + " int�gral du prix par l'acheteur (loi n�80335 du 12 mai 1980)."
-                                + " En cas de r�glement avant la date d'�ch�ance convenue, aucun escompte ne sera accord�; "
-                                + "pour tout d�passement de l'�ch�ance convenue, un int�r�t de retard de 1,3% par mois sera appliqu�,"
-                                + " apr�s mise en demeure par lettre recommand�e.", FontFactory.getFont(
+                        "Les matèriels livrés restent la propriété du vendeur jusqu'au paiement"
+                                + " intégral du prix par l'acheteur (loi n°80335 du 12 mai 1980)."
+                                + " En cas de réglement avant la date d'échéance convenue, aucun escompte ne sera accordé; "
+                                + "pour tout dépassement de l'échéance convenue, un intérêt de retard de 1,3% par mois sera appliqué,"
+                                + " après mise en demeure par lettre recommandée.", FontFactory.getFont(
                                 FontFactory.TIMES_ROMAN, 8)));
         cell.setBorder(Rectangle.NO_BORDER);
         footer.addCell(cell);

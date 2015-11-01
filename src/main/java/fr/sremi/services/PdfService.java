@@ -73,21 +73,21 @@ public class PdfService {
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(new Phrase("SARL au capital de 15500 Euros", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("Touche Foug�re", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+        paragraph.add(new Phrase("Touche Fougère", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(new Phrase("72320 Saint Maixent", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("N� Siret: 4397548100015", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+        paragraph.add(new Phrase("N° Siret: 4397548100015", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(new Phrase("APE: 3320C", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("N� Intracommunautaire: FR 26 439 754 581", FontFactory.getFont(
+        paragraph.add(new Phrase("N° Intracommunautaire: FR 26 439 754 581", FontFactory.getFont(
                 FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("T�l�phone: 02.43.71.70.76", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+        paragraph.add(new Phrase("Téléphone: 02.43.71.70.76", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("T�l�copie:  02.43.71.70.94", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+        paragraph.add(new Phrase("Télécopie:  02.43.71.70.94", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
 
         PdfPCell cell = new PdfPCell(paragraph);
@@ -104,9 +104,9 @@ public class PdfService {
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(new Phrase("12 Route de Mamers, BP 46,", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("72402 La Fert�-Bernard Cedex", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+        paragraph.add(new Phrase("72402 La Ferté-Bernard Cedex", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("N� Intracommunautaire: FR 63 340 321 801", FontFactory.getFont(
+        paragraph.add(new Phrase("N° Intracommunautaire: FR 63 340 321 801", FontFactory.getFont(
                 FontFactory.TIMES_ROMAN, 12)));
 
         cell = new PdfPCell(paragraph);
@@ -126,7 +126,7 @@ public class PdfService {
         table.setWidthPercentage(50);
         table.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-        PdfPCell headerCell = new PdfPCell(new Phrase("Num�ro"));
+        PdfPCell headerCell = new PdfPCell(new Phrase("Numéro"));
         headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         headerCell.setMinimumHeight(20);
         headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
@@ -189,7 +189,7 @@ public class PdfService {
         headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         table.addCell(headerCell);
 
-        headerCell = new PdfPCell(new Phrase("Quantit�"));
+        headerCell = new PdfPCell(new Phrase("Quantité"));
         headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         headerCell.setMinimumHeight(20);
         headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
