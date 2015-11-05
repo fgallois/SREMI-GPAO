@@ -6,11 +6,16 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import fr.sremi.data.OrderData;
+import fr.sremi.model.LineItem;
 import org.springframework.stereotype.Component;
 
+import fr.sremi.dao.OrderRepository;
+import fr.sremi.dao.PartRepository;
+import fr.sremi.data.OrderData;
 import fr.sremi.data.OrderDetailData;
 import fr.sremi.exception.ExcelException;
+import fr.sremi.model.Order;
+import fr.sremi.model.Part;
 import fr.sremi.vo.Command;
 import fr.sremi.vo.ItemCommand;
 
@@ -22,6 +27,40 @@ public class OrderService {
 
     @Resource
     ConfigurationService configurationService;
+
+    @Resource
+    OrderRepository orderRepository;
+
+    @Resource
+    PartRepository partRepository;
+
+    public void importOrders() {
+        ExcelParserService excelParser = new ExcelParserService();
+
+        File excelFile = new File(configurationService.getExcelPath());
+        try {
+            List<Command> commands = excelParser.getCommandsFromExcelFile(excelFile);
+            for (Command command : commands) {
+                if (orderRepository.findByReference(command.getReference()) == null) {
+                    Order order = new Order(command.getReference());
+                    for (ItemCommand itemCommand : command.getItems()) {
+                        Part part = partRepository.findByReference(itemCommand.getItem().getReference());
+                        if (part == null) {
+                            part = new Part(itemCommand.getItem().getReference(), itemCommand.getItem()
+                                    .getDescription());
+                        }
+                        LineItem lineItem = new LineItem(itemCommand.getLine(), part,
+                                itemCommand.getQuantity(), itemCommand.getDueDate());
+                        order.addLineItem(lineItem);
+                    }
+                    orderRepository.save(order);
+                }
+            }
+        } catch (ExcelException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public List<OrderData> getAvailableOrders() {
         List<OrderData> result = new ArrayList<>();
@@ -67,4 +106,5 @@ public class OrderService {
 
         return result;
     }
+
 }

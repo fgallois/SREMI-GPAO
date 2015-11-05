@@ -24,6 +24,7 @@ public class OrderController {
 
     @RequestMapping(value = "/orders.json", method = RequestMethod.GET)
     public List<OrderData> gpaoConfiguration() {
+        orderService.importOrders();
         return orderService.getAvailableOrders();
     }
 

@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
  * Created by fgallois on 9/13/15.
  */
 @Entity
-@Table(name = "PART")
+@Table(name = "PARTS")
 public class Part {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -51,6 +51,13 @@ public class Part {
         this.reference = reference;
         this.modification = modification;
         this.isPlanTableau = isPlanTableau;
+        this.description = description;
+        this.retired = Boolean.FALSE;
+    }
+
+    public Part(String reference, String description) {
+        this.reference = reference;
+        this.isPlanTableau = Boolean.FALSE;
         this.description = description;
         this.retired = Boolean.FALSE;
     }

@@ -1,54 +1,52 @@
 package fr.sremi.vo;
 
-import fr.sremi.vo.ItemCommand;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Command {
-	private String reference;
-	private String fournisseur;
-	private List<ItemCommand> items;
-	
-	public Command() {
-		this("", "");
-	}
-	
-	public Command(String reference, String fournisseur) {
-		this.reference = reference;
-		this.fournisseur = fournisseur;
-		this.items = new ArrayList<ItemCommand>();
-	}
+    private String reference;
+    private String fournisseur;
+    private List<ItemCommand> items;
 
-	public String getReference() {
-		return reference;
-	}
+    public Command() {
+        this("", "");
+    }
 
-	public void setReference(String reference) {
-		this.reference = reference;
-	}
+    public Command(String reference, String fournisseur) {
+        this.reference = reference;
+        this.fournisseur = fournisseur;
+        this.items = new ArrayList<ItemCommand>();
+    }
 
-	public String getFournisseur() {
-		return fournisseur;
-	}
+    public String getReference() {
+        return reference;
+    }
 
-	public void setFournisseur(String fournisseur) {
-		this.fournisseur = fournisseur;
-	}
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
 
-	public List<ItemCommand> getItems() {
-		return items;
-	}
+    public String getFournisseur() {
+        return fournisseur;
+    }
 
-	public void setItems(List<ItemCommand> items) {
-		this.items = items;
-	}
-	
-	public void addItem(ItemCommand item) {
-		items.add(item);
-	}
-	
-	public String toString() {
-		return this.reference;
-	}
+    public void setFournisseur(String fournisseur) {
+        this.fournisseur = fournisseur;
+    }
+
+    public List<ItemCommand> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ItemCommand> items) {
+        this.items = items;
+    }
+
+    public void addItem(ItemCommand item) {
+        items.add(item);
+    }
+
+    public String toString() {
+        return this.reference;
+    }
 }

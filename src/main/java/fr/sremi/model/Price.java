@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * Created by fgallois on 9/24/15.
  */
 @Entity
-@Table(name = "PRICE")
+@Table(name = "PRICES")
 public class Price {
 
     @Id
