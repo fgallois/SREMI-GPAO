@@ -1,5 +1,5 @@
 (function() {
-    var sremiApp = angular.module('sremiGpao', ['ngRoute','home-directives']);
+    var sremiApp = angular.module('sremiGpao', ['ngRoute','bl-controller','admin-controller']);
 
     sremiApp.config(['$routeProvider',
         function($routeProvider) {

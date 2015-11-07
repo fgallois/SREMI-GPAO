@@ -1,57 +1,5 @@
-/**
- * Created by fgallois on 8/18/15.
- */
 (function () {
-    var app = angular.module('home-directives', []);
-
-    app.directive("homeBl", function () {
-        return {
-            restrict: 'E',
-            templateUrl: "app/components/bl/bl.html"
-        };
-    });
-
-    app.directive("homeCatalog", function () {
-        return {
-            restrict: 'E',
-            templateUrl: "app/components/catalog/catalog.html"
-        };
-    });
-
-    app.directive("homeAdmin", function () {
-        return {
-            restrict: 'E',
-            templateUrl: "app/components/admin/admin.html"
-        };
-    });
-
-    app.directive("homeTabs", function () {
-        return {
-            restrict: "E",
-            templateUrl: "app/components/home/home-tabs.html",
-            controller: function () {
-                this.tab = 1;
-
-                this.isSet = function (checkTab) {
-                    return this.tab === checkTab;
-                };
-
-                this.setTab = function (activeTab) {
-                    this.tab = activeTab;
-                };
-            },
-            controllerAs: "tab"
-        };
-    });
-
-    app.controller('AdministrationController', ['$http', function ($http) {
-        var gpaoConfig = this;
-        gpaoConfig.config = {};
-        $http.get('./configuration.json').success(function (data) {
-            console.log("data = " + data.invoiceNumber);
-            gpaoConfig.config = data;
-        });
-    }]);
+    var app = angular.module('bl-controller', []);
 
     app.controller('BLController', ['$http', function ($http) {
         var bl = this;
@@ -103,7 +51,7 @@
             console.log("invoiceNumber " + newNumber);
             $http.post('./invoiceNumber', newNumber)
                 .success(function (data) {
-                   console.log("SUCCESS");
+                    console.log("SUCCESS");
                 })
                 .error(function (data) {
                     console.log("ERROR");
