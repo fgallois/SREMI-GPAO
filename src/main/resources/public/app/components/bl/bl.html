@@ -1,7 +1,4 @@
-<!--  Bon de Livraison Tab's Content  -->
-<div ng-show="tab.isSet(1)" ng-controller="BLController as blCtrl" class="ng-scope">
-    <br>
-
+<div class="container-fluid" ng-controller="BLController as blCtrl" class="ng-scope">
     <div id="alert1" class="alert alert-danger" role="alert" style="display:none">
         Vous devez selectionner au moins une ligne de la commande pour générer le bon de livraison.
     </div>
@@ -43,7 +40,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <table id="tableCde" data-method="load" data-height="499" data-toggle="table" data-click-to-select="true">
+            <table id="tableCde" data-method="load" data-height="600" data-toggle="table" data-click-to-select="true">
                 <thead>
                 <tr>
                     <th data-field="line" data-align="center">Ligne</th>
@@ -66,17 +63,6 @@
         $(window).resize(function () {
             $('#tableCde').bootstrapTable('resetView');
         });
-//        var $table = $('#table-transform');
-//        $('#transform').click(function () {
-//            $table.bootstrapTable();
-//        });
-//        $('#destroy').click(function () {
-//            $table.bootstrapTable('destroy');
-//        });
-
-//        $('#blButton').click(function () {
-//            alert('Selected values: ' + JSON.stringify($table.bootstrapTable('getSelections')));
-//        });
     });
 
     function dateFormatter(value) {

@@ -15,8 +15,8 @@
     /*margin-left: 2px;*/
 /*}*/
 
-.page-header{
-    background-color: #ffff00;
+.navbar-inverse .navbar-brand{
+    color: #ffff00;
 }
 
 .scrollable-menu {

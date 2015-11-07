@@ -7,21 +7,21 @@
     app.directive("homeBl", function () {
         return {
             restrict: 'E',
-            templateUrl: "app/components/bl/home-bl.html"
+            templateUrl: "app/components/bl/bl.html"
         };
     });
 
     app.directive("homeCatalog", function () {
         return {
             restrict: 'E',
-            templateUrl: "app/components/catalog/home-catalog.html"
+            templateUrl: "app/components/catalog/catalog.html"
         };
     });
 
     app.directive("homeAdmin", function () {
         return {
             restrict: 'E',
-            templateUrl: "app/components/admin/home-admin.html"
+            templateUrl: "app/components/admin/admin.html"
         };
     });
 

@@ -1,7 +1,4 @@
-<!--  Catalog Tab's Content  -->
-<div ng-show="tab.isSet(2)" class="ng-scope">
-    <br>
-
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
             <table id="tableCatalog" data-url="parts.json" data-height="600" data-toggle="table"
@@ -24,15 +21,6 @@
 <script>
     $(function () {
         var $table = $('#tableCatalog').bootstrapTable();
-
-//        $table.on('expand-row.bs.table', function (e, index, row, $detail) {
-//            if (index % 2 == 1) {
-//                $detail.html('Loading from ajax request...');
-//                $.get('LICENSE', function (res) {
-//                    $detail.html(res.replace(/\n/g, '<br>'));
-//                });
-//            }
-//        });
 
         $(window).resize(function () {
             $('#tableCatalog').bootstrapTable('resetView');
