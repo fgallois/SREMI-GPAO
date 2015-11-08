@@ -4,19 +4,19 @@ package fr.sremi.data;
  * Created by fgallois on 9/6/15.
  */
 public class OrderData {
-    private Integer id;
+    private Long id;
     private String orderReference;
 
-    public OrderData(Integer id, String orderReference) {
+    public OrderData(Long id, String orderReference) {
         this.id = id;
         this.orderReference = orderReference;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

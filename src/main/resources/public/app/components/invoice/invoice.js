@@ -2,31 +2,31 @@
     var app = angular.module('invoice-controller', []);
 
     app.controller('InvoiceController', ['$http', function ($http) {
-        var bl = this;
-        bl.orders = {};
-        bl.orderListLabel = 'Référence Commande';
-        bl.invoiceNumber = 0;
+        var invoice = this;
+        invoice.orders = {};
+        invoice.orderListLabel = 'Référence Commande';
+        invoice.invoiceNumber = 0;
 
         $http.get('./invoiceNumber.json').success(function (data) {
             console.log("Facture # = " + data);
-            bl.invoiceNumber = data;
+            invoice.invoiceNumber = data;
         });
 
         this.refreshOrderList = function () {
             $http.get('./openOrders.json').success(function (data) {
-                bl.orders = data;
+                invoice.orders = data;
             });
         };
         this.refreshOrderList();
 
-//        this.orderSelected = function (order) {
-//            bl.orderListLabel = order.orderReference;
+        this.orderSelected = function (order) {
+            invoice.orderListLabel = order.orderReference;
 //            $http.get('./order.json/' + order.orderReference)
 //                .success(function (data) {
 //                    console.log("data = " + data);
 //                    $('#tableCde').bootstrapTable($('#tableCde').data('method'), data);
 //                });
-//        };
+        };
 
 //        this.printBL = function () {
 //            var lineSelection = $('#tableCde').bootstrapTable('getSelections');
@@ -46,16 +46,16 @@
 //            }
 //        };
 
-//        this.updateInvoiceNumber = function () {
-//            var newNumber = JSON.stringify({invoiceNumber: bl.invoiceNumber});
-//            console.log("invoiceNumber " + newNumber);
-//            $http.post('./invoiceNumber', newNumber)
-//                .success(function (data) {
-//                    console.log("SUCCESS");
-//                })
-//                .error(function (data) {
-//                    console.log("ERROR");
-//                });
-//        };
+        this.updateInvoiceNumber = function () {
+            var newNumber = JSON.stringify({documentNumber: invoice.invoiceNumber});
+            console.log("invoiceNumber " + newNumber);
+            $http.post('./invoiceNumber', newNumber)
+                .success(function (data) {
+                    console.log("SUCCESS");
+                })
+                .error(function (data) {
+                    console.log("ERROR");
+                });
+        };
     }]);
 })();

@@ -1,8 +1,14 @@
 <div class="container-fluid" ng-controller="AdministrationController as adminCtrl" class="ng-scope">
     <div class="row">
         <div class="form-group col-md-4">
-            <label for="receiptNumber">Numero de BL</label>
+            <label for="receiptNumber">Numéro de BL</label>
             <input type="text" class="form-control" id="receiptNumber" value="{{adminCtrl.config.receiptNumber}}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-4">
+            <label for="invoiceNumber">Numéro de Facture</label>
+            <input type="text" class="form-control" id="invoiceNumber" value="{{adminCtrl.config.invoiceNumber}}">
         </div>
     </div>
     <div class="row">

@@ -47,7 +47,7 @@
         };
 
         this.updateReceiptNumber = function () {
-            var newNumber = JSON.stringify({receiptNumber: bl.receiptNumber});
+            var newNumber = JSON.stringify({documentNumber: bl.receiptNumber});
             console.log("receiptNumber " + newNumber);
             $http.post('./receiptNumber', newNumber)
                 .success(function (data) {

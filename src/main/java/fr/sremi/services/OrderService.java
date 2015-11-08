@@ -72,7 +72,7 @@ public class OrderService {
         try {
             List<Command> commands = excelParser.getCommandsFromExcelFile(excelFile);
             for (Command command : commands) {
-                result.add(new OrderData(1, command.getReference()));
+                result.add(new OrderData(null, command.getReference()));
             }
         } catch (ExcelException e) {
             e.printStackTrace();
@@ -116,5 +116,15 @@ public class OrderService {
             order.addReceipt(receipt);
             orderRepository.save(order);
         }
+    }
+
+    public List<OrderData> getOpenOrders() {
+        List<OrderData> result = new ArrayList<>();
+
+        List<Order> orders = orderRepository.findByOpenTrue();
+        for (Order order: orders) {
+            result.add(new OrderData(order.getId(), order.getReference()));
+        }
+        return result;
     }
 }

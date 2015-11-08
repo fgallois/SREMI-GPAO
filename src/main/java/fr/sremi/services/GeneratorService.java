@@ -16,6 +16,7 @@ import fr.sremi.model.Generator;
 public class GeneratorService {
 
     private static String RECEIPT_TYPE = "RECEIPT";
+    private static String INVOICE_TYPE = "INVOICE";
 
     @Resource
     private GeneratorRepository generatorRepository;
@@ -44,6 +45,34 @@ public class GeneratorService {
             generator = new Generator(receiptNumber, RECEIPT_TYPE);
         } else {
             generator.setNumber(receiptNumber);
+        }
+        generatorRepository.save(generator);
+    }
+
+    public int getNextInvoiceNumber() {
+        int invoiceNumber = 0;
+        Generator generator = generatorRepository.findByType(INVOICE_TYPE);
+        if (generator != null) {
+            invoiceNumber = generator.getNumber() + 1;
+        }
+        return invoiceNumber;
+    }
+
+    public int getCurrentInvoiceNumber() {
+        int invoiceNumber = 0;
+        Generator generator = generatorRepository.findByType(INVOICE_TYPE);
+        if (generator != null) {
+            invoiceNumber = generator.getNumber();
+        }
+        return invoiceNumber;
+    }
+
+    public void saveInvoiceNumber(int invoiceNumber) {
+        Generator generator = generatorRepository.findByType(INVOICE_TYPE);
+        if (generator == null) {
+            generator = new Generator(invoiceNumber, INVOICE_TYPE);
+        } else {
+            generator.setNumber(invoiceNumber);
         }
         generatorRepository.save(generator);
     }
