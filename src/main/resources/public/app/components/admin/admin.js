@@ -8,7 +8,7 @@
         var gpaoConfig = this;
         gpaoConfig.config = {};
         $http.get('./configuration.json').success(function (data) {
-            console.log("data = " + data.invoiceNumber);
+            console.log("data = " + data.receiptNumber);
             gpaoConfig.config = data;
         });
     }]);

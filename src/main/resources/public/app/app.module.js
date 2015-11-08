@@ -1,5 +1,5 @@
 (function() {
-    var sremiApp = angular.module('sremiGpao', ['ngRoute','bl-controller','admin-controller']);
+    var sremiApp = angular.module('sremiGpao', ['ngRoute','bl-controller','admin-controller','invoice-controller']);
 
     sremiApp.config(['$routeProvider',
         function($routeProvider) {
@@ -9,7 +9,8 @@
                     controller: 'BLController'
                 }).
                 when('/facturation', {
-                    templateUrl: 'app/components/facturation/facturation.html'
+                    templateUrl: 'app/components/invoice/invoice.html',
+                    controller: 'InvoiceController'
                 }).
                 when('/catalogue', {
                     templateUrl: 'app/components/catalog/catalog.html'

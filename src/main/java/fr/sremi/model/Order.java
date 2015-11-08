@@ -33,12 +33,16 @@ public class Order {
     @JoinTable(name = "order_lineItems", joinColumns = @JoinColumn(name = "orderId"), inverseJoinColumns = @JoinColumn(name = "lineItemId"))
     private List<LineItem> lineItems;
 
+    @NotNull
+    private Boolean open;
+
     protected Order() {
     }
 
     public Order(String reference) {
         this.reference = reference;
         this.lineItems = new ArrayList<>();
+        this.open = Boolean.TRUE;
     }
 
     public Long getId() {
@@ -67,5 +71,13 @@ public class Order {
 
     public void addLineItem(LineItem lineItem) {
         lineItems.add(lineItem);
+    }
+
+    public Boolean getOpen() {
+        return open;
+    }
+
+    public void setOpen(Boolean open) {
+        this.open = open;
     }
 }

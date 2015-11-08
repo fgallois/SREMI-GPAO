@@ -5,11 +5,11 @@
         var bl = this;
         bl.orders = {};
         bl.orderListLabel = 'Référence Commande';
-        bl.invoiceNumber = 0;
+        bl.receiptNumber = 0;
 
-        $http.get('./invoiceNumber.json').success(function (data) {
-            console.log("Invoice # = " + data);
-            bl.invoiceNumber = data;
+        $http.get('./receiptNumber.json').success(function (data) {
+            console.log("Receipt # = " + data);
+            bl.receiptNumber = data;
         });
 
         this.orderSelected = function (order) {
@@ -33,9 +33,9 @@
             if(typeof lineSelection != "undefined" && lineSelection != null && lineSelection.length > 0) {
                 $( "#alert1" ).toggle(false);
                 var dataBL = JSON.stringify({orderRef: bl.orderListLabel, lines: lineSelection});
-                $http.post('./bonLivraison', dataBL)
+                $http.post('./receipt', dataBL)
                     .success(function (data, status, headers, config) {
-                        bl.invoiceNumber = parseInt(headers('receiptNumber'));
+                        bl.receiptNumber = parseInt(headers('receiptNumber'));
                         window.open(headers('Location'), "_blank");
                     })
                     .error(function (data) {
@@ -46,10 +46,10 @@
             }
         };
 
-        this.updateInvoiceNumber = function () {
-            var newNumber = JSON.stringify({invoiceNumber: bl.invoiceNumber});
-            console.log("invoiceNumber " + newNumber);
-            $http.post('./invoiceNumber', newNumber)
+        this.updateReceiptNumber = function () {
+            var newNumber = JSON.stringify({receiptNumber: bl.receiptNumber});
+            console.log("receiptNumber " + newNumber);
+            $http.post('./receiptNumber', newNumber)
                 .success(function (data) {
                     console.log("SUCCESS");
                 })

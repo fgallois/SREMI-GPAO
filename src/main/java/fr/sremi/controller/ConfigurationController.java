@@ -2,7 +2,7 @@ package fr.sremi.controller;
 
 import javax.annotation.Resource;
 
-import fr.sremi.data.InvoiceNumber;
+import fr.sremi.data.ReceiptNumber;
 import fr.sremi.services.GeneratorService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,29 +29,29 @@ public class ConfigurationController {
                 configurationService.getExcelPath());
     }
 
-    @RequestMapping(value = "/invoiceNumber.json", method = RequestMethod.GET)
-    public int currentInvoiceNumber() {
+    @RequestMapping(value = "/receiptNumber.json", method = RequestMethod.GET)
+    public int currentReceiptNumber() {
         return generatorService.getNextReceiptNumber();
     }
 
-    @RequestMapping(value = "/invoiceNumber", method = RequestMethod.POST)
-    public void updateInvoiceNumber(@RequestBody InvoiceNumber invoiceNumber) {
-        generatorService.saveReceiptNumber(invoiceNumber.getInvoiceNumber() - 1);
+    @RequestMapping(value = "/receiptNumber", method = RequestMethod.POST)
+    public void updateReceiptNumber(@RequestBody ReceiptNumber receiptNumber) {
+        generatorService.saveReceiptNumber(receiptNumber.getReceiptNumber() - 1);
     }
 
     private class GpaoConfiguration {
-        private final int invoiceNumber;
+        private final int receiptNumber;
         private final String archivePath;
         private final String excelPath;
 
-        private GpaoConfiguration(int invoiceNumber, String archivePath, String excelPath) {
-            this.invoiceNumber = invoiceNumber;
+        private GpaoConfiguration(int receiptNumber, String archivePath, String excelPath) {
+            this.receiptNumber = receiptNumber;
             this.archivePath = archivePath;
             this.excelPath = excelPath;
         }
 
-        public int getInvoiceNumber() {
-            return invoiceNumber;
+        public int getReceiptNumber() {
+            return receiptNumber;
         }
 
         public String getArchivePath() {

@@ -24,7 +24,7 @@ import fr.sremi.services.ReceiptService;
  * Created by fgallois on 9/7/15.
  */
 @RestController
-@RequestMapping("/bonLivraison")
+@RequestMapping("/receipt")
 public class ReceiptController {
 
     @Resource
