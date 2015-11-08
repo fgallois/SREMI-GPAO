@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import fr.sremi.model.LineItem;
 import org.springframework.stereotype.Component;
 
 import fr.sremi.dao.OrderRepository;
@@ -14,8 +13,10 @@ import fr.sremi.dao.PartRepository;
 import fr.sremi.data.OrderData;
 import fr.sremi.data.OrderDetailData;
 import fr.sremi.exception.ExcelException;
+import fr.sremi.model.LineItem;
 import fr.sremi.model.Order;
 import fr.sremi.model.Part;
+import fr.sremi.model.Receipt;
 import fr.sremi.vo.Command;
 import fr.sremi.vo.ItemCommand;
 
@@ -49,8 +50,8 @@ public class OrderService {
                             part = new Part(itemCommand.getItem().getReference(), itemCommand.getItem()
                                     .getDescription());
                         }
-                        LineItem lineItem = new LineItem(itemCommand.getLine(), part,
-                                itemCommand.getQuantity(), itemCommand.getDueDate());
+                        LineItem lineItem = new LineItem(itemCommand.getLine(), part, itemCommand.getQuantity(),
+                                itemCommand.getDueDate());
                         order.addLineItem(lineItem);
                     }
                     orderRepository.save(order);
@@ -107,4 +108,13 @@ public class OrderService {
         return result;
     }
 
+    public void saveOrderReceipt(String orderRef, int invoiceNumber) {
+        Order order = orderRepository.findByReference(orderRef);
+        if (order != null) {
+            Receipt receipt = new Receipt(invoiceNumber);
+
+            order.addReceipt(receipt);
+            orderRepository.save(order);
+        }
+    }
 }

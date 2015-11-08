@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -33,6 +34,10 @@ public class Order {
     @JoinTable(name = "order_lineItems", joinColumns = @JoinColumn(name = "orderId"), inverseJoinColumns = @JoinColumn(name = "lineItemId"))
     private List<LineItem> lineItems;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private List<Receipt> receipts;
+
     @NotNull
     private Boolean open;
 
@@ -42,6 +47,7 @@ public class Order {
     public Order(String reference) {
         this.reference = reference;
         this.lineItems = new ArrayList<>();
+        this.receipts = new ArrayList<>();
         this.open = Boolean.TRUE;
     }
 
@@ -79,5 +85,17 @@ public class Order {
 
     public void setOpen(Boolean open) {
         this.open = open;
+    }
+
+    public List<Receipt> getReceipts() {
+        return receipts;
+    }
+
+    public void setReceipts(List<Receipt> receipts) {
+        this.receipts = receipts;
+    }
+
+    public void addReceipt(Receipt receipt) {
+        this.receipts.add(receipt);
     }
 }
