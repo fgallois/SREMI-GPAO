@@ -29,7 +29,7 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/order.json/{commandeRef}", method = RequestMethod.GET)
-    public List<OrderDetailData> gpaoConfiguration(@PathVariable String commandeRef) {
+    public List<OrderDetailData> getOrderDetails(@PathVariable String commandeRef) {
         return orderService.getOrderDetails(commandeRef);
     }
 
@@ -37,5 +37,11 @@ public class OrderController {
     public List<OrderData> getOpenOrders() {
         return orderService.getOpenOrders();
     }
+
+    @RequestMapping(value = "/openOrder.json/{commandeRef}", method = RequestMethod.GET)
+    public List<OrderDetailData> getOpenOrderDetails(@PathVariable String commandeRef) {
+        return orderService.getOpenOrderDetails(commandeRef);
+    }
+
 
 }

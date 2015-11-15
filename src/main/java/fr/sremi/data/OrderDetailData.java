@@ -12,6 +12,7 @@ public class OrderDetailData {
     private String description;
     private int quantity;
     private Date dueDate;
+    private Double unitPriceHT;
 
     public int getLine() {
         return line;
@@ -51,5 +52,13 @@ public class OrderDetailData {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public Double getUnitPriceHT() {
+        return unitPriceHT;
+    }
+
+    public void setUnitPriceHT(Double unitPriceHT) {
+        this.unitPriceHT = unitPriceHT;
     }
 }

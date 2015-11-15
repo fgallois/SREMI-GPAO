@@ -122,8 +122,27 @@ public class OrderService {
         List<OrderData> result = new ArrayList<>();
 
         List<Order> orders = orderRepository.findByOpenTrue();
-        for (Order order: orders) {
+        for (Order order : orders) {
             result.add(new OrderData(order.getId(), order.getReference()));
+        }
+        return result;
+    }
+
+    public List<OrderDetailData> getOpenOrderDetails(final String orderRef) {
+        List<OrderDetailData> result = new ArrayList<>();
+
+        Order order = orderRepository.findByReference(orderRef);
+
+        if (order != null) {
+            for (LineItem lineItem : order.getLineItems()) {
+                OrderDetailData orderData = new OrderDetailData();
+                orderData.setLine(lineItem.getLine());
+                orderData.setReference(lineItem.getPart().getReference());
+                orderData.setDescription(lineItem.getPart().getDescription());
+                orderData.setQuantity(lineItem.getQuantity());
+                orderData.setDueDate(lineItem.getDueDate());
+                result.add(orderData);
+            }
         }
         return result;
     }

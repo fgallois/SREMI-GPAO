@@ -21,11 +21,11 @@
 
         this.orderSelected = function (order) {
             invoice.orderListLabel = order.orderReference;
-//            $http.get('./order.json/' + order.orderReference)
-//                .success(function (data) {
-//                    console.log("data = " + data);
-//                    $('#tableCde').bootstrapTable($('#tableCde').data('method'), data);
-//                });
+            $http.get('./openOrder.json/' + order.orderReference)
+                .success(function (data) {
+                    console.log("data = " + data);
+                    $('#tableCde').bootstrapTable($('#tableCde').data('method'), data);
+                });
         };
 
 //        this.printBL = function () {
