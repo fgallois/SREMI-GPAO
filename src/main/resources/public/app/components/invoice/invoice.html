@@ -43,7 +43,9 @@
                     <th data-field="reference">Article</th>
                     <th data-field="description">Description</th>
                     <th data-field="quantity" data-align="center">Quantité</th>
-                    <th data-field="unitPriceHT" data-editable="true" data-align="center">Prix Unitaire HT</th>
+                    <th data-field="unitPriceHT" data-editable="true" data-align="center" data-editable-empty-text="NA">
+                        Prix Unitaire HT
+                    </th>
                     <th data-align="center">Total HT</th>
                 </tr>
                 </thead>
@@ -55,45 +57,10 @@
 
 <script>
     $(function () {
+//        $.fn.editable.defaults.mode = 'inline';
         $('#tableCde').bootstrapTable({
-//            height: 600,
-//            columns: [
-//                {
-//                    title: 'Ligne',
-//                    field: 'line',
-//                    align: 'center'
-//                }, {
-//                    title: 'Article',
-//                    field: 'reference',
-//                    align: 'left'
-//                }, {
-//                    title: 'Description',
-//                    field: 'description',
-//                    align: 'left'
-//                }, {
-//                    title: 'Quantité',
-//                    field: 'quantity',
-//                    align: 'center'
-//                }, {
-//                    title: 'Prix Unitaire',
-//                    field: 'unitPriceHT',
-//                    align: 'center',
-//                    editable: {
-//                        type: 'text',
-//                        title: 'Prix',
-//                        validate: function(value) {
-//                            return 'test';
-//                        },
-//                        success: function(response, newValue) {
-//
-//                        }
-//                    }
-//                }, {
-//                    title: 'Total HT',
-//                    align: 'center',
-//                    editable: true
-//                }
-//            ]
+        }).on('editable-save.bs.table', function (e) {
+            console.log('SAVE');
         });
 
         $(window).resize(function () {

@@ -49,6 +49,7 @@ public class OrderService {
                         if (part == null) {
                             part = new Part(itemCommand.getItem().getReference(), itemCommand.getItem()
                                     .getDescription());
+                            partRepository.save(part);
                         }
                         LineItem lineItem = new LineItem(itemCommand.getLine(), part, itemCommand.getQuantity(),
                                 itemCommand.getDueDate());

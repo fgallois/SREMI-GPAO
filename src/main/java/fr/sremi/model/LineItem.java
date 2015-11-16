@@ -1,5 +1,7 @@
 package fr.sremi.model;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * Created by fgallois on 11/4/15.
@@ -24,7 +25,7 @@ public class LineItem {
     private int line;
 
     @NotNull
-    @ManyToOne(cascade= CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Part part;
 
     @NotNull
