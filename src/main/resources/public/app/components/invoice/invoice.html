@@ -36,39 +36,40 @@
 
     <div class="row">
         <div class="col-md-12">
-            <table id="tableCde" data-method="load" data-toggle="table" data-click-to-select="true">
-                <thead>
-                <tr>
-                    <th data-field="line" data-align="center">Ligne</th>
-                    <th data-field="reference">Article</th>
-                    <th data-field="description">Description</th>
-                    <th data-field="quantity" data-align="center">Quantité</th>
-                    <th data-field="unitPriceHT" data-editable="true" data-align="center" data-editable-empty-text="NA">
-                        Prix Unitaire HT
-                    </th>
-                    <th data-align="center">Total HT</th>
-                </tr>
-                </thead>
-            </table>
+            <div id="gridInvoice" ui-grid="gridOptions" ui-grid-edit ui-grid-cellNav class="grid"></div>
+            <!--<table id="tableCde" data-method="load" data-toggle="table" data-click-to-select="true">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                    <!--<th data-field="line" data-align="center">Ligne</th>-->
+                    <!--<th data-field="reference">Article</th>-->
+                    <!--<th data-field="description">Description</th>-->
+                    <!--<th data-field="quantity" data-align="center">Quantité</th>-->
+                    <!--<th data-field="unitPriceHT" data-editable="true" data-align="center" data-editable-empty-text="NA">-->
+                        <!--Prix Unitaire HT-->
+                    <!--</th>-->
+                    <!--<th data-align="center">Total HT</th>-->
+                <!--</tr>-->
+                <!--</thead>-->
+            <!--</table>-->
         </div>
     </div>
 
 </div>
 
 <script>
-    $(function () {
+//    $(function () {
 //        $.fn.editable.defaults.mode = 'inline';
-        $('#tableCde').bootstrapTable({
-        }).on('editable-save.bs.table', function (e) {
-            console.log('SAVE');
-        });
-
-        $(window).resize(function () {
-            $('#tableCde').bootstrapTable('resetView');
-        });
-    });
-
-    function dateFormatter(value) {
-        return moment(value).locale('fr').format('LL');
-    }
+//        $('#tableCde').bootstrapTable({
+//        }).on('editable-save.bs.table', function (e) {
+//            console.log('SAVE');
+//        });
+//
+//        $(window).resize(function () {
+//            $('#tableCde').bootstrapTable('resetView');
+//        });
+//    });
+//
+//    function dateFormatter(value) {
+//        return moment(value).locale('fr').format('LL');
+//    }
 </script>

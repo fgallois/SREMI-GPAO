@@ -34,6 +34,8 @@ public class LineItem {
     @NotNull
     private Date dueDate;
 
+    private Double unitPrice;
+
     protected LineItem() {
     }
 
@@ -82,5 +84,13 @@ public class LineItem {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public Double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(Double unitPrice) {
+        this.unitPrice = unitPrice;
     }
 }

@@ -24,3 +24,11 @@
     max-height: 200px;
     overflow-x: hidden;
 }
+
+.grid {
+    height:600px;
+}
+
+.ui-grid-cell-center-align {
+    text-align: center;
+}

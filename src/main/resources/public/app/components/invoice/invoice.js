@@ -1,11 +1,66 @@
 (function () {
-    var app = angular.module('invoice-controller', []);
+    var app = angular.module('invoice-controller', ['ui.grid', 'ui.grid.edit', 'ui.grid.cellNav']);
 
-    app.controller('InvoiceController', ['$http', function ($http) {
+    app.controller('InvoiceController', ['$scope', '$http', function ($scope, $http) {
         var invoice = this;
         invoice.orders = {};
         invoice.orderListLabel = 'Référence Commande';
         invoice.invoiceNumber = 0;
+
+        $scope.gridOptions = {
+            enableSorting: false,
+            columnDefs: [
+                {
+                    field: 'line',
+                    displayName: 'Ligne',
+                    headerCellClass: 'ui-grid-cell-center-align',
+                    cellClass: 'ui-grid-cell-center-align',
+                    enableCellEdit: false,
+                    allowCellFocus : false,
+                    enableColumnMenu: false
+                },
+                {
+                    name: 'reference',
+                    displayName: 'Référence',
+                    enableCellEdit: false,
+                    allowCellFocus : false,
+                    enableColumnMenu: false
+                },
+                {
+                    name: 'description',
+                    displayName: 'Description',
+                    enableCellEdit: false,
+                    allowCellFocus : false,
+                    enableColumnMenu: false
+                },
+                {
+                    name: 'quantity',
+                    displayName: 'Quantité',
+                    headerCellClass: 'ui-grid-cell-center-align',
+                    cellClass: 'ui-grid-cell-center-align',
+                    enableCellEdit: false,
+                    allowCellFocus : false,
+                    enableColumnMenu: false
+                },
+                {
+                    name: 'unitPriceHT',
+                    displayName: 'Prix Unitaire HT',
+                    headerCellClass: 'ui-grid-cell-center-align',
+                    cellClass: 'ui-grid-cell-center-align',
+                    type: 'number',
+                    enableColumnMenu: false
+                },
+                {
+                    name: 'totalHT',
+                    displayName: 'Prix Total HT',
+                    headerCellClass: 'ui-grid-cell-center-align',
+                    cellClass: 'ui-grid-cell-center-align',
+                    enableCellEdit: false,
+                    allowCellFocus : false,
+                    enableColumnMenu: false
+                }
+            ]
+        };
 
         $http.get('./invoiceNumber.json').success(function (data) {
             console.log("Facture # = " + data);
@@ -24,7 +79,7 @@
             $http.get('./openOrder.json/' + order.orderReference)
                 .success(function (data) {
                     console.log("data = " + data);
-                    $('#tableCde').bootstrapTable($('#tableCde').data('method'), data);
+                    $scope.gridOptions.data = data;
                 });
         };
 

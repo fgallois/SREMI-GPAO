@@ -142,6 +142,7 @@ public class OrderService {
                 orderData.setDescription(lineItem.getPart().getDescription());
                 orderData.setQuantity(lineItem.getQuantity());
                 orderData.setDueDate(lineItem.getDueDate());
+                orderData.setUnitPriceHT(lineItem.getUnitPrice());
                 result.add(orderData);
             }
         }
