@@ -51,7 +51,8 @@
                     enableColumnMenu: false
                 },
                 {
-                    name: 'totalHT',
+                    name: 'calculateTotalHT',
+                    field: 'calculateTotalHT()',
                     displayName: 'Prix Total HT',
                     headerCellClass: 'ui-grid-cell-center-align',
                     cellClass: 'ui-grid-cell-center-align',
@@ -79,6 +80,15 @@
             $http.get('./openOrder.json/' + order.orderReference)
                 .success(function (data) {
                     console.log("data = " + data);
+                    angular.forEach(data, function(row){
+                        row.calculateTotalHT = function() {
+                            var total = 20;
+                            if (this.unitPriceHT >= 0) {
+                                total = this.quantity * this.unitPriceHT;
+                            }
+                            return total;
+                        }
+                    });
                     $scope.gridOptions.data = data;
                 });
         };
