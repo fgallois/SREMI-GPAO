@@ -7,12 +7,21 @@ import java.util.Date;
  */
 public class OrderDetailData {
 
+    private Long id;
     private int line;
     private String reference;
     private String description;
     private int quantity;
     private Date dueDate;
     private Double unitPriceHT;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public int getLine() {
         return line;

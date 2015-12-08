@@ -1,7 +1,7 @@
 (function () {
-    var app = angular.module('invoice-controller', ['ui.grid', 'ui.grid.edit', 'ui.grid.cellNav']);
+    var app = angular.module('invoice-controller', ['ui.grid', 'ui.grid.edit', 'ui.grid.rowEdit', 'ui.grid.cellNav']);
 
-    app.controller('InvoiceController', ['$scope', '$http', function ($scope, $http) {
+    app.controller('InvoiceController', ['$scope', '$http', '$q', function ($scope, $http, $q) {
         var invoice = this;
         invoice.orders = {};
         invoice.orderListLabel = 'Référence Commande';
@@ -10,6 +10,10 @@
         $scope.gridOptions = {
             enableSorting: false,
             columnDefs: [
+                {
+                    field: 'id',
+                    visible:false
+                },
                 {
                     field: 'line',
                     displayName: 'Ligne',
@@ -60,7 +64,22 @@
                     allowCellFocus : false,
                     enableColumnMenu: false
                 }
-            ]
+            ],
+            onRegisterApi: function(gridApi){
+                $scope.gridApi = gridApi;
+                gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
+            }
+        };
+
+        $scope.saveRow = function( rowEntity ) {
+            var deferred = $q.defer();
+            $http.put('./updateOrderLineItem.json', rowEntity)
+                .then(function(data) {
+                    deferred.resolve();
+                }, function(error){
+                    deferred.reject();
+                });
+            $scope.gridApi.rowEdit.setSavePromise(rowEntity, deferred.promise);
         };
 
         $http.get('./invoiceNumber.json').success(function (data) {

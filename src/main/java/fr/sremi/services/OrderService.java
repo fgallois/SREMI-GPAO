@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import fr.sremi.dao.OrderLineItemRepository;
 import org.springframework.stereotype.Component;
 
 import fr.sremi.dao.OrderRepository;
@@ -31,6 +32,9 @@ public class OrderService {
 
     @Resource
     OrderRepository orderRepository;
+
+    @Resource
+    OrderLineItemRepository orderLineItemRepository;
 
     @Resource
     PartRepository partRepository;
@@ -137,6 +141,7 @@ public class OrderService {
         if (order != null) {
             for (LineItem lineItem : order.getLineItems()) {
                 OrderDetailData orderData = new OrderDetailData();
+                orderData.setId(lineItem.getId());
                 orderData.setLine(lineItem.getLine());
                 orderData.setReference(lineItem.getPart().getReference());
                 orderData.setDescription(lineItem.getPart().getDescription());
@@ -147,5 +152,14 @@ public class OrderService {
             }
         }
         return result;
+    }
+
+    public void updateLineItemPrice(OrderDetailData orderDetailData) {
+        LineItem lineItem = orderLineItemRepository.findOne(orderDetailData.getId());
+
+        if (lineItem != null) {
+            lineItem.setUnitPrice(orderDetailData.getUnitPriceHT());
+            orderLineItemRepository.save(lineItem);
+        }
     }
 }

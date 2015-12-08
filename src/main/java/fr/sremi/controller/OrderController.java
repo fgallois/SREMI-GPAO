@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,5 +44,8 @@ public class OrderController {
         return orderService.getOpenOrderDetails(commandeRef);
     }
 
-
+    @RequestMapping(value = "/updateOrderLineItem.json", method = RequestMethod.PUT)
+    public void updateLineItem(@RequestBody OrderDetailData orderDetailData) {
+        orderService.updateLineItemPrice(orderDetailData);
+    }
 }
