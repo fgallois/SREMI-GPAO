@@ -1,7 +1,7 @@
 (function () {
     var app = angular.module('invoice-controller', ['ui.grid', 'ui.grid.edit', 'ui.grid.rowEdit', 'ui.grid.cellNav']);
 
-    app.controller('InvoiceController', ['$scope', '$http', '$q', function ($scope, $http, $q) {
+    app.controller('InvoiceController', ['$scope', 'uiGridConstants', '$http', '$q', function ($scope, uiGridConstants, $http, $q) {
         var invoice = this;
         invoice.orders = {};
         invoice.orderListLabel = 'Référence Commande';
@@ -9,6 +9,7 @@
 
         $scope.gridOptions = {
             enableSorting: false,
+            showColumnFooter: true,
             columnDefs: [
                 {
                     field: 'id',
@@ -62,7 +63,10 @@
                     cellClass: 'ui-grid-cell-center-align',
                     enableCellEdit: false,
                     allowCellFocus : false,
-                    enableColumnMenu: false
+                    enableColumnMenu: false,
+                    cellTemplate: '<div>{{COL_FIELD | currency:"" : 2}} €</div>',
+                    aggregationType: uiGridConstants.aggregationTypes.sum,
+                    footerCellTemplate: '<div>Total HT: {{col.getAggregationValue() | currency:"" : 2}} €</div>'
                 }
             ],
             onRegisterApi: function(gridApi){
