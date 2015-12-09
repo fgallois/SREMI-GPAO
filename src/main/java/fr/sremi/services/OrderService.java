@@ -7,6 +7,8 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import fr.sremi.dao.OrderLineItemRepository;
+import fr.sremi.data.invoice.InvoiceData;
+import fr.sremi.data.invoice.ReceiptData;
 import org.springframework.stereotype.Component;
 
 import fr.sremi.dao.OrderRepository;
@@ -126,19 +128,20 @@ public class OrderService {
     public List<OrderData> getOpenOrders() {
         List<OrderData> result = new ArrayList<>();
 
-        List<Order> orders = orderRepository.findByOpenTrue();
+        List<Order> orders = orderRepository.findByOpenTrueOrderByReferenceAsc();
         for (Order order : orders) {
             result.add(new OrderData(order.getId(), order.getReference()));
         }
         return result;
     }
 
-    public List<OrderDetailData> getOpenOrderDetails(final String orderRef) {
-        List<OrderDetailData> result = new ArrayList<>();
+    public InvoiceData getInvoiceData(final String orderRef) {
+        InvoiceData result = new InvoiceData();
 
         Order order = orderRepository.findByReference(orderRef);
 
         if (order != null) {
+            List<OrderDetailData> orderDetails = new ArrayList<>();
             for (LineItem lineItem : order.getLineItems()) {
                 OrderDetailData orderData = new OrderDetailData();
                 orderData.setId(lineItem.getId());
@@ -148,8 +151,19 @@ public class OrderService {
                 orderData.setQuantity(lineItem.getQuantity());
                 orderData.setDueDate(lineItem.getDueDate());
                 orderData.setUnitPriceHT(lineItem.getUnitPrice());
-                result.add(orderData);
+                orderDetails.add(orderData);
             }
+            result.setOrderDetails(orderDetails);
+
+            List<ReceiptData> receipts = new ArrayList<>();
+            for (Receipt receipt: order.getReceipts()) {
+                ReceiptData receiptData = new ReceiptData();
+                receiptData.setId(receipt.getId());
+                receiptData.setNumber(receipt.getNumber());
+                receiptData.setCreationDate(receipt.getCreationDate());
+                receipts.add(receiptData);
+            }
+            result.setReceipts(receipts);
         }
         return result;
     }

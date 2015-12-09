@@ -7,7 +7,36 @@
         invoice.orderListLabel = 'Référence Commande';
         invoice.invoiceNumber = 0;
 
-        $scope.gridOptions = {
+        $scope.gridBlInvoice = {
+            enableSorting: false,
+            columnDefs: [
+                {
+                    name: 'id',
+                    visible:false
+                },
+                {
+                    name: 'number',
+                    displayName: 'Bon de Livraison',
+                    headerCellClass: 'ui-grid-cell-center-align',
+                    cellClass: 'ui-grid-cell-center-align',
+                    enableCellEdit: false,
+                    allowCellFocus : false,
+                    enableColumnMenu: false
+                },
+                {
+                    name: 'creationDate',
+                    displayName: 'Date',
+                    headerCellClass: 'ui-grid-cell-center-align',
+                    cellClass: 'ui-grid-cell-center-align',
+                    enableCellEdit: false,
+                    allowCellFocus : false,
+                    enableColumnMenu: false,
+                    cellTemplate: '<div>{{COL_FIELD | date : "dd/MM/yyyy"}}</div>'
+                }
+            ]
+        };
+
+        $scope.gridInvoice = {
             enableSorting: false,
             showColumnFooter: true,
             columnDefs: [
@@ -53,7 +82,8 @@
                     headerCellClass: 'ui-grid-cell-center-align',
                     cellClass: 'ui-grid-cell-center-align',
                     type: 'number',
-                    enableColumnMenu: false
+                    enableColumnMenu: false,
+                    cellTemplate: '<div>{{COL_FIELD | currency:"" : 2}}</div>'
                 },
                 {
                     name: 'calculateTotalHT',
@@ -102,8 +132,8 @@
             invoice.orderListLabel = order.orderReference;
             $http.get('./openOrder.json/' + order.orderReference)
                 .success(function (data) {
-                    console.log("data = " + data);
-                    angular.forEach(data, function(row){
+                    console.log("data = " + data.orderDetails);
+                    angular.forEach(data.orderDetails, function(row){
                         row.calculateTotalHT = function() {
                             var total = 20;
                             if (this.unitPriceHT >= 0) {
@@ -112,11 +142,12 @@
                             return total;
                         }
                     });
-                    $scope.gridOptions.data = data;
+                    $scope.gridInvoice.data = data.orderDetails;
+                    $scope.gridBlInvoice.data = data.receipts;
                 });
         };
 
-//        this.printBL = function () {
+//        this.printFacture = function () {
 //            var lineSelection = $('#tableCde').bootstrapTable('getSelections');
 //            if(typeof lineSelection != "undefined" && lineSelection != null && lineSelection.length > 0) {
 //                $( "#alert1" ).toggle(false);

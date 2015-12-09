@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import fr.sremi.data.invoice.InvoiceData;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,8 +41,8 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/openOrder.json/{commandeRef}", method = RequestMethod.GET)
-    public List<OrderDetailData> getOpenOrderDetails(@PathVariable String commandeRef) {
-        return orderService.getOpenOrderDetails(commandeRef);
+    public InvoiceData getOpenOrderDetails(@PathVariable String commandeRef) {
+        return orderService.getInvoiceData(commandeRef);
     }
 
     @RequestMapping(value = "/updateOrderLineItem.json", method = RequestMethod.PUT)

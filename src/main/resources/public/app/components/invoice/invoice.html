@@ -1,6 +1,6 @@
 <div class="container-fluid" ng-controller="InvoiceController as invoiceCtrl" class="ng-scope">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-3">
             <div class="btn-group">
                 <button class="btn btn-default dropdown-toggle" type="button" id="referenceCde"
                         data-toggle="dropdown"
@@ -19,6 +19,11 @@
             </div>
         </div>
         <div class="col-md-2">
+            <button id="blButton" class="btn btn-primary" ng-click="invoiceCtrl.printInvoice()">
+                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Facture
+            </button>
+        </div>
+        <div class="col-md-2">
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">Facture</span>
                 <input type="number" class="form-control" id="invoiceNumber" ng-model="invoiceCtrl.invoiceNumber"
@@ -26,50 +31,23 @@
                        aria-describedby="basic-addon1">
             </div>
         </div>
-        <div class="col-md-2">
-            <button id="blButton" class="btn btn-primary pull-right" ng-click="invoiceCtrl.printInvoice()">
-                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Facture
-            </button>
+        <div class="col-md-4 pull-right">
+            <div id="gridBlInvoice" ui-grid="gridBlInvoice" ui-grid-edit ui-grid-row-edit ui-grid-cellNav style="height: 150px"></div>
         </div>
     </div>
     <br>
 
+    <!--<div class="row">-->
+        <!--<div class="col-md-4 pull-right">-->
+            <!--<div id="gridBlInvoice" ui-grid="gridBlInvoice" ui-grid-edit ui-grid-row-edit ui-grid-cellNav style="height: 150px"></div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <br>
     <div class="row">
         <div class="col-md-12">
-            <div id="gridInvoice" ui-grid="gridOptions" ui-grid-edit ui-grid-row-edit ui-grid-cellNav class="grid"></div>
-            <!--<table id="tableCde" data-method="load" data-toggle="table" data-click-to-select="true">-->
-                <!--<thead>-->
-                <!--<tr>-->
-                    <!--<th data-field="line" data-align="center">Ligne</th>-->
-                    <!--<th data-field="reference">Article</th>-->
-                    <!--<th data-field="description">Description</th>-->
-                    <!--<th data-field="quantity" data-align="center">Quantité</th>-->
-                    <!--<th data-field="unitPriceHT" data-editable="true" data-align="center" data-editable-empty-text="NA">-->
-                        <!--Prix Unitaire HT-->
-                    <!--</th>-->
-                    <!--<th data-align="center">Total HT</th>-->
-                <!--</tr>-->
-                <!--</thead>-->
-            <!--</table>-->
+            <div id="gridInvoice" ui-grid="gridInvoice" ui-grid-edit ui-grid-row-edit ui-grid-cellNav class="grid"></div>
         </div>
     </div>
 
 </div>
-
-<script>
-//    $(function () {
-//        $.fn.editable.defaults.mode = 'inline';
-//        $('#tableCde').bootstrapTable({
-//        }).on('editable-save.bs.table', function (e) {
-//            console.log('SAVE');
-//        });
-//
-//        $(window).resize(function () {
-//            $('#tableCde').bootstrapTable('resetView');
-//        });
-//    });
-//
-//    function dateFormatter(value) {
-//        return moment(value).locale('fr').format('LL');
-//    }
-</script>

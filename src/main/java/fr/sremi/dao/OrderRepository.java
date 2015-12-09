@@ -12,5 +12,5 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 
     Order findByReference(String reference);
 
-    List<Order> findByOpenTrue();
+    List<Order> findByOpenTrueOrderByReferenceAsc();
 }
