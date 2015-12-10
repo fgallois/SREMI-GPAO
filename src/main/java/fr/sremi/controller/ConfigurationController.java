@@ -26,7 +26,7 @@ public class ConfigurationController {
     @RequestMapping(value = "/configuration.json", method = RequestMethod.GET)
     public GpaoConfiguration gpaoConfiguration() {
         return new GpaoConfiguration(generatorService.getCurrentReceiptNumber(),
-                generatorService.getCurrentInvoiceNumber(), configurationService.getArchivePath(),
+                generatorService.getCurrentInvoiceNumber(), configurationService.getBlArchivePath(),
                 configurationService.getExcelPath());
     }
 

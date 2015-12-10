@@ -32,7 +32,7 @@ public class ReceiptService {
         int invoiceNumber = generatorService.getNextReceiptNumber();
         String filename = "BL-" + invoiceNumber + ".pdf";
         try {
-            File archiveFile = new File(configurationService.getArchivePath() + filename);
+            File archiveFile = new File(configurationService.getBlArchivePath() + filename);
 
             pdfService.generatePdf(String.valueOf(invoiceNumber), receiptData.getOrderRef(), receiptData.getLines(),
                     archiveFile);
@@ -47,7 +47,7 @@ public class ReceiptService {
     public org.springframework.core.io.Resource readBL(String filename) {
         org.springframework.core.io.Resource resource = null;
 
-        String uri = configurationService.getArchivePath() + filename;
+        String uri = configurationService.getBlArchivePath() + filename;
         File file = new File(uri);
         if (file.exists()) {
             resource = new FileSystemResource(uri);

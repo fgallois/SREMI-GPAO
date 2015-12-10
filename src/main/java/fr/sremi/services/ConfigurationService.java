@@ -12,14 +12,21 @@ public class ConfigurationService {
     @Value("${excel.file.path}")
     private String excelPath;
 
-    @Value("${archive.file.path}")
-    private String archivePath;
+    @Value("${bl.archive.file.path}")
+    private String blArchivePath;
+
+    @Value("${invoice.archive.file.path}")
+    private String invoiceArchivePath;
 
     public String getExcelPath() {
         return excelPath;
     }
 
-    public String getArchivePath() {
-        return archivePath;
+    public String getBlArchivePath() {
+        return blArchivePath;
+    }
+
+    public String getInvoiceArchivePath() {
+        return invoiceArchivePath;
     }
 }
