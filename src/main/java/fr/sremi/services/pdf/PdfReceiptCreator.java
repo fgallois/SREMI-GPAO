@@ -1,4 +1,4 @@
-package fr.sremi.services;
+package fr.sremi.services.pdf;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,8 +6,6 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import org.springframework.stereotype.Component;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -25,11 +23,12 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import fr.sremi.data.OrderDetailData;
 import fr.sremi.exception.PdfException;
+import org.springframework.stereotype.Component;
 
 @Component
-public class PdfService {
+public class PdfReceiptCreator {
 
-    public void generatePdf(String invoiceNumber, String referenceCommand, List<OrderDetailData> commands, File file)
+    public void createPdf(String receiptNumber, String referenceCommand, List<OrderDetailData> commands, File file)
             throws PdfException {
         Document document = new Document(PageSize.A4);
 
@@ -43,13 +42,13 @@ public class PdfService {
 
             // Page 1: Exemplaire client
             document.add(createInformations());
-            document.add(createInfoCommand(referenceCommand, invoiceNumber));
+            document.add(createInfoCommand(referenceCommand, receiptNumber));
             document.add(createCommandTable(commands));
             document.newPage();
 
             // Page 2: Exemplaire SREMI
             document.add(createInformations());
-            document.add(createInfoCommand(referenceCommand, invoiceNumber));
+            document.add(createInfoCommand(referenceCommand, receiptNumber));
             document.add(createCommandTable(commands));
             document.newPage();
 

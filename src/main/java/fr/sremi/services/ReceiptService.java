@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import fr.sremi.data.ReceiptData;
 import fr.sremi.exception.PdfException;
+import fr.sremi.services.pdf.PdfReceiptCreator;
 
 /**
  * Created by fgallois on 9/7/15.
@@ -17,7 +18,7 @@ import fr.sremi.exception.PdfException;
 public class ReceiptService {
 
     @Resource
-    private PdfService pdfService;
+    private PdfReceiptCreator pdfReceiptCreator;
 
     @Resource
     private ConfigurationService configurationService;
@@ -29,15 +30,15 @@ public class ReceiptService {
     OrderService orderService;
 
     public String createBL(ReceiptData receiptData) {
-        int invoiceNumber = generatorService.getNextReceiptNumber();
-        String filename = "BL-" + invoiceNumber + ".pdf";
+        int receiptNumber = generatorService.getNextReceiptNumber();
+        String filename = "BL-" + receiptNumber + ".pdf";
         try {
             File archiveFile = new File(configurationService.getBlArchivePath() + filename);
 
-            pdfService.generatePdf(String.valueOf(invoiceNumber), receiptData.getOrderRef(), receiptData.getLines(),
-                    archiveFile);
-            orderService.saveOrderReceipt(receiptData.getOrderRef(), invoiceNumber);
-            generatorService.saveReceiptNumber(invoiceNumber);
+            pdfReceiptCreator.createPdf(String.valueOf(receiptNumber), receiptData.getOrderRef(),
+                    receiptData.getLines(), archiveFile);
+            orderService.saveOrderReceipt(receiptData.getOrderRef(), receiptNumber);
+            generatorService.saveReceiptNumber(receiptNumber);
         } catch (PdfException e) {
             e.printStackTrace();
         }

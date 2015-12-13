@@ -148,8 +148,8 @@
         };
 
         this.printInvoice = function () {
-                var dataFacture = JSON.stringify({orderRef: invoice.orderListLabel});
-                $http.post('./facture', dataFacture)
+                var dataFacture = JSON.stringify({reference: invoice.orderListLabel});
+                $http.post('./invoice', dataFacture)
                     .success(function (data, status, headers, config) {
                         invoice.invoiceNumber = parseInt(headers('invoiceNumber'));
                         window.open(headers('Location'), "_blank");

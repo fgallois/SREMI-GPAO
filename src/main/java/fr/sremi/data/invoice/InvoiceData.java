@@ -8,8 +8,17 @@ import java.util.List;
  * Created by fgallois on 12/8/15.
  */
 public class InvoiceData {
+    private String reference;
     private List<OrderDetailData> orderDetails;
     private List<ReceiptData> receipts;
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
 
     public List<OrderDetailData> getOrderDetails() {
         return orderDetails;

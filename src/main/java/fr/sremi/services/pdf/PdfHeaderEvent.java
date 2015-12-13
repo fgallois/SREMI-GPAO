@@ -1,4 +1,4 @@
-package fr.sremi.services;
+package fr.sremi.services.pdf;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;

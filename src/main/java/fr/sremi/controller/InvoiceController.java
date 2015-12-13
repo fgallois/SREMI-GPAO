@@ -1,8 +1,9 @@
 package fr.sremi.controller;
 
-import fr.sremi.data.ReceiptData;
-import fr.sremi.services.GeneratorService;
-import fr.sremi.services.InvoiceService;
+import java.io.IOException;
+
+import javax.annotation.Resource;
+
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.annotation.Resource;
-import java.io.IOException;
+import fr.sremi.data.invoice.InvoiceData;
+import fr.sremi.services.GeneratorService;
+import fr.sremi.services.InvoiceService;
 
 /**
  * Created by fgallois on 11/8/15.
@@ -32,13 +34,13 @@ public class InvoiceController {
     private GeneratorService generatorService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> createBonLivraison(@RequestBody String orderRef) {
+    public ResponseEntity<?> createInvoice(@RequestBody InvoiceData invoiceData) {
 
-        String filename = invoiceService.createInvoice(orderRef);
+        String filename = invoiceService.createInvoice(invoiceData.getReference());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{filename}")
-          .buildAndExpand(filename).toUri());
+                .buildAndExpand(filename).toUri());
         httpHeaders.set("invoiceNumber", String.valueOf(generatorService.getNextInvoiceNumber()));
         return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
     }
@@ -54,8 +56,8 @@ public class InvoiceController {
         headers.add("Content-Disposition", "inline;filename=" + filename + ".pdf");
 
         return ResponseEntity.ok().headers(headers).contentLength(pdfFile.contentLength())
-          .contentType(MediaType.parseMediaType("application/pdf"))
-          .body(new InputStreamResource(pdfFile.getInputStream()));
+                .contentType(MediaType.parseMediaType("application/pdf"))
+                .body(new InputStreamResource(pdfFile.getInputStream()));
     }
 
 }

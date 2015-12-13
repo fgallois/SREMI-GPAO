@@ -141,6 +141,8 @@ public class OrderService {
         Order order = orderRepository.findByReference(orderRef);
 
         if (order != null) {
+            result.setReference(order.getReference());
+
             List<OrderDetailData> orderDetails = new ArrayList<>();
             for (LineItem lineItem : order.getLineItems()) {
                 OrderDetailData orderData = new OrderDetailData();
