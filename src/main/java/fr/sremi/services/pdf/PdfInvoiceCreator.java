@@ -3,6 +3,7 @@ package fr.sremi.services.pdf;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +32,7 @@ import fr.sremi.exception.PdfException;
 public class PdfInvoiceCreator {
 
     public void createPdf(String invoiceNumber, InvoiceData invoiceData, File file)
-            throws PdfException {
+      throws PdfException {
         Document document = new Document(PageSize.A4);
 
         try {
@@ -45,13 +46,15 @@ public class PdfInvoiceCreator {
             // Page 1: Exemplaire client
             document.add(createInformations());
             document.add(createInfoCommand(invoiceData.getReference(), invoiceNumber));
-//            document.add(createCommandTable(commands));
+            document.add(createCommandTable(invoiceData.getOrderDetails()));
+            document.add(createFooterTable(invoiceData.getOrderDetails()));
             document.newPage();
 
             // Page 2: Exemplaire SREMI
             document.add(createInformations());
             document.add(createInfoCommand(invoiceData.getReference(), invoiceNumber));
-//            document.add(createCommandTable(commands));
+            document.add(createCommandTable(invoiceData.getOrderDetails()));
+            document.add(createFooterTable(invoiceData.getOrderDetails()));
             document.newPage();
 
         } catch (FileNotFoundException e) {
@@ -83,7 +86,7 @@ public class PdfInvoiceCreator {
         paragraph.add(new Phrase("APE: 3320C", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(new Phrase("N° Intracommunautaire: FR 26 439 754 581", FontFactory.getFont(
-                FontFactory.TIMES_ROMAN, 12)));
+          FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(new Phrase("Téléphone: 02.43.71.70.76", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
@@ -108,7 +111,7 @@ public class PdfInvoiceCreator {
         paragraph.add(new Phrase("72402 La Ferté-Bernard Cedex", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(new Phrase("N° Intracommunautaire: FR 63 340 321 801", FontFactory.getFont(
-                FontFactory.TIMES_ROMAN, 12)));
+          FontFactory.TIMES_ROMAN, 12)));
 
         cell = new PdfPCell(paragraph);
         cell.setBorder(Rectangle.NO_BORDER);
@@ -151,7 +154,7 @@ public class PdfInvoiceCreator {
         table.addCell(cell);
 
         cell = new PdfPCell(new Phrase(SimpleDateFormat.getDateInstance().format(new Date()), FontFactory.getFont(
-                FontFactory.TIMES_ROMAN, 12)));
+          FontFactory.TIMES_ROMAN, 12)));
         cell.setMinimumHeight(20);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         table.addCell(cell);
@@ -167,18 +170,12 @@ public class PdfInvoiceCreator {
     }
 
     private Element createCommandTable(List<OrderDetailData> commands) {
-        float[] colsWidth = { 7f, 23f, 60f, 10f };
+        float[] colsWidth = { 16f, 36f, 10f, 14f, 14f };
         PdfPTable table = new PdfPTable(colsWidth);
         table.setWidthPercentage(100);
         table.setSpacingBefore(40);
 
-        PdfPCell headerCell = new PdfPCell(new Phrase("Ligne"));
-        headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
-        headerCell.setMinimumHeight(20);
-        headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-        table.addCell(headerCell);
-
-        headerCell = new PdfPCell(new Phrase("Article"));
+        PdfPCell headerCell = new PdfPCell(new Phrase("Article"));
         headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         headerCell.setMinimumHeight(20);
         headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
@@ -196,28 +193,83 @@ public class PdfInvoiceCreator {
         headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         table.addCell(headerCell);
 
+        headerCell = new PdfPCell(new Phrase("Pu. HT"));
+        headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        headerCell.setMinimumHeight(20);
+        headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("Montant HT"));
+        headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        headerCell.setMinimumHeight(20);
+        headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        table.addCell(headerCell);
+
         PdfPCell cell;
         for (OrderDetailData command : commands) {
-            // if(command.isSelected()) {
-            cell = new PdfPCell(new Phrase(String.valueOf(command.getLine())));
+            cell = new PdfPCell(new Phrase(command.getReference(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cell.setMinimumHeight(20);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(command.getDescription(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+            cell.setMinimumHeight(20);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(new Integer(command.getQuantity()).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
             cell.setMinimumHeight(20);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
             table.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(command.getReference()));
+            DecimalFormat myFormatter = new DecimalFormat("###.00 €");
+            String unitPrice = "?";
+            String total = "?";
+            if (command.getUnitPriceHT() != null) {
+                unitPrice = myFormatter.format(command.getUnitPriceHT());
+                total = myFormatter.format(command.getUnitPriceHT() * command.getQuantity());
+            }
+            cell = new PdfPCell(new Phrase(unitPrice, FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
             cell.setMinimumHeight(20);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             table.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(command.getDescription()));
+            cell = new PdfPCell(new Phrase(total, FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
             cell.setMinimumHeight(20);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase(new Integer(command.getQuantity()).toString()));
-            cell.setMinimumHeight(20);
-            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-            table.addCell(cell);
-            // }
         }
+        return table;
+    }
+
+    private Element createFooterTable(List<OrderDetailData> commands) {
+        float[] colsWidth = { 62f, 14f, 14f };
+        PdfPTable table = new PdfPTable(colsWidth);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(20);
+
+        Double totalHt = Double.valueOf(0);
+        for (OrderDetailData command : commands) {
+            if (command.getUnitPriceHT() != null) {
+                totalHt += command.getUnitPriceHT() * command.getQuantity();
+            }
+
+        }
+        PdfPCell cell = new PdfPCell(new Phrase("ATTESTATION N° 07/2015", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+        cell.setMinimumHeight(20);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("TOTAL HT", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+        cell.setMinimumHeight(20);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        table.addCell(cell);
+
+        DecimalFormat myFormatter = new DecimalFormat("###.00 €");
+        cell = new PdfPCell(new Phrase(myFormatter.format(totalHt), FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+        cell.setMinimumHeight(20);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        table.addCell(cell);
+
         return table;
     }
 }
