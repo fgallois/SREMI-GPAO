@@ -255,7 +255,8 @@ public class PdfInvoiceCreator {
 
         }
         PdfPCell cell = new PdfPCell(new Phrase("ATTESTATION N° 07/2015", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
-        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+        cell.setBorder(Rectangle.NO_BORDER);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         cell.setMinimumHeight(20);
         table.addCell(cell);
 
