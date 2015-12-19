@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import fr.sremi.data.invoice.InvoiceData;
 import org.springframework.stereotype.Component;
 
 import com.itextpdf.text.BaseColor;
@@ -26,13 +25,14 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import fr.sremi.data.OrderDetailData;
+import fr.sremi.data.invoice.InvoiceData;
+import fr.sremi.data.invoice.ReceiptData;
 import fr.sremi.exception.PdfException;
 
 @Component
 public class PdfInvoiceCreator {
 
-    public void createPdf(String invoiceNumber, InvoiceData invoiceData, File file)
-      throws PdfException {
+    public void createPdf(String invoiceNumber, InvoiceData invoiceData, File file) throws PdfException {
         Document document = new Document(PageSize.A4);
 
         try {
@@ -45,14 +45,14 @@ public class PdfInvoiceCreator {
 
             // Page 1: Exemplaire client
             document.add(createInformations());
-            document.add(createInfoCommand(invoiceData.getReference(), invoiceNumber));
+            document.add(createInfoCommand(invoiceData, invoiceNumber));
             document.add(createCommandTable(invoiceData.getOrderDetails()));
             document.add(createFooterTable(invoiceData.getOrderDetails()));
             document.newPage();
 
             // Page 2: Exemplaire SREMI
             document.add(createInformations());
-            document.add(createInfoCommand(invoiceData.getReference(), invoiceNumber));
+            document.add(createInfoCommand(invoiceData, invoiceNumber));
             document.add(createCommandTable(invoiceData.getOrderDetails()));
             document.add(createFooterTable(invoiceData.getOrderDetails()));
             document.newPage();
@@ -86,7 +86,7 @@ public class PdfInvoiceCreator {
         paragraph.add(new Phrase("APE: 3320C", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(new Phrase("N° Intracommunautaire: FR 26 439 754 581", FontFactory.getFont(
-          FontFactory.TIMES_ROMAN, 12)));
+                FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(new Phrase("Téléphone: 02.43.71.70.76", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
@@ -111,7 +111,7 @@ public class PdfInvoiceCreator {
         paragraph.add(new Phrase("72402 La Ferté-Bernard Cedex", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(new Phrase("N° Intracommunautaire: FR 63 340 321 801", FontFactory.getFont(
-          FontFactory.TIMES_ROMAN, 12)));
+                FontFactory.TIMES_ROMAN, 12)));
 
         cell = new PdfPCell(paragraph);
         cell.setBorder(Rectangle.NO_BORDER);
@@ -119,54 +119,131 @@ public class PdfInvoiceCreator {
         return table;
     }
 
-    private Element createInfoCommand(String referenceCommand, String invoiceNumber) {
+    private Element createInfoCommand(InvoiceData invoiceData, String invoiceNumber) {
+
         Paragraph paragraph = new Paragraph();
         paragraph.setAlignment(Element.ALIGN_LEFT);
         paragraph.setSpacingBefore(20);
         paragraph.add(new Phrase("FACTURE", FontFactory.getFont(FontFactory.TIMES_BOLDITALIC, 14)));
 
+        // Main table
+        PdfPTable mainTable = new PdfPTable(2);
+        mainTable.setWidthPercentage(100.0f);
+        // Left table
+        PdfPCell firstTableCell = new PdfPCell();
+        firstTableCell.setBorder(PdfPCell.NO_BORDER);
+
+        firstTableCell.addElement(createLeftTable(invoiceNumber, invoiceData.getReference()));
+        mainTable.addCell(firstTableCell);
+
+        // Right table
+        PdfPCell secondTableCell = new PdfPCell();
+        secondTableCell.setBorder(PdfPCell.NO_BORDER);
+
+        secondTableCell.addElement(createBLTable(invoiceData.getReceipts()));
+        mainTable.addCell(secondTableCell);
+
+        paragraph.add(mainTable);
+
+        return paragraph;
+    }
+
+    private Element createLeftTable(String invoiceNumber, String reference) {
         float[] colsWidth = { 25f, 30f, 45f };
-        PdfPTable table = new PdfPTable(colsWidth);
-        table.setWidthPercentage(50);
-        table.setHorizontalAlignment(Element.ALIGN_LEFT);
+        PdfPTable leftTable = new PdfPTable(colsWidth);
+        leftTable.setWidthPercentage(100);
+        leftTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 
         PdfPCell headerCell = new PdfPCell(new Phrase("Numéro"));
         headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         headerCell.setMinimumHeight(20);
         headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-        table.addCell(headerCell);
+        leftTable.addCell(headerCell);
 
         headerCell = new PdfPCell(new Phrase("Date"));
         headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         headerCell.setMinimumHeight(20);
         headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-        table.addCell(headerCell);
+        leftTable.addCell(headerCell);
 
         headerCell = new PdfPCell(new Phrase("Commande Client"));
         headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         headerCell.setMinimumHeight(20);
         headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-        table.addCell(headerCell);
+        leftTable.addCell(headerCell);
 
         PdfPCell cell = new PdfPCell(new Phrase(invoiceNumber, FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         cell.setMinimumHeight(20);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-        table.addCell(cell);
+        leftTable.addCell(cell);
 
         cell = new PdfPCell(new Phrase(SimpleDateFormat.getDateInstance().format(new Date()), FontFactory.getFont(
-          FontFactory.TIMES_ROMAN, 12)));
+                FontFactory.TIMES_ROMAN, 12)));
         cell.setMinimumHeight(20);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-        table.addCell(cell);
+        leftTable.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(referenceCommand, FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+        cell = new PdfPCell(new Phrase(reference, FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         cell.setMinimumHeight(20);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-        table.addCell(cell);
+        leftTable.addCell(cell);
 
-        paragraph.add(table);
+        return leftTable;
+    }
 
-        return paragraph;
+    private Element createBLTable(List<ReceiptData> receiptDatas) {
+        float[] colsWidth = { 40f, 70f, 40f, 70f };
+        PdfPTable rightTable = new PdfPTable(colsWidth);
+        rightTable.setWidthPercentage(70);
+        rightTable.setHorizontalAlignment(Element.ALIGN_RIGHT);
+
+        PdfPCell headerCell = new PdfPCell(new Phrase("BL N°", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+        headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        headerCell.setMinimumHeight(15);
+        headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        rightTable.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("Date", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+        headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        headerCell.setMinimumHeight(15);
+        headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        rightTable.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("BL N°", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+        headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        headerCell.setMinimumHeight(15);
+        headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        rightTable.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("Date", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+        headerCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        headerCell.setMinimumHeight(15);
+        headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        rightTable.addCell(headerCell);
+
+        for (ReceiptData receiptData : receiptDatas) {
+            PdfPCell cell = new PdfPCell(new Phrase(String.valueOf(receiptData.getNumber()), FontFactory.getFont(
+                    FontFactory.TIMES_ROMAN, 10)));
+            cell.setMinimumHeight(15);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            rightTable.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy").format(receiptData.getCreationDate()),
+                    FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+            cell.setMinimumHeight(15);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            rightTable.addCell(cell);
+        }
+        PdfPCell cell = new PdfPCell(new Phrase("", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+        cell.setMinimumHeight(15);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        rightTable.addCell(cell);
+        cell = new PdfPCell(new Phrase("", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+        cell.setMinimumHeight(15);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        rightTable.addCell(cell);
+
+        return rightTable;
     }
 
     private Element createCommandTable(List<OrderDetailData> commands) {
@@ -216,7 +293,8 @@ public class PdfInvoiceCreator {
             cell.setMinimumHeight(20);
             table.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(new Integer(command.getQuantity()).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+            cell = new PdfPCell(new Phrase(new Integer(command.getQuantity()).toString(), FontFactory.getFont(
+                    FontFactory.TIMES_ROMAN, 12)));
             cell.setMinimumHeight(20);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
             table.addCell(cell);
@@ -254,7 +332,8 @@ public class PdfInvoiceCreator {
             }
 
         }
-        PdfPCell cell = new PdfPCell(new Phrase("ATTESTATION N° 07/2015", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+        PdfPCell cell = new PdfPCell(new Phrase("ATTESTATION N° 07/2015", FontFactory.getFont(FontFactory.TIMES_ROMAN,
+                12)));
         cell.setBorder(Rectangle.NO_BORDER);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         cell.setMinimumHeight(20);
