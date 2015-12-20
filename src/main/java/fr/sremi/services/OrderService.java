@@ -152,7 +152,11 @@ public class OrderService {
                 orderData.setDescription(lineItem.getPart().getDescription());
                 orderData.setQuantity(lineItem.getQuantity());
                 orderData.setDueDate(lineItem.getDueDate());
-                orderData.setUnitPriceHT(lineItem.getUnitPrice());
+                if (lineItem.getUnitPrice() == null) {
+                    orderData.setUnitPriceHT(Double.valueOf(0));
+                } else {
+                    orderData.setUnitPriceHT(lineItem.getUnitPrice());
+                }
                 orderDetails.add(orderData);
             }
             result.setOrderDetails(orderDetails);
