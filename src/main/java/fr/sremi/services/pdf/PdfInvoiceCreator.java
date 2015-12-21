@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -28,6 +27,7 @@ import fr.sremi.data.OrderDetailData;
 import fr.sremi.data.invoice.InvoiceData;
 import fr.sremi.data.invoice.ReceiptData;
 import fr.sremi.exception.PdfException;
+import fr.sremi.util.InvoiceUtils;
 
 @Component
 public class PdfInvoiceCreator {
@@ -38,7 +38,7 @@ public class PdfInvoiceCreator {
         try {
             FileOutputStream fileout = new FileOutputStream(file);
             PdfWriter writer = PdfWriter.getInstance(document, fileout);
-            writer.setPageEvent(new PdfFooterEvent());
+            writer.setPageEvent(new PdfInvoiceFooterEvent());
             writer.setPageEvent(new PdfHeaderEvent());
 
             document.open();
@@ -177,8 +177,8 @@ public class PdfInvoiceCreator {
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         leftTable.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(SimpleDateFormat.getDateInstance().format(new Date()), FontFactory.getFont(
-                FontFactory.TIMES_ROMAN, 12)));
+        cell = new PdfPCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy").format(InvoiceUtils.currentInvoiceDate()),
+                FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         cell.setMinimumHeight(20);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         leftTable.addCell(cell);
