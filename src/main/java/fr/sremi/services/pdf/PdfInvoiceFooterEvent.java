@@ -48,8 +48,8 @@ public class PdfInvoiceFooterEvent extends PdfPageEventHelper {
         footer.addCell(echeanceTableCell);
 
         LineSeparator footerLine = getLineSeparator();
-        footerLine.drawLine(writer.getDirectContent(), document.left(), document.right(), document.bottom() + 21);
-        footer.writeSelectedRows(0, -1, document.leftMargin(), document.bottomMargin() + 20, writer.getDirectContent());
+        footerLine.drawLine(writer.getDirectContent(), document.left(), document.right(), document.bottom() + 31);
+        footer.writeSelectedRows(0, -1, document.leftMargin(), document.bottomMargin() + 30, writer.getDirectContent());
     }
 
     private LineSeparator getLineSeparator() {
