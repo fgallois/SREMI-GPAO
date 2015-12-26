@@ -27,7 +27,7 @@ public class ConfigurationController {
     public GpaoConfiguration gpaoConfiguration() {
         return new GpaoConfiguration(generatorService.getCurrentReceiptNumber(),
                 generatorService.getCurrentInvoiceNumber(), configurationService.getBlArchivePath(),
-                configurationService.getExcelPath());
+                configurationService.getInvoiceArchivePath(), configurationService.getExcelPath());
     }
 
     @RequestMapping(value = "/receiptNumber.json", method = RequestMethod.GET)
@@ -53,13 +53,16 @@ public class ConfigurationController {
     private class GpaoConfiguration {
         private final int receiptNumber;
         private final int invoiceNumber;
-        private final String archivePath;
+        private final String receiptArchivePath;
+        private final String invoiceArchivePath;
         private final String excelPath;
 
-        private GpaoConfiguration(int receiptNumber, int invoiceNumber, String archivePath, String excelPath) {
+        private GpaoConfiguration(int receiptNumber, int invoiceNumber, String receiptArchivePath,
+                String invoiceArchivePath, String excelPath) {
             this.receiptNumber = receiptNumber;
             this.invoiceNumber = invoiceNumber;
-            this.archivePath = archivePath;
+            this.receiptArchivePath = receiptArchivePath;
+            this.invoiceArchivePath = invoiceArchivePath;
             this.excelPath = excelPath;
         }
 
@@ -71,8 +74,12 @@ public class ConfigurationController {
             return invoiceNumber;
         }
 
-        public String getArchivePath() {
-            return archivePath;
+        public String getReceiptArchivePath() {
+            return receiptArchivePath;
+        }
+
+        public String getInvoiceArchivePath() {
+            return invoiceArchivePath;
         }
 
         public String getExcelPath() {

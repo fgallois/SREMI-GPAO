@@ -1,24 +1,84 @@
 <div class="container-fluid" ng-controller="AdministrationController as adminCtrl" class="ng-scope">
     <div class="row">
-        <div class="form-group col-md-4">
-            <label for="receiptNumber">Numéro de BL</label>
-            <input type="text" class="form-control" id="receiptNumber" value="{{adminCtrl.config.receiptNumber}}">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Général</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group col-md-5">
+                        <label for="excelPath">Chemin Fichier Excel</label>
+                        <input type="text" class="form-control" id="excelPath" disabled="true" value="{{adminCtrl.config.excelPath}}">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
     <div class="row">
-        <div class="form-group col-md-4">
-            <label for="invoiceNumber">Numéro de Facture</label>
-            <input type="text" class="form-control" id="invoiceNumber" value="{{adminCtrl.config.invoiceNumber}}">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Bons de Livraison</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label for="receiptNumber">Numéro de BL</label>
+                            <input type="text" class="form-control" id="receiptNumber" disabled="true"
+                                   value="{{adminCtrl.config.receiptNumber}}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-5">
+                            <label for="blArchivePath">Chemin Archive BL</label>
+                            <input type="text" class="form-control" id="blArchivePath" disabled="true"
+                                   value="{{adminCtrl.config.receiptArchivePath}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
     <div class="row">
-        <div class="form-group col-md-7">
-            <label for="archivePath">Archive Path</label>
-            <input type="text" class="form-control" id="archivePath" value="{{adminCtrl.config.archivePath}}">
-        </div>
-        <div class="form-group col-md-7">
-            <label for="excelPath">Excel Path</label>
-            <input type="text" class="form-control" id="excelPath" value="{{adminCtrl.config.excelPath}}">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Facturation</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label for="invoiceNumber">Numéro de Facture</label>
+                            <input type="text" class="form-control" id="invoiceNumber" disabled="true"
+                                   value="{{adminCtrl.config.invoiceNumber}}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-5">
+                            <label for="factureArchivePath">Chemin Archive Facture</label>
+                            <input type="text" class="form-control" id="factureArchivePath" disabled="true"
+                                   value="{{adminCtrl.config.invoiceArchivePath}}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-5">
+                            <label for="attestation">Numéro d'Attestation</label>
+                            <input type="text" class="form-control" id="attestation"
+                                   value="{{adminCtrl.config.invoiceArchivePath}}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label for="tva">Taux de TVA</label>
+                            <input type="text" class="form-control" id="tva"
+                                   value="{{adminCtrl.config.invoiceArchivePath}}">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>
