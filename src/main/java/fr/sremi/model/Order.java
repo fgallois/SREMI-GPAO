@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -40,6 +41,10 @@ public class Order {
 
     @NotNull
     private Boolean open;
+
+    @ManyToOne
+    @JoinColumn(name = "buyerId")
+    private Buyer buyer;
 
     protected Order() {
     }
@@ -97,5 +102,13 @@ public class Order {
 
     public void addReceipt(Receipt receipt) {
         this.receipts.add(receipt);
+    }
+
+    public Buyer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
     }
 }

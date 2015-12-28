@@ -1,3 +1,6 @@
 create database sremi CHARACTER SET=utf8 COLLATE=utf8_bin;
 grant all on sremi.* to sremi@localhost identified by 'sremi';
 
+insert into buyers (code, first_name, last_name) set('IH', 'Isabelle', 'Hrimel');
+insert into buyers (code, first_name, last_name) set('SB', 'Sebastien', 'Bolino');
+

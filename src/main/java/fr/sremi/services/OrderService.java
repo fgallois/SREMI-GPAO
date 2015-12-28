@@ -2,20 +2,23 @@ package fr.sremi.services;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import fr.sremi.dao.OrderLineItemRepository;
-import fr.sremi.data.invoice.InvoiceData;
-import fr.sremi.data.invoice.ReceiptData;
 import org.springframework.stereotype.Component;
 
+import fr.sremi.dao.BuyerRepository;
+import fr.sremi.dao.OrderLineItemRepository;
 import fr.sremi.dao.OrderRepository;
 import fr.sremi.dao.PartRepository;
 import fr.sremi.data.OrderData;
 import fr.sremi.data.OrderDetailData;
+import fr.sremi.data.invoice.InvoiceData;
+import fr.sremi.data.invoice.ReceiptData;
 import fr.sremi.exception.ExcelException;
+import fr.sremi.model.Buyer;
 import fr.sremi.model.LineItem;
 import fr.sremi.model.Order;
 import fr.sremi.model.Part;
@@ -41,6 +44,9 @@ public class OrderService {
     @Resource
     PartRepository partRepository;
 
+    @Resource
+    BuyerRepository buyerRepository;
+
     public void importOrders() {
         ExcelParserService excelParser = new ExcelParserService();
 
@@ -50,6 +56,7 @@ public class OrderService {
             for (Command command : commands) {
                 if (orderRepository.findByReference(command.getReference()) == null) {
                     Order order = new Order(command.getReference());
+                    order.setBuyer(buyerRepository.findByCode(command.getReference().substring(0, 2)));
                     for (ItemCommand itemCommand : command.getItems()) {
                         Part part = partRepository.findByReference(itemCommand.getItem().getReference());
                         if (part == null) {
@@ -67,8 +74,10 @@ public class OrderService {
         } catch (ExcelException e) {
             e.printStackTrace();
         }
-
     }
+
+
+
 
     public List<OrderData> getAvailableOrders() {
         List<OrderData> result = new ArrayList<>();
@@ -162,7 +171,7 @@ public class OrderService {
             result.setOrderDetails(orderDetails);
 
             List<ReceiptData> receipts = new ArrayList<>();
-            for (Receipt receipt: order.getReceipts()) {
+            for (Receipt receipt : order.getReceipts()) {
                 ReceiptData receiptData = new ReceiptData();
                 receiptData.setId(receipt.getId());
                 receiptData.setNumber(receipt.getNumber());
