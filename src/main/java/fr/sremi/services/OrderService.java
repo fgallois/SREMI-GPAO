@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import fr.sremi.util.InvoiceUtils;
 import org.springframework.stereotype.Component;
 
 import fr.sremi.dao.BuyerRepository;
@@ -190,5 +191,11 @@ public class OrderService {
             lineItem.setUnitPrice(orderDetailData.getUnitPriceHT());
             orderLineItemRepository.save(lineItem);
         }
+    }
+
+    public void updateInvoiceDate(String orderRef) {
+        Order order = orderRepository.findByReference(orderRef);
+        order.setInvoiceDate(InvoiceUtils.currentInvoiceDate());
+        orderRepository.save(order);
     }
 }

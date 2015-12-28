@@ -36,8 +36,8 @@ public class InvoiceService {
 
             pdfInvoiceCreator.createPdf(String.valueOf(invoiceNumber), orderService.getInvoiceData(orderRef),
                     archiveFile);
-            // orderService.saveOrderReceipt(receiptData.getOrderRef(), invoiceNumber);
             generatorService.saveInvoiceNumber(invoiceNumber);
+            orderService.updateInvoiceDate(orderRef);
         } catch (PdfException e) {
             e.printStackTrace();
         }

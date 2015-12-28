@@ -1,6 +1,7 @@
 package fr.sremi.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -45,6 +46,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "buyerId")
     private Buyer buyer;
+
+    private Date invoiceDate;
 
     protected Order() {
     }
@@ -110,5 +113,13 @@ public class Order {
 
     public void setBuyer(Buyer buyer) {
         this.buyer = buyer;
+    }
+
+    public Date getInvoiceDate() {
+        return invoiceDate;
+    }
+
+    public void setInvoiceDate(Date invoiceDate) {
+        this.invoiceDate = invoiceDate;
     }
 }
