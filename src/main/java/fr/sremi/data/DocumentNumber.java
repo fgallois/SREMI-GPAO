@@ -4,13 +4,13 @@ package fr.sremi.data;
  * Created by fgallois on 10/17/15.
  */
 public class DocumentNumber {
-    private int documentNumber;
+    private String documentNumber;
 
-    public int getDocumentNumber() {
+    public String getDocumentNumber() {
         return documentNumber;
     }
 
-    public void setDocumentNumber(int documentNumber) {
+    public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
     }
 }

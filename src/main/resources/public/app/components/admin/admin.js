@@ -11,6 +11,29 @@
             console.log("data = " + data.receiptNumber);
             gpaoConfig.config = data;
         });
+
+        this.updateCertificateNumber = function () {
+            var newNumber = JSON.stringify({documentNumber: gpaoConfig.config.certificateNumber});
+            $http.post('./certificateNumber', newNumber)
+                .success(function (data) {
+                    console.log("SUCCESS");
+                })
+                .error(function (data) {
+                    console.log("ERROR");
+                });
+        };
+
+        this.updateVatRate = function () {
+            var newNumber = JSON.stringify({documentNumber: gpaoConfig.config.vatRate});
+            $http.post('./vatRate', newNumber)
+                .success(function (data) {
+                    console.log("SUCCESS");
+                })
+                .error(function (data) {
+                    console.log("ERROR");
+                });
+        };
+
     }]);
 
 })();

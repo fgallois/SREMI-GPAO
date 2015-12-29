@@ -1,6 +1,9 @@
 package fr.sremi.services;
 
-import org.springframework.beans.factory.annotation.Value;
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,24 +12,56 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConfigurationService {
 
-    @Value("${excel.file.path}")
-    private String excelPath;
+    private PropertiesConfiguration configuration;
 
-    @Value("${bl.archive.file.path}")
-    private String blArchivePath;
-
-    @Value("${invoice.archive.file.path}")
-    private String invoiceArchivePath;
+    @PostConstruct
+    private void init() {
+        try {
+            configuration = new PropertiesConfiguration("gpao-config.properties");
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
 
     public String getExcelPath() {
-        return excelPath;
+        return configuration.getString("excel.file.path");
     }
 
     public String getBlArchivePath() {
-        return blArchivePath;
+        return configuration.getString("bl.archive.file.path");
     }
 
     public String getInvoiceArchivePath() {
-        return invoiceArchivePath;
+        return configuration.getString("invoice.archive.file.path");
+    }
+
+    public String getCertificateNumber() {
+        return configuration.getString("invoice.certificateNumber");
+    }
+
+    public void setCertificateNumber(String certificateNumber) {
+        configuration.setProperty("invoice.certificateNumber", certificateNumber);
+        save();
+    }
+
+    public Boolean getWithVat() {
+        return configuration.getBoolean("invoice.withVat");
+    }
+
+    public Double getVatRate() {
+        return configuration.getDouble("invoice.vatRate");
+    }
+
+    public void setVatRate(Double vatRate) {
+        configuration.setProperty("invoice.vatRate", vatRate);
+        save();
+    }
+
+    private void save() {
+        try {
+            configuration.save();
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 }

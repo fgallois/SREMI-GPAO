@@ -8,7 +8,8 @@
                 <div class="panel-body">
                     <div class="form-group col-md-5">
                         <label for="excelPath">Chemin Fichier Excel</label>
-                        <input type="text" class="form-control" id="excelPath" disabled="true" value="{{adminCtrl.config.excelPath}}">
+                        <input type="text" class="form-control" id="excelPath" disabled="true"
+                               value="{{adminCtrl.config.excelPath}}">
                     </div>
                 </div>
             </div>
@@ -66,17 +67,20 @@
                         <div class="form-group col-md-5">
                             <label for="attestation">Numéro d'Attestation</label>
                             <input type="text" class="form-control" id="attestation"
-                                   value="{{adminCtrl.config.invoiceArchivePath}}">
+                                   ng-model="adminCtrl.config.certificateNumber"
+                                   ng-model-options="{ updateOn: 'blur' }"
+                                   ng-change="adminCtrl.updateCertificateNumber()"
+                                   aria-describedby="basic-addon1">
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-3">
                             <label for="tva">Taux de TVA</label>
-                            <input type="text" class="form-control" id="tva"
-                                   value="{{adminCtrl.config.invoiceArchivePath}}">
+                            <input type="text" class="form-control" id="tva" ng-model="adminCtrl.config.vatRate"
+                                   ng-model-options="{ updateOn: 'blur' }" ng-change="adminCtrl.updateVatRate()"
+                                   aria-describedby="basic-addon1">
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
