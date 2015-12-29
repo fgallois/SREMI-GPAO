@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.itextpdf.text.BaseColor;
@@ -47,14 +48,14 @@ public class PdfInvoiceCreator {
             document.add(createInformations());
             document.add(createInfoCommand(invoiceData, invoiceNumber));
             document.add(createCommandTable(invoiceData.getOrderDetails()));
-            document.add(createFooterTable(invoiceData.getOrderDetails()));
+            document.add(createFooterTable(invoiceData));
             document.newPage();
 
             // Page 2: Exemplaire SREMI
             document.add(createInformations());
             document.add(createInfoCommand(invoiceData, invoiceNumber));
             document.add(createCommandTable(invoiceData.getOrderDetails()));
-            document.add(createFooterTable(invoiceData.getOrderDetails()));
+            document.add(createFooterTable(invoiceData));
             document.newPage();
 
         } catch (FileNotFoundException e) {
@@ -319,7 +320,8 @@ public class PdfInvoiceCreator {
         return table;
     }
 
-    private Element createFooterTable(List<OrderDetailData> commands) {
+    private Element createFooterTable(InvoiceData invoiceData) {
+        List<OrderDetailData> commands = invoiceData.getOrderDetails();
         float[] colsWidth = { 62f, 14f, 14f };
         PdfPTable table = new PdfPTable(colsWidth);
         table.setWidthPercentage(100);
@@ -332,8 +334,11 @@ public class PdfInvoiceCreator {
             }
 
         }
-        PdfPCell cell = new PdfPCell(new Phrase("ATTESTATION N° 07/2015", FontFactory.getFont(FontFactory.TIMES_ROMAN,
-                12)));
+        PdfPCell cell = new PdfPCell();
+        if (StringUtils.isNotEmpty(invoiceData.getCertificateNumber())) {
+            cell.setPhrase(new Phrase("ATTESTATION N° " + invoiceData.getCertificateNumber(), FontFactory.getFont(
+                    FontFactory.TIMES_ROMAN, 12)));
+        }
         cell.setBorder(Rectangle.NO_BORDER);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         cell.setMinimumHeight(20);
@@ -349,6 +354,30 @@ public class PdfInvoiceCreator {
         cell.setMinimumHeight(20);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         table.addCell(cell);
+
+        if (invoiceData.getWithVat()) {
+            cell = new PdfPCell();
+            cell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(cell);
+            table.addCell(cell);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("TOTAL TTC", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+            cell.setMinimumHeight(20);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            table.addCell(cell);
+
+            Double totalTTC = totalHt + totalHt * invoiceData.getVatRate() / 100;
+            cell = new PdfPCell(new Phrase(myFormatter.format(totalTTC),
+                    FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+            cell.setMinimumHeight(20);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            table.addCell(cell);
+        }
 
         return table;
     }

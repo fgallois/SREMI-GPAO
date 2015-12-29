@@ -2,12 +2,10 @@ package fr.sremi.services;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import fr.sremi.util.InvoiceUtils;
 import org.springframework.stereotype.Component;
 
 import fr.sremi.dao.BuyerRepository;
@@ -19,11 +17,11 @@ import fr.sremi.data.OrderDetailData;
 import fr.sremi.data.invoice.InvoiceData;
 import fr.sremi.data.invoice.ReceiptData;
 import fr.sremi.exception.ExcelException;
-import fr.sremi.model.Buyer;
 import fr.sremi.model.LineItem;
 import fr.sremi.model.Order;
 import fr.sremi.model.Part;
 import fr.sremi.model.Receipt;
+import fr.sremi.util.InvoiceUtils;
 import fr.sremi.vo.Command;
 import fr.sremi.vo.ItemCommand;
 
@@ -76,9 +74,6 @@ public class OrderService {
             e.printStackTrace();
         }
     }
-
-
-
 
     public List<OrderData> getAvailableOrders() {
         List<OrderData> result = new ArrayList<>();
@@ -152,6 +147,9 @@ public class OrderService {
 
         if (order != null) {
             result.setReference(order.getReference());
+            result.setCertificateNumber(configurationService.getCertificateNumber());
+            result.setWithVat(configurationService.getWithVat());
+            result.setVatRate(configurationService.getVatRate());
 
             List<OrderDetailData> orderDetails = new ArrayList<>();
             for (LineItem lineItem : order.getLineItems()) {
