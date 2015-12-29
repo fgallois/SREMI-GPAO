@@ -54,13 +54,16 @@ public class ConfigurationController {
 
     @RequestMapping(value = "/certificateNumber", method = RequestMethod.POST)
     public void updateCertificateNumber(@RequestBody DocumentNumber certificateNumber) {
-        System.out.println("Certificate = " + certificateNumber.getDocumentNumber());
         configurationService.setCertificateNumber(certificateNumber.getDocumentNumber());
+    }
+
+    @RequestMapping(value = "/withVat", method = RequestMethod.POST)
+    public void updateWithVat(@RequestBody DocumentNumber certificateNumber) {
+        configurationService.setWithVat(Boolean.valueOf(certificateNumber.getDocumentNumber()));
     }
 
     @RequestMapping(value = "/vatRate", method = RequestMethod.POST)
     public void updateVatRate(@RequestBody DocumentNumber certificateNumber) {
-        System.out.println("Certificate = " + certificateNumber.getDocumentNumber());
         configurationService.setVatRate(Double.valueOf(certificateNumber.getDocumentNumber()));
     }
 

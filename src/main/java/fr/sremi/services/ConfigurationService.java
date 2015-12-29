@@ -48,6 +48,11 @@ public class ConfigurationService {
         return configuration.getBoolean("invoice.withVat");
     }
 
+    public void setWithVat(Boolean withVat) {
+        configuration.setProperty("invoice.withVat", withVat);
+        save();
+    }
+
     public Double getVatRate() {
         return configuration.getDouble("invoice.vatRate");
     }

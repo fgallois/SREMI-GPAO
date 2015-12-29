@@ -23,6 +23,18 @@
                 });
         };
 
+
+        this.updateWithVat = function () {
+            var newNumber = JSON.stringify({documentNumber: gpaoConfig.config.withVat});
+            $http.post('./withVat', newNumber)
+                .success(function (data) {
+                    console.log("SUCCESS");
+                })
+                .error(function (data) {
+                    console.log("ERROR");
+                });
+        };
+
         this.updateVatRate = function () {
             var newNumber = JSON.stringify({documentNumber: gpaoConfig.config.vatRate});
             $http.post('./vatRate', newNumber)
