@@ -48,14 +48,18 @@ public class PdfInvoiceCreator {
             document.add(createInformations());
             document.add(createInfoCommand(invoiceData, invoiceNumber));
             document.add(createCommandTable(invoiceData.getOrderDetails()));
-            document.add(createFooterTable(invoiceData));
+            PdfPTable table = (PdfPTable)createFooterTable(invoiceData);
+            table.setSpacingBefore(writer.getVerticalPosition(true) - 120);
+            document.add(table);
             document.newPage();
 
             // Page 2: Exemplaire SREMI
             document.add(createInformations());
             document.add(createInfoCommand(invoiceData, invoiceNumber));
             document.add(createCommandTable(invoiceData.getOrderDetails()));
-            document.add(createFooterTable(invoiceData));
+            table = (PdfPTable)createFooterTable(invoiceData);
+            table.setSpacingBefore(writer.getVerticalPosition(true) - 120);
+            document.add(table);
             document.newPage();
 
         } catch (FileNotFoundException e) {
