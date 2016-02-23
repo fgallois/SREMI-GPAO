@@ -120,10 +120,18 @@ public class OrderService {
         return result;
     }
 
-    public void saveOrderReceipt(String orderRef, int invoiceNumber) {
+    public void saveOrderReceipt(String orderRef, List<OrderDetailData> commands, int invoiceNumber) {
         Order order = orderRepository.findByReference(orderRef);
         if (order != null) {
-            Receipt receipt = new Receipt(invoiceNumber);
+            List<LineItem> lineItems = new ArrayList<>();
+            for (OrderDetailData command : commands) {
+                for (LineItem lineItem : order.getLineItems()) {
+                    if (lineItem.getLine() == command.getLine()) {
+                        lineItems.add(lineItem);
+                    }
+                }
+            }
+            Receipt receipt = new Receipt(invoiceNumber, lineItems);
 
             order.addReceipt(receipt);
             orderRepository.save(order);
@@ -152,23 +160,6 @@ public class OrderService {
             result.setVatRate(configurationService.getVatRate());
 
             List<OrderDetailData> orderDetails = new ArrayList<>();
-            for (LineItem lineItem : order.getLineItems()) {
-                OrderDetailData orderData = new OrderDetailData();
-                orderData.setId(lineItem.getId());
-                orderData.setLine(lineItem.getLine());
-                orderData.setReference(lineItem.getPart().getReference());
-                orderData.setDescription(lineItem.getPart().getDescription());
-                orderData.setQuantity(lineItem.getQuantity());
-                orderData.setDueDate(lineItem.getDueDate());
-                if (lineItem.getUnitPrice() == null) {
-                    orderData.setUnitPriceHT(Double.valueOf(0));
-                } else {
-                    orderData.setUnitPriceHT(lineItem.getUnitPrice());
-                }
-                orderDetails.add(orderData);
-            }
-            result.setOrderDetails(orderDetails);
-
             List<ReceiptData> receipts = new ArrayList<>();
             for (Receipt receipt : order.getReceipts()) {
                 ReceiptData receiptData = new ReceiptData();
@@ -176,8 +167,26 @@ public class OrderService {
                 receiptData.setNumber(receipt.getNumber());
                 receiptData.setCreationDate(receipt.getCreationDate());
                 receipts.add(receiptData);
+
+                for (LineItem lineItem : receipt.getLineItems()) {
+                    OrderDetailData orderData = new OrderDetailData();
+                    orderData.setId(lineItem.getId());
+                    orderData.setLine(lineItem.getLine());
+                    orderData.setReference(lineItem.getPart().getReference());
+                    orderData.setDescription(lineItem.getPart().getDescription());
+                    orderData.setQuantity(lineItem.getQuantity());
+                    orderData.setDueDate(lineItem.getDueDate());
+                    if (lineItem.getUnitPrice() == null) {
+                        orderData.setUnitPriceHT(Double.valueOf(0));
+                    } else {
+                        orderData.setUnitPriceHT(lineItem.getUnitPrice());
+                    }
+                    orderDetails.add(orderData);
+                }
+
             }
             result.setReceipts(receipts);
+            result.setOrderDetails(orderDetails);
         }
         return result;
     }

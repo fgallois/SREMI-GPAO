@@ -37,7 +37,7 @@ public class ReceiptService {
 
             pdfReceiptCreator.createPdf(String.valueOf(receiptNumber), receiptData.getOrderRef(),
                     receiptData.getLines(), archiveFile);
-            orderService.saveOrderReceipt(receiptData.getOrderRef(), receiptNumber);
+            orderService.saveOrderReceipt(receiptData.getOrderRef(), receiptData.getLines(), receiptNumber);
             generatorService.saveReceiptNumber(receiptNumber);
         } catch (PdfException e) {
             e.printStackTrace();

@@ -1,11 +1,16 @@
 package fr.sremi.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -25,11 +30,16 @@ public class Receipt {
     @NotNull
     private Date creationDate;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "receipt_lineItems", joinColumns = @JoinColumn(name = "receiptId"), inverseJoinColumns = @JoinColumn(name = "lineItemId"))
+    private List<LineItem> lineItems;
+
     protected Receipt() {
     }
 
-    public Receipt(Integer number) {
+    public Receipt(Integer number, List<LineItem> lineItems) {
         this.number = number;
+        this.lineItems = lineItems;
         this.creationDate = new Date();
     }
 
@@ -55,5 +65,13 @@ public class Receipt {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public List<LineItem> getLineItems() {
+        return lineItems;
+    }
+
+    public void setLineItems(List<LineItem> lineItems) {
+        this.lineItems = lineItems;
     }
 }
