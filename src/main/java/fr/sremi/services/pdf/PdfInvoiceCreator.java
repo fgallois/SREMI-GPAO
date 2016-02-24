@@ -49,7 +49,11 @@ public class PdfInvoiceCreator {
             document.add(createInfoCommand(invoiceData, invoiceNumber));
             document.add(createCommandTable(invoiceData.getOrderDetails()));
             PdfPTable table = (PdfPTable)createFooterTable(invoiceData);
-            table.setSpacingBefore(writer.getVerticalPosition(true) - 120);
+            int bottomSpacing = 100;
+            if (invoiceData.getWithVat()) {
+                bottomSpacing = 140;
+            }
+                table.setSpacingBefore(writer.getVerticalPosition(true) - bottomSpacing);
             document.add(table);
             document.newPage();
 
@@ -58,7 +62,7 @@ public class PdfInvoiceCreator {
             document.add(createInfoCommand(invoiceData, invoiceNumber));
             document.add(createCommandTable(invoiceData.getOrderDetails()));
             table = (PdfPTable)createFooterTable(invoiceData);
-            table.setSpacingBefore(writer.getVerticalPosition(true) - 120);
+            table.setSpacingBefore(writer.getVerticalPosition(true) - bottomSpacing);
             document.add(table);
             document.newPage();
 
@@ -370,12 +374,34 @@ public class PdfInvoiceCreator {
             cell.setBorder(Rectangle.NO_BORDER);
             table.addCell(cell);
 
+            Double montantTva = totalHt * invoiceData.getVatRate() / 100;
+            cell = new PdfPCell(new Phrase("TVA à " + invoiceData.getVatRate() + "%", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+            cell.setMinimumHeight(20);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(myFormatter.format(montantTva),
+              FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+            cell.setMinimumHeight(20);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(cell);
+            table.addCell(cell);
+            table.addCell(cell);
+
+            cell = new PdfPCell();
+            cell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(cell);
+
             cell = new PdfPCell(new Phrase("TOTAL TTC", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
             cell.setMinimumHeight(20);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
             table.addCell(cell);
 
-            Double totalTTC = totalHt + totalHt * invoiceData.getVatRate() / 100;
+            Double totalTTC = totalHt + montantTva;
             cell = new PdfPCell(new Phrase(myFormatter.format(totalTTC),
                     FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
             cell.setMinimumHeight(20);
