@@ -67,7 +67,6 @@ public class ReceiptController {
 
     @RequestMapping(value = "/{commandeRef}/{receiptRef}", method = RequestMethod.DELETE)
     public InvoiceData getOpenOrderDetails(@PathVariable String commandeRef, @PathVariable String receiptRef) {
-//        return orderService.getInvoiceData(commandeRef);
         return orderService.removeReceiptFromOrder(commandeRef, receiptRef);
     }
 

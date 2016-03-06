@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import fr.sremi.dao.ReceiptRepository;
 import org.springframework.stereotype.Component;
 
 import fr.sremi.dao.BuyerRepository;
@@ -45,6 +46,9 @@ public class OrderService {
 
     @Resource
     BuyerRepository buyerRepository;
+
+    @Resource
+    ReceiptRepository receiptRepository;
 
     public void importOrders() {
         ExcelParserService excelParser = new ExcelParserService();
@@ -210,13 +214,22 @@ public class OrderService {
         Order order = orderRepository.findByReference(commandeRef);
         if (order != null) {
             List<Receipt> updatedReceipts = new ArrayList<>();
+            Receipt receiptToDelete = null;
             for (Receipt receipt : order.getReceipts()) {
-                if (!receipt.getId().equals(Long.valueOf(receiptRef))) {
+                if (receipt.getId().equals(Long.valueOf(receiptRef))) {
+                    receiptToDelete = receipt;
+                } else {
                     updatedReceipts.add(receipt);
                 }
             }
             order.setReceipts(updatedReceipts);
             orderRepository.save(order);
+
+            if (receiptToDelete != null) {
+                receiptToDelete.getLineItems().clear();
+                receiptRepository.save(receiptToDelete);
+                receiptRepository.delete(receiptToDelete);
+            }
         }
         return getInvoiceData(commandeRef);
     }
