@@ -1,5 +1,6 @@
 package fr.sremi.data.invoice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.sremi.data.OrderDetailData;
@@ -12,7 +13,6 @@ public class InvoiceData {
     private String certificateNumber;
     private Boolean withVat;
     private Double vatRate;
-    private List<OrderDetailData> orderDetails;
     private List<ReceiptData> receipts;
 
     public String getReference() {
@@ -47,19 +47,19 @@ public class InvoiceData {
         this.vatRate = vatRate;
     }
 
-    public List<OrderDetailData> getOrderDetails() {
-        return orderDetails;
-    }
-
-    public void setOrderDetails(List<OrderDetailData> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
-
     public List<ReceiptData> getReceipts() {
         return receipts;
     }
 
     public void setReceipts(List<ReceiptData> receipts) {
         this.receipts = receipts;
+    }
+
+    public List<OrderDetailData> getAllOrderDetails() {
+        List<OrderDetailData> result = new ArrayList<>();
+        for (ReceiptData receipt : receipts) {
+            result.addAll(receipt.getOrderDetails());
+        }
+        return result;
     }
 }

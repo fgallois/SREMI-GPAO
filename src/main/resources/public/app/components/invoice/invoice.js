@@ -12,7 +12,7 @@
             columnDefs: [
                 {
                     name: 'id',
-                    visible:false
+                    visible: false
                 },
                 {
                     name: 'number',
@@ -20,7 +20,7 @@
                     headerCellClass: 'ui-grid-cell-center-align',
                     cellClass: 'ui-grid-cell-center-align',
                     enableCellEdit: false,
-                    allowCellFocus : false,
+                    allowCellFocus: false,
                     enableColumnMenu: false
                 },
                 {
@@ -29,9 +29,20 @@
                     headerCellClass: 'ui-grid-cell-center-align',
                     cellClass: 'ui-grid-cell-center-align',
                     enableCellEdit: false,
-                    allowCellFocus : false,
+                    allowCellFocus: false,
                     enableColumnMenu: false,
                     cellTemplate: '<div>{{COL_FIELD | date : "dd/MM/yyyy"}}</div>'
+                },
+                {
+                    name: 'Action',
+                    cellTemplate: '<button class="btn btn-danger btn-sm" ng-click="grid.appScope.deleteRowBL(row)">' +
+                        'Supprimer' +
+                        '</button>',
+                    headerCellClass: 'ui-grid-cell-center-align',
+                    cellClass: 'ui-grid-cell-center-align',
+                    enableCellEdit: false,
+                    allowCellFocus: false,
+                    enableColumnMenu: false
                 }
             ]
         };
@@ -42,7 +53,7 @@
             columnDefs: [
                 {
                     field: 'id',
-                    visible:false
+                    visible: false
                 },
                 {
                     field: 'line',
@@ -50,21 +61,21 @@
                     headerCellClass: 'ui-grid-cell-center-align',
                     cellClass: 'ui-grid-cell-center-align',
                     enableCellEdit: false,
-                    allowCellFocus : false,
+                    allowCellFocus: false,
                     enableColumnMenu: false
                 },
                 {
                     name: 'reference',
                     displayName: 'Référence',
                     enableCellEdit: false,
-                    allowCellFocus : false,
+                    allowCellFocus: false,
                     enableColumnMenu: false
                 },
                 {
                     name: 'description',
                     displayName: 'Description',
                     enableCellEdit: false,
-                    allowCellFocus : false,
+                    allowCellFocus: false,
                     enableColumnMenu: false
                 },
                 {
@@ -73,7 +84,7 @@
                     headerCellClass: 'ui-grid-cell-center-align',
                     cellClass: 'ui-grid-cell-center-align',
                     enableCellEdit: false,
-                    allowCellFocus : false,
+                    allowCellFocus: false,
                     enableColumnMenu: false
                 },
                 {
@@ -92,28 +103,51 @@
                     headerCellClass: 'ui-grid-cell-center-align',
                     cellClass: 'ui-grid-cell-center-align',
                     enableCellEdit: false,
-                    allowCellFocus : false,
+                    allowCellFocus: false,
                     enableColumnMenu: false,
                     cellTemplate: '<div>{{COL_FIELD | currency:"" : 2}} €</div>',
                     aggregationType: uiGridConstants.aggregationTypes.sum,
                     footerCellTemplate: '<div>Total HT: {{col.getAggregationValue() | currency:"" : 2}} €</div>'
                 }
             ],
-            onRegisterApi: function(gridApi){
+            onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
                 gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
             }
         };
 
-        $scope.saveRow = function( rowEntity ) {
+        $scope.saveRow = function (rowEntity) {
             var deferred = $q.defer();
             $http.put('./updateOrderLineItem.json', rowEntity)
-                .then(function(data) {
+                .then(function (data) {
                     deferred.resolve();
-                }, function(error){
+                }, function (error) {
                     deferred.reject();
                 });
             $scope.gridApi.rowEdit.setSavePromise(rowEntity, deferred.promise);
+        };
+
+        $scope.deleteRowBL = function (row) {
+            BootstrapDialog.confirm('Etes-vous sur de vouloir supprimer le bon de livraison \''
+                + row.entity.number + '\'?', function (result) {
+                if (result) {
+                    $http.delete('./receipt/' + invoice.orderListLabel + '/' + row.entity.id)
+                        .success(function (data) {
+                            console.log("data = " + data.allOrderDetails);
+                            angular.forEach(data.allOrderDetails, function (row) {
+                                row.calculateTotalHT = function () {
+                                    var total = 20;
+                                    if (this.unitPriceHT >= 0) {
+                                        total = this.quantity * this.unitPriceHT;
+                                    }
+                                    return total;
+                                }
+                            });
+                            $scope.gridBlInvoice.data = data.receipts;
+                            $scope.gridInvoice.data = data.allOrderDetails;
+                        });
+                }
+            });
         };
 
         $http.get('./invoiceNumber.json').success(function (data) {
@@ -132,9 +166,9 @@
             invoice.orderListLabel = order.orderReference;
             $http.get('./openOrder.json/' + order.orderReference)
                 .success(function (data) {
-                    console.log("data = " + data.orderDetails);
-                    angular.forEach(data.orderDetails, function(row){
-                        row.calculateTotalHT = function() {
+                    console.log("data = " + data.allOrderDetails);
+                    angular.forEach(data.allOrderDetails, function (row) {
+                        row.calculateTotalHT = function () {
                             var total = 20;
                             if (this.unitPriceHT >= 0) {
                                 total = this.quantity * this.unitPriceHT;
@@ -142,21 +176,21 @@
                             return total;
                         }
                     });
-                    $scope.gridInvoice.data = data.orderDetails;
                     $scope.gridBlInvoice.data = data.receipts;
+                    $scope.gridInvoice.data = data.allOrderDetails;
                 });
         };
 
         this.printInvoice = function () {
-                var dataFacture = JSON.stringify({reference: invoice.orderListLabel});
-                $http.post('./invoice', dataFacture)
-                    .success(function (data, status, headers, config) {
-                        invoice.invoiceNumber = parseInt(headers('invoiceNumber'));
-                        window.open(headers('Location'), "_blank");
-                    })
-                    .error(function (data) {
-                        console.log('Error = ' + data);
-                    });
+            var dataFacture = JSON.stringify({reference: invoice.orderListLabel});
+            $http.post('./invoice', dataFacture)
+                .success(function (data, status, headers, config) {
+                    invoice.invoiceNumber = parseInt(headers('invoiceNumber'));
+                    window.open(headers('Location'), "_blank");
+                })
+                .error(function (data) {
+                    console.log('Error = ' + data);
+                });
         };
 
         this.updateInvoiceNumber = function () {

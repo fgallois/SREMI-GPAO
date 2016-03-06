@@ -5,7 +5,9 @@ import java.io.IOException;
 import javax.annotation.Resource;
 
 import fr.sremi.data.ReceiptData;
+import fr.sremi.data.invoice.InvoiceData;
 import fr.sremi.services.GeneratorService;
+import fr.sremi.services.OrderService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,9 @@ public class ReceiptController {
 
     @Resource
     private ReceiptService receiptService;
+
+    @Resource
+    private OrderService orderService;
 
     @Resource
     private GeneratorService generatorService;
@@ -59,4 +64,11 @@ public class ReceiptController {
                 .contentType(MediaType.parseMediaType("application/pdf"))
                 .body(new InputStreamResource(pdfFile.getInputStream()));
     }
+
+    @RequestMapping(value = "/{commandeRef}/{receiptRef}", method = RequestMethod.DELETE)
+    public InvoiceData getOpenOrderDetails(@PathVariable String commandeRef, @PathVariable String receiptRef) {
+//        return orderService.getInvoiceData(commandeRef);
+        return orderService.removeReceiptFromOrder(commandeRef, receiptRef);
+    }
+
 }

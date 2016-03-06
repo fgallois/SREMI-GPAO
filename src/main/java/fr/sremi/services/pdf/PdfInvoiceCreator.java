@@ -47,7 +47,7 @@ public class PdfInvoiceCreator {
             // Page 1: Exemplaire client
             document.add(createInformations());
             document.add(createInfoCommand(invoiceData, invoiceNumber));
-            document.add(createCommandTable(invoiceData.getOrderDetails()));
+            document.add(createCommandTable(invoiceData.getAllOrderDetails()));
             PdfPTable table = (PdfPTable)createFooterTable(invoiceData);
             int bottomSpacing = 100;
             if (invoiceData.getWithVat()) {
@@ -60,7 +60,7 @@ public class PdfInvoiceCreator {
             // Page 2: Exemplaire SREMI
             document.add(createInformations());
             document.add(createInfoCommand(invoiceData, invoiceNumber));
-            document.add(createCommandTable(invoiceData.getOrderDetails()));
+            document.add(createCommandTable(invoiceData.getAllOrderDetails()));
             table = (PdfPTable)createFooterTable(invoiceData);
             table.setSpacingBefore(writer.getVerticalPosition(true) - bottomSpacing);
             document.add(table);
@@ -329,7 +329,7 @@ public class PdfInvoiceCreator {
     }
 
     private Element createFooterTable(InvoiceData invoiceData) {
-        List<OrderDetailData> commands = invoiceData.getOrderDetails();
+        List<OrderDetailData> commands = invoiceData.getAllOrderDetails();
         float[] colsWidth = { 62f, 14f, 14f };
         PdfPTable table = new PdfPTable(colsWidth);
         table.setWidthPercentage(100);

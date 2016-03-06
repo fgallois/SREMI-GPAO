@@ -159,15 +159,14 @@ public class OrderService {
             result.setWithVat(configurationService.getWithVat());
             result.setVatRate(configurationService.getVatRate());
 
-            List<OrderDetailData> orderDetails = new ArrayList<>();
             List<ReceiptData> receipts = new ArrayList<>();
             for (Receipt receipt : order.getReceipts()) {
                 ReceiptData receiptData = new ReceiptData();
                 receiptData.setId(receipt.getId());
                 receiptData.setNumber(receipt.getNumber());
                 receiptData.setCreationDate(receipt.getCreationDate());
-                receipts.add(receiptData);
 
+                List<OrderDetailData> orderDetails = new ArrayList<>();
                 for (LineItem lineItem : receipt.getLineItems()) {
                     OrderDetailData orderData = new OrderDetailData();
                     orderData.setId(lineItem.getId());
@@ -183,10 +182,11 @@ public class OrderService {
                     }
                     orderDetails.add(orderData);
                 }
+                receiptData.setOrderDetails(orderDetails);
 
+                receipts.add(receiptData);
             }
             result.setReceipts(receipts);
-            result.setOrderDetails(orderDetails);
         }
         return result;
     }
@@ -204,5 +204,20 @@ public class OrderService {
         Order order = orderRepository.findByReference(orderRef);
         order.setInvoiceDate(InvoiceUtils.currentInvoiceDate());
         orderRepository.save(order);
+    }
+
+    public InvoiceData removeReceiptFromOrder(String commandeRef, String receiptRef) {
+        Order order = orderRepository.findByReference(commandeRef);
+        if (order != null) {
+            List<Receipt> updatedReceipts = new ArrayList<>();
+            for (Receipt receipt : order.getReceipts()) {
+                if (!receipt.getId().equals(Long.valueOf(receiptRef))) {
+                    updatedReceipts.add(receipt);
+                }
+            }
+            order.setReceipts(updatedReceipts);
+            orderRepository.save(order);
+        }
+        return getInvoiceData(commandeRef);
     }
 }
