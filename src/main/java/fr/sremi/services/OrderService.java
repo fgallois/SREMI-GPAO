@@ -6,13 +6,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import fr.sremi.dao.ReceiptRepository;
 import org.springframework.stereotype.Component;
 
 import fr.sremi.dao.BuyerRepository;
 import fr.sremi.dao.OrderLineItemRepository;
 import fr.sremi.dao.OrderRepository;
 import fr.sremi.dao.PartRepository;
+import fr.sremi.dao.ReceiptRepository;
 import fr.sremi.data.OrderData;
 import fr.sremi.data.OrderDetailData;
 import fr.sremi.data.invoice.InvoiceData;
@@ -165,30 +165,32 @@ public class OrderService {
 
             List<ReceiptData> receipts = new ArrayList<>();
             for (Receipt receipt : order.getReceipts()) {
-                ReceiptData receiptData = new ReceiptData();
-                receiptData.setId(receipt.getId());
-                receiptData.setNumber(receipt.getNumber());
-                receiptData.setCreationDate(receipt.getCreationDate());
+                if (InvoiceUtils.isForCurrentInvoice(receipt.getCreationDate())) {
+                    ReceiptData receiptData = new ReceiptData();
+                    receiptData.setId(receipt.getId());
+                    receiptData.setNumber(receipt.getNumber());
+                    receiptData.setCreationDate(receipt.getCreationDate());
 
-                List<OrderDetailData> orderDetails = new ArrayList<>();
-                for (LineItem lineItem : receipt.getLineItems()) {
-                    OrderDetailData orderData = new OrderDetailData();
-                    orderData.setId(lineItem.getId());
-                    orderData.setLine(lineItem.getLine());
-                    orderData.setReference(lineItem.getPart().getReference());
-                    orderData.setDescription(lineItem.getPart().getDescription());
-                    orderData.setQuantity(lineItem.getQuantity());
-                    orderData.setDueDate(lineItem.getDueDate());
-                    if (lineItem.getUnitPrice() == null) {
-                        orderData.setUnitPriceHT(Double.valueOf(0));
-                    } else {
-                        orderData.setUnitPriceHT(lineItem.getUnitPrice());
+                    List<OrderDetailData> orderDetails = new ArrayList<>();
+                    for (LineItem lineItem : receipt.getLineItems()) {
+                        OrderDetailData orderData = new OrderDetailData();
+                        orderData.setId(lineItem.getId());
+                        orderData.setLine(lineItem.getLine());
+                        orderData.setReference(lineItem.getPart().getReference());
+                        orderData.setDescription(lineItem.getPart().getDescription());
+                        orderData.setQuantity(lineItem.getQuantity());
+                        orderData.setDueDate(lineItem.getDueDate());
+                        if (lineItem.getUnitPrice() == null) {
+                            orderData.setUnitPriceHT(Double.valueOf(0));
+                        } else {
+                            orderData.setUnitPriceHT(lineItem.getUnitPrice());
+                        }
+                        orderDetails.add(orderData);
                     }
-                    orderDetails.add(orderData);
-                }
-                receiptData.setOrderDetails(orderDetails);
+                    receiptData.setOrderDetails(orderDetails);
 
-                receipts.add(receiptData);
+                    receipts.add(receiptData);
+                }
             }
             result.setReceipts(receipts);
         }
@@ -206,7 +208,7 @@ public class OrderService {
 
     public void updateInvoiceDate(String orderRef) {
         Order order = orderRepository.findByReference(orderRef);
-        order.setInvoiceDate(InvoiceUtils.currentInvoiceDate());
+        order.setInvoiceDate(InvoiceUtils.currentInvoiceDate().toDate());
         orderRepository.save(order);
     }
 

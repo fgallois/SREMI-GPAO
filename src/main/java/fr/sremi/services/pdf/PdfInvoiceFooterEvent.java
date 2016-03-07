@@ -76,7 +76,8 @@ public class PdfInvoiceFooterEvent extends PdfPageEventHelper {
         cell.setBorder(Rectangle.NO_BORDER);
         echeance.addCell(cell);
 
-        cell = new PdfPCell(new Phrase("échéance le " + new SimpleDateFormat("dd/MM/yyyy").format(InvoiceUtils.currentEcheanceDate()),
+        cell = new PdfPCell(new Phrase("échéance le "
+                + new SimpleDateFormat("dd/MM/yyyy").format(InvoiceUtils.currentEcheanceDate().toDate()),
                 FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         cell.setBorder(Rectangle.NO_BORDER);
