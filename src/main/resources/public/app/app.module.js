@@ -1,9 +1,13 @@
 (function() {
-    var sremiApp = angular.module('sremiGpao', ['ngRoute','bl-controller','admin-controller','invoice-controller']);
+    var sremiApp = angular.module('sremiGpao', ['ngRoute','order-controller', 'bl-controller','admin-controller','invoice-controller']);
 
     sremiApp.config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.
+                when('/order', {
+                    templateUrl: 'app/components/order/order.html',
+                    controller: 'OrderController'
+                }).
                 when('/bonsLivraison', {
                     templateUrl: 'app/components/bl/bl.html',
                     controller: 'BLController'
@@ -20,7 +24,7 @@
                     controller: 'AdministrationController'
                 }).
                 otherwise({
-                    redirectTo: '/bonsLivraison'
+                    redirectTo: '/order'
                 });
         }]);
 })();

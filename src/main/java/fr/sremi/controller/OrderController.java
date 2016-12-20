@@ -1,19 +1,17 @@
 package fr.sremi.controller;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
+import fr.sremi.data.OrderData;
+import fr.sremi.data.OrderDetailData;
 import fr.sremi.data.invoice.InvoiceData;
+import fr.sremi.services.OrderService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.sremi.data.OrderData;
-import fr.sremi.data.OrderDetailData;
-import fr.sremi.services.OrderService;
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by fgallois on 9/4/15.
@@ -49,4 +47,11 @@ public class OrderController {
     public void updateLineItem(@RequestBody OrderDetailData orderDetailData) {
         orderService.updateLineItemPrice(orderDetailData);
     }
+
+    //    @RequestMapping(value = "/paginated-orders.json", method = RequestMethod.GET)
+    //    public OrderPaginationData gpaoConfiguration(@RequestParam("limit") int limit, @RequestParam("offset") int offset,
+    //      @RequestParam(value = "search", required = false, defaultValue = "") String search) {
+    //        //        return catalogService.getPartsByReferenceOrDescriptionPaginated(search, offset / limit, limit);
+    //    }
+
 }

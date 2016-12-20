@@ -88,7 +88,7 @@ public class OrderService {
         try {
             List<Command> commands = excelParser.getCommandsFromExcelFile(excelFile);
             for (Command command : commands) {
-                result.add(new OrderData(null, command.getReference()));
+                result.add(new OrderData(null, command.getReference(), Boolean.TRUE, "Test"));
             }
         } catch (ExcelException e) {
             e.printStackTrace();
@@ -147,7 +147,7 @@ public class OrderService {
 
         List<Order> orders = orderRepository.findByOpenTrueOrderByReferenceAsc();
         for (Order order : orders) {
-            result.add(new OrderData(order.getId(), order.getReference()));
+            result.add(new OrderData(order.getId(), order.getReference(), order.getOpen(), order.getBuyer().getFullName()));
         }
         return result;
     }
@@ -204,12 +204,6 @@ public class OrderService {
             lineItem.setUnitPrice(orderDetailData.getUnitPriceHT());
             orderLineItemRepository.save(lineItem);
         }
-    }
-
-    public void updateInvoiceDate(String orderRef) {
-        Order order = orderRepository.findByReference(orderRef);
-        order.setInvoiceDate(InvoiceUtils.currentInvoiceDate().toDate());
-        orderRepository.save(order);
     }
 
     public InvoiceData removeReceiptFromOrder(String commandeRef, String receiptRef) {

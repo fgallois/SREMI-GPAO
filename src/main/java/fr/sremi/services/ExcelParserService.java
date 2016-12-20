@@ -5,11 +5,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
@@ -60,7 +66,7 @@ public class ExcelParserService {
                             itemCommand.setQuantity((int) cell.getNumericCellValue());
                             break;
                         case 7: // Date d'echeance
-                            itemCommand.setDueDate(cell.getDateCellValue());
+                            itemCommand.setDueDate(formatDate(cell.getStringCellValue()));
                             break;
                         case 8: // Revision
                             itemCommand.setVersion(cell.getStringCellValue());
@@ -78,4 +84,19 @@ public class ExcelParserService {
 
         return result;
     }
+
+    private Date formatDate(String date) {
+        Date result = null;
+        if (StringUtils.isNoneEmpty(date)) {
+            DateFormat format = new SimpleDateFormat("dd/MM/yy", Locale.FRANCE);
+            try {
+                result = format.parse(date);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
 }

@@ -24,7 +24,7 @@ public class LineItem {
     @NotNull
     private int line;
 
-    @NotNull
+//    @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     private Part part;
 
