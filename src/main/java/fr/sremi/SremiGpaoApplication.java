@@ -1,21 +1,13 @@
 package fr.sremi;
 
-import org.springframework.boot.*;
-import org.springframework.boot.autoconfigure.*;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
-import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
-
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan
+@SpringBootApplication
 @EnableCaching
 public class SremiGpaoApplication {
 
