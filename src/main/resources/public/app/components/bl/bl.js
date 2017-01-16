@@ -3,46 +3,50 @@
 
     app.controller('BLController', ['$http', function ($http) {
         var bl = this;
-        bl.orders = {};
+        bl.orders = [];
         bl.orderListLabel = 'Référence Commande';
         bl.receiptNumber = 0;
 
-        $http.get('./receiptNumber.json').success(function (data) {
-            console.log("Receipt # = " + data);
-            bl.receiptNumber = data;
-        });
+        $http.get('./receiptNumber.json')
+            .then(function successCallback(response) {
+                console.log("Receipt # = " + response.data);
+                bl.receiptNumber = response.data;
+            });
 
         this.orderSelected = function (order) {
             bl.orderListLabel = order.orderReference;
             $http.get('./order.json/' + order.orderReference)
-                .success(function (data) {
-                    console.log("data = " + data);
-                    $('#tableCde').bootstrapTable($('#tableCde').data('method'), data);
+                .then(function successCallback(response) {
+                    console.log("data = " + response.data);
+                    $('#tableCde').bootstrapTable($('#tableCde').data('method'), response.data);
                 });
         };
 
         this.refreshOrderList = function () {
-            $http.get('./orders.json').success(function (data) {
-                bl.orders = data;
-            });
+            $http.get('./orders.json')
+                .then(function successCallback(response) {
+                    bl.orders = response.data;
+                }, function errorCallback(response) {
+                    // called asynchronously if an error occurs
+                    // or server returns response with an error status.
+                });
         };
         this.refreshOrderList();
 
         this.printBL = function () {
             var lineSelection = $('#tableCde').bootstrapTable('getSelections');
-            if(typeof lineSelection != "undefined" && lineSelection != null && lineSelection.length > 0) {
-                $( "#alert1" ).toggle(false);
+            if (typeof lineSelection != "undefined" && lineSelection != null && lineSelection.length > 0) {
+                $("#alert1").toggle(false);
                 var dataBL = JSON.stringify({orderRef: bl.orderListLabel, lines: lineSelection});
                 $http.post('./receipt', dataBL)
-                    .success(function (data, status, headers, config) {
-                        bl.receiptNumber = parseInt(headers('receiptNumber'));
-                        window.open(headers('Location'), "_blank");
-                    })
-                    .error(function (data) {
-                        console.log('Error = ' + data);
+                    .then(function successCallback(response) {
+                        bl.receiptNumber = parseInt(response.headers('receiptNumber'));
+                        window.open(response.headers('Location'), "_blank");
+                    }, function errorCallback(response) {
+                        console.log('Error = ' + response.data);
                     });
             } else {
-                $( "#alert1" ).toggle(true);
+                $("#alert1").toggle(true);
             }
         };
 
@@ -50,10 +54,9 @@
             var newNumber = JSON.stringify({documentNumber: bl.receiptNumber});
             console.log("receiptNumber " + newNumber);
             $http.post('./receiptNumber', newNumber)
-                .success(function (data) {
+                .then(function successCallback(response) {
                     console.log("SUCCESS");
-                })
-                .error(function (data) {
+                }, function errorCallback(response) {
                     console.log("ERROR");
                 });
         };

@@ -4,16 +4,16 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-4">
             <div class="btn-group">
                 <button class="btn btn-default dropdown-toggle" type="button" id="referenceCde"
                         data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="true">
-                    {{blCtrl.orderListLabel}}
+                    {{filtered.length}} {{blCtrl.orderListLabel}}
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu scrollable-menu" aria-labelledby="referenceCde">
-                    <li ng-repeat="order in blCtrl.orders">
+                    <li ng-repeat="order in blCtrl.orders | filter : searchText as filtered">
                         <a ng-click="blCtrl.orderSelected(order)">{{order.orderReference}}</a>
                     </li>
                 </ul>
@@ -23,6 +23,12 @@
             </div>
         </div>
         <div class="col-md-2">
+            <div class="form-group has-feedback">
+                <input class="form-control" placeholder="Chercher" ng-model="searchText"/>
+                <i class="glyphicon glyphicon-search form-control-feedback"></i>
+            </div>
+        </div>
+        <div class="col-md-2 col-md-offset-2">
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">BL</span>
                 <input type="number" class="form-control" id="receiptNumber" ng-model="blCtrl.receiptNumber"
