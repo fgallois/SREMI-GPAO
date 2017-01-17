@@ -36,8 +36,8 @@
                 {
                     name: 'Action',
                     cellTemplate: '<button class="btn btn-danger btn-sm" ng-click="grid.appScope.deleteRowBL(row)">' +
-                        'Supprimer' +
-                        '</button>',
+                    'Supprimer' +
+                    '</button>',
                     headerCellClass: 'ui-grid-cell-center-align',
                     cellClass: 'ui-grid-cell-center-align',
                     enableCellEdit: false,
@@ -119,9 +119,9 @@
         $scope.saveRow = function (rowEntity) {
             var deferred = $q.defer();
             $http.put('./updateOrderLineItem.json', rowEntity)
-                .then(function (data) {
+                .then(function successCallback(data) {
                     deferred.resolve();
-                }, function (error) {
+                }, function errorCallback(error) {
                     deferred.reject();
                 });
             $scope.gridApi.rowEdit.setSavePromise(rowEntity, deferred.promise);
@@ -132,9 +132,9 @@
                 + row.entity.number + '\'?', function (result) {
                 if (result) {
                     $http.delete('./receipt/' + invoice.orderListLabel + '/' + row.entity.id)
-                        .success(function (data) {
-                            console.log("data = " + data.allOrderDetails);
-                            angular.forEach(data.allOrderDetails, function (row) {
+                        .then(function successCallback(response) {
+                            console.log("data = " + response.data.allOrderDetails);
+                            angular.forEach(response.data.allOrderDetails, function (row) {
                                 row.calculateTotalHT = function () {
                                     var total = 20;
                                     if (this.unitPriceHT >= 0) {
@@ -143,31 +143,33 @@
                                     return total;
                                 }
                             });
-                            $scope.gridBlInvoice.data = data.receipts;
-                            $scope.gridInvoice.data = data.allOrderDetails;
+                            $scope.gridBlInvoice.data = response.data.receipts;
+                            $scope.gridInvoice.data = response.data.allOrderDetails;
                         });
                 }
             });
         };
 
-        $http.get('./invoiceNumber.json').success(function (data) {
-            console.log("Facture # = " + data);
-            invoice.invoiceNumber = data;
-        });
+        $http.get('./invoiceNumber.json')
+            .then(function successCallback(response) {
+                console.log("Facture # = " + response.data);
+                invoice.invoiceNumber = response.data;
+            });
 
         this.refreshOrderList = function () {
-            $http.get('./openOrders.json').success(function (data) {
-                invoice.orders = data;
-            });
+            $http.get('./openOrders.json')
+                .then(function successCallback(response) {
+                    invoice.orders = response.data;
+                });
         };
         this.refreshOrderList();
 
         this.orderSelected = function (order) {
             invoice.orderListLabel = order.orderReference;
             $http.get('./openOrder.json/' + order.orderReference)
-                .success(function (data) {
-                    console.log("data = " + data.allOrderDetails);
-                    angular.forEach(data.allOrderDetails, function (row) {
+                .then(function successCallback(response) {
+                    console.log("data = " + response.data.allOrderDetails);
+                    angular.forEach(response.data.allOrderDetails, function (row) {
                         row.calculateTotalHT = function () {
                             var total = 20;
                             if (this.unitPriceHT >= 0) {
@@ -176,20 +178,19 @@
                             return total;
                         }
                     });
-                    $scope.gridBlInvoice.data = data.receipts;
-                    $scope.gridInvoice.data = data.allOrderDetails;
+                    $scope.gridBlInvoice.data = response.data.receipts;
+                    $scope.gridInvoice.data = response.data.allOrderDetails;
                 });
         };
 
         this.printInvoice = function () {
             var dataFacture = JSON.stringify({reference: invoice.orderListLabel});
             $http.post('./invoice', dataFacture)
-                .success(function (data, status, headers, config) {
-                    invoice.invoiceNumber = parseInt(headers('invoiceNumber'));
-                    window.open(headers('Location'), "_blank");
-                })
-                .error(function (data) {
-                    console.log('Error = ' + data);
+                .then(function successCallback(response) {
+                    invoice.invoiceNumber = parseInt(response.headers('invoiceNumber'));
+                    window.open(response.headers('Location'), "_blank");
+                }, function errorCallback(response) {
+                    console.log('Error = ' + response.data);
                 });
         };
 
@@ -197,10 +198,9 @@
             var newNumber = JSON.stringify({documentNumber: invoice.invoiceNumber});
             console.log("invoiceNumber " + newNumber);
             $http.post('./invoiceNumber', newNumber)
-                .success(function (data) {
+                .then(function successCallback(response) {
                     console.log("SUCCESS");
-                })
-                .error(function (data) {
+                }, function errorCallback(response) {
                     console.log("ERROR");
                 });
         };
