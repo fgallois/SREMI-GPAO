@@ -9,8 +9,9 @@
                 <button class="btn btn-default dropdown-toggle" type="button" id="referenceCde"
                         data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="true">
-                    {{filtered.length}} {{blCtrl.orderListLabel}}
+                    {{blCtrl.orderListLabel}}
                     <span class="caret"></span>
+                    <span class="badge">{{filtered.length}}</span>
                 </button>
                 <ul class="dropdown-menu scrollable-menu" aria-labelledby="referenceCde">
                     <li ng-repeat="order in blCtrl.orders | filter : searchText as filtered">
