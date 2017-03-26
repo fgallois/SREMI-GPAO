@@ -1,9 +1,7 @@
 package fr.sremi.services;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import javafx.beans.binding.DoubleExpression;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,61 +10,127 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConfigurationService {
 
-    private PropertiesConfiguration configuration;
+    @Value("${excel.file.path}")
+    private String excelPath;
 
-    @PostConstruct
-    private void init() {
-        try {
-            configuration = new PropertiesConfiguration("gpao-config.properties");
-        } catch (ConfigurationException e) {
-            e.printStackTrace();
-        }
-    }
+    @Value("${bl.archive.file.path}")
+    private String blArchivePath;
+
+    @Value("${invoice.archive.file.path}")
+    private String invoiceArchivePath;
+
+    @Value("${invoice.certificateNumber}")
+    private String certificateNumber;
+
+    @Value("${invoice.withVat}")
+    private boolean withVat;
+
+    @Value("${invoice.vatRate}")
+    private Double vatRate;
 
     public String getExcelPath() {
-        return configuration.getString("excel.file.path");
+        return excelPath;
+    }
+
+    public void setExcelPath(String excelPath) {
+        this.excelPath = excelPath;
     }
 
     public String getBlArchivePath() {
-        return configuration.getString("bl.archive.file.path");
+        return blArchivePath;
+    }
+
+    public void setBlArchivePath(String blArchivePath) {
+        this.blArchivePath = blArchivePath;
     }
 
     public String getInvoiceArchivePath() {
-        return configuration.getString("invoice.archive.file.path");
+        return invoiceArchivePath;
+    }
+
+    public void setInvoiceArchivePath(String invoiceArchivePath) {
+        this.invoiceArchivePath = invoiceArchivePath;
     }
 
     public String getCertificateNumber() {
-        return configuration.getString("invoice.certificateNumber");
+        return certificateNumber;
     }
 
     public void setCertificateNumber(String certificateNumber) {
-        configuration.setProperty("invoice.certificateNumber", certificateNumber);
-        save();
+        this.certificateNumber = certificateNumber;
     }
 
-    public Boolean getWithVat() {
-        return configuration.getBoolean("invoice.withVat");
+    public boolean isWithVat() {
+        return withVat;
     }
 
-    public void setWithVat(Boolean withVat) {
-        configuration.setProperty("invoice.withVat", withVat);
-        save();
+    public void setWithVat(boolean withVat) {
+        this.withVat = withVat;
     }
 
     public Double getVatRate() {
-        return configuration.getDouble("invoice.vatRate");
+        return vatRate;
     }
 
     public void setVatRate(Double vatRate) {
-        configuration.setProperty("invoice.vatRate", vatRate);
-        save();
+        this.vatRate = vatRate;
     }
 
-    private void save() {
-        try {
-            configuration.save();
-        } catch (ConfigurationException e) {
-            e.printStackTrace();
-        }
-    }
+    //    private PropertiesConfiguration configuration;
+//
+//    @PostConstruct
+//    private void init() {
+//        try {
+//            configuration = new PropertiesConfiguration("gpao-config.properties");
+//        } catch (ConfigurationException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public String getExcelPath() {
+//        return configuration.getString("excel.file.path");
+//    }
+//
+//    public String getBlArchivePath() {
+//        return configuration.getString("bl.archive.file.path");
+//    }
+//
+//    public String getInvoiceArchivePath() {
+//        return configuration.getString("invoice.archive.file.path");
+//    }
+//
+//    public String getCertificateNumber() {
+//        return configuration.getString("invoice.certificateNumber");
+//    }
+//
+//    public void setCertificateNumber(String certificateNumber) {
+//        configuration.setProperty("invoice.certificateNumber", certificateNumber);
+//        save();
+//    }
+//
+//    public Boolean getWithVat() {
+//        return configuration.getBoolean("invoice.withVat");
+//    }
+//
+//    public void setWithVat(Boolean withVat) {
+//        configuration.setProperty("invoice.withVat", withVat);
+//        save();
+//    }
+//
+//    public Double getVatRate() {
+//        return configuration.getDouble("invoice.vatRate");
+//    }
+//
+//    public void setVatRate(Double vatRate) {
+//        configuration.setProperty("invoice.vatRate", vatRate);
+//        save();
+//    }
+//
+//    private void save() {
+//        try {
+//            configuration.save();
+//        } catch (ConfigurationException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

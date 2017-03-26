@@ -28,7 +28,7 @@ public class ConfigurationController {
         return new GpaoConfiguration(generatorService.getCurrentReceiptNumber(),
                 generatorService.getCurrentInvoiceNumber(), configurationService.getBlArchivePath(),
                 configurationService.getInvoiceArchivePath(), configurationService.getExcelPath(),
-                configurationService.getCertificateNumber(), configurationService.getWithVat(),
+                configurationService.getCertificateNumber(), configurationService.isWithVat(),
                 configurationService.getVatRate());
     }
 

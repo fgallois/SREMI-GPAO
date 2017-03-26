@@ -160,7 +160,7 @@ public class OrderService {
         if (order != null) {
             result.setReference(order.getReference());
             result.setCertificateNumber(configurationService.getCertificateNumber());
-            result.setWithVat(configurationService.getWithVat());
+            result.setWithVat(configurationService.isWithVat());
             result.setVatRate(configurationService.getVatRate());
 
             List<ReceiptData> receipts = new ArrayList<>();
