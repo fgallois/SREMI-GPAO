@@ -8,14 +8,16 @@ public class Command {
     private String fournisseur;
     private List<ItemCommand> items;
 
-    public Command() {
-        this("", "");
-    }
-
     public Command(String reference, String fournisseur) {
         this.reference = reference;
         this.fournisseur = fournisseur;
-        this.items = new ArrayList<ItemCommand>();
+        this.items = new ArrayList<>();
+    }
+
+    public Command(String reference, String fournisseur, List<ItemCommand> items) {
+        this.reference = reference;
+        this.fournisseur = fournisseur;
+        this.items = items;
     }
 
     public String getReference() {
