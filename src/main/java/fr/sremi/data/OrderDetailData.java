@@ -1,5 +1,7 @@
 package fr.sremi.data;
 
+import fr.sremi.model.LineItem;
+
 import java.util.Date;
 
 /**
@@ -14,6 +16,19 @@ public class OrderDetailData {
     private int quantity;
     private Date dueDate;
     private Double unitPriceHT;
+
+    public OrderDetailData() {
+    }
+
+    public OrderDetailData(LineItem lineItem) {
+        this.id = lineItem.getId();
+        this.line = lineItem.getLine();
+        this.reference = lineItem.getPart().getReference();
+        this.description = lineItem.getPart().getDescription();
+        this.quantity = lineItem.getQuantity();
+        this.dueDate = lineItem.getDueDate();
+        this.unitPriceHT = lineItem.getUnitPrice() == null ? Double.valueOf(0) : lineItem.getUnitPrice();
+    }
 
     public Long getId() {
         return id;

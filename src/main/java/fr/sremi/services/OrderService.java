@@ -1,18 +1,6 @@
 package fr.sremi.services;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Component;
-
-import fr.sremi.dao.BuyerRepository;
-import fr.sremi.dao.OrderLineItemRepository;
-import fr.sremi.dao.OrderRepository;
-import fr.sremi.dao.PartRepository;
-import fr.sremi.dao.ReceiptRepository;
+import fr.sremi.dao.*;
 import fr.sremi.data.OrderData;
 import fr.sremi.data.OrderDetailData;
 import fr.sremi.data.invoice.InvoiceData;
@@ -25,6 +13,13 @@ import fr.sremi.model.Receipt;
 import fr.sremi.util.InvoiceUtils;
 import fr.sremi.vo.Command;
 import fr.sremi.vo.ItemCommand;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by fgallois on 9/6/15.
@@ -50,78 +45,43 @@ public class OrderService {
     @Resource
     ReceiptRepository receiptRepository;
 
-    public void importOrders() {
-        ExcelParserService excelParser = new ExcelParserService();
-
+    public List<OrderData> importOrders() throws ExcelException {
         File excelFile = new File(configurationService.getExcelPath());
-        try {
-            List<Command> commands = excelParser.getCommandsFromExcelFile(excelFile);
-            for (Command command : commands) {
-                if (orderRepository.findByReference(command.getReference()) == null) {
-                    Order order = new Order(command.getReference());
-                    order.setBuyer(buyerRepository.findByCode(command.getReference().substring(0, 2)));
-                    for (ItemCommand itemCommand : command.getItems()) {
-                        Part part = partRepository.findByReference(itemCommand.getItem().getReference());
-                        if (part == null) {
-                            part = new Part(itemCommand.getItem().getReference(), itemCommand.getItem()
-                                    .getDescription());
-                            partRepository.save(part);
-                        }
-                        LineItem lineItem = new LineItem(itemCommand.getLine(), part, itemCommand.getQuantity(),
-                                itemCommand.getDueDate());
-                        order.addLineItem(lineItem);
-                    }
-                    orderRepository.save(order);
-                }
-            }
-        } catch (ExcelException e) {
-            e.printStackTrace();
-        }
+        List<Command> commands = new ExcelParserService().getCommandsFromExcelFile(excelFile);
+        persistCommands(commands);
+
+        return commands.stream()
+                .map(command -> new OrderData(null, command.getReference()))
+                .collect(Collectors.toList());
+
     }
 
-    public List<OrderData> getAvailableOrders() {
-        List<OrderData> result = new ArrayList<>();
-
-        ExcelParserService excelParser = new ExcelParserService();
-
-        File excelFile = new File(configurationService.getExcelPath());
-        try {
-            List<Command> commands = excelParser.getCommandsFromExcelFile(excelFile);
-            for (Command command : commands) {
-                result.add(new OrderData(null, command.getReference()));
+    private void persistCommands(List<Command> commands) {
+        for (Command command : commands) {
+            if (orderRepository.findByReference(command.getReference()) == null) {
+                Order order = new Order(command.getReference());
+                order.setBuyer(buyerRepository.findByCode(command.getReference().substring(0, 2)));
+                for (ItemCommand itemCommand : command.getItems()) {
+                    Part part = partRepository.findByReference(itemCommand.getItem().getReference());
+                    if (part == null) {
+                        part = new Part(itemCommand.getItem().getReference(), itemCommand.getItem()
+                                .getDescription());
+                        partRepository.save(part);
+                    }
+                    LineItem lineItem = new LineItem(itemCommand.getLine(), part, itemCommand.getQuantity(),
+                            itemCommand.getDueDate());
+                    order.addLineItem(lineItem);
+                }
+                orderRepository.save(order);
             }
-        } catch (ExcelException e) {
-            e.printStackTrace();
         }
-        return result;
     }
 
     public List<OrderDetailData> getOrderDetails(String orderRef) {
-        List<OrderDetailData> result = new ArrayList<>();
-
-        ExcelParserService excelParser = new ExcelParserService();
-
-        File excelFile = new File(configurationService.getExcelPath());
-        try {
-            List<Command> commands = excelParser.getCommandsFromExcelFile(excelFile);
-            for (Command command : commands) {
-                if (orderRef.equalsIgnoreCase(command.getReference())) {
-                    for (ItemCommand itemCommand : command.getItems()) {
-                        OrderDetailData detail = new OrderDetailData();
-                        detail.setLine(itemCommand.getLine());
-                        detail.setReference(itemCommand.getItem().getReference());
-                        detail.setDescription(itemCommand.getItem().getDescription());
-                        detail.setQuantity(itemCommand.getQuantity());
-                        detail.setDueDate(itemCommand.getDueDate());
-                        result.add(detail);
-                    }
-                }
-            }
-        } catch (ExcelException e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        Order order = orderRepository.findByReference(orderRef);
+        return order.getLineItems().stream()
+                .map(lineItem -> new OrderDetailData(lineItem))
+                .collect(Collectors.toList());
     }
 
     public void saveOrderReceipt(String orderRef, List<OrderDetailData> commands, int invoiceNumber) {
@@ -173,19 +133,7 @@ public class OrderService {
 
                     List<OrderDetailData> orderDetails = new ArrayList<>();
                     for (LineItem lineItem : receipt.getLineItems()) {
-                        OrderDetailData orderData = new OrderDetailData();
-                        orderData.setId(lineItem.getId());
-                        orderData.setLine(lineItem.getLine());
-                        orderData.setReference(lineItem.getPart().getReference());
-                        orderData.setDescription(lineItem.getPart().getDescription());
-                        orderData.setQuantity(lineItem.getQuantity());
-                        orderData.setDueDate(lineItem.getDueDate());
-                        if (lineItem.getUnitPrice() == null) {
-                            orderData.setUnitPriceHT(Double.valueOf(0));
-                        } else {
-                            orderData.setUnitPriceHT(lineItem.getUnitPrice());
-                        }
-                        orderDetails.add(orderData);
+                        orderDetails.add(new OrderDetailData(lineItem));
                     }
                     receiptData.setOrderDetails(orderDetails);
 

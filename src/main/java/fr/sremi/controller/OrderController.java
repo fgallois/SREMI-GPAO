@@ -1,19 +1,16 @@
 package fr.sremi.controller;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import fr.sremi.data.invoice.InvoiceData;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import fr.sremi.data.OrderData;
 import fr.sremi.data.OrderDetailData;
+import fr.sremi.data.invoice.InvoiceData;
+import fr.sremi.exception.ExcelException;
 import fr.sremi.services.OrderService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by fgallois on 9/4/15.
@@ -24,13 +21,16 @@ public class OrderController {
     @Resource
     private OrderService orderService;
 
-    @RequestMapping(value = "/orders.json", method = RequestMethod.GET)
-    public List<OrderData> getAvailableOrders() {
-        orderService.importOrders();
-        return orderService.getAvailableOrders();
+    @GetMapping(value = "/orders.json")
+    public ResponseEntity<List> getAvailableOrders() {
+        try {
+            return ResponseEntity.ok().body(orderService.importOrders());
+        } catch (ExcelException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
-    @RequestMapping(value = "/order.json/{commandeRef}", method = RequestMethod.GET)
+    @GetMapping(value = "/order.json/{commandeRef}")
     public List<OrderDetailData> getOrderDetails(@PathVariable String commandeRef) {
         return orderService.getOrderDetails(commandeRef);
     }
