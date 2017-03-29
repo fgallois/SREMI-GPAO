@@ -35,7 +35,7 @@ public class OrderController {
         return orderService.getOrderDetails(commandeRef);
     }
 
-    @RequestMapping(value = "/openOrders.json", method = RequestMethod.GET)
+    @GetMapping(value = "/openOrders.json")
     public List<OrderData> getOpenOrders() {
         return orderService.getOpenOrders();
     }

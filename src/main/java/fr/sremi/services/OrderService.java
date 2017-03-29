@@ -78,8 +78,7 @@ public class OrderService {
     }
 
     public List<OrderDetailData> getOrderDetails(String orderRef) {
-        Order order = orderRepository.findByReference(orderRef);
-        return order.getLineItems().stream()
+        return orderRepository.findByReference(orderRef).getLineItems().stream()
                 .map(lineItem -> new OrderDetailData(lineItem))
                 .collect(Collectors.toList());
     }
@@ -103,13 +102,9 @@ public class OrderService {
     }
 
     public List<OrderData> getOpenOrders() {
-        List<OrderData> result = new ArrayList<>();
-
-        List<Order> orders = orderRepository.findByOpenTrueOrderByReferenceAsc();
-        for (Order order : orders) {
-            result.add(new OrderData(order.getId(), order.getReference()));
-        }
-        return result;
+        return orderRepository.findByOpenTrueOrderByReferenceAsc().stream()
+                .map(order -> new OrderData(order.getId(), order.getReference()))
+                .collect(Collectors.toList());
     }
 
     public InvoiceData getInvoiceData(final String orderRef) {
