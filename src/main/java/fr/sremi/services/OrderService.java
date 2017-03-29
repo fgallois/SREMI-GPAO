@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,9 +52,9 @@ public class OrderService {
         persistCommands(commands);
 
         return commands.stream()
-                .map(command -> new OrderData(null, command.getReference()))
+                .sorted(Comparator.comparing(Command::getReference))
+                .map(command -> new OrderData(command.getReference()))
                 .collect(Collectors.toList());
-
     }
 
     private void persistCommands(List<Command> commands) {

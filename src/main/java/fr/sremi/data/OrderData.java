@@ -7,6 +7,10 @@ public class OrderData {
     private Long id;
     private String orderReference;
 
+    public OrderData(String orderReference) {
+        this.orderReference = orderReference;
+    }
+
     public OrderData(Long id, String orderReference) {
         this.id = id;
         this.orderReference = orderReference;

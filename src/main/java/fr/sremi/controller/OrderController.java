@@ -22,7 +22,7 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping(value = "/orders.json")
-    public ResponseEntity<List> getAvailableOrders() {
+    public ResponseEntity<List<OrderData>> getAvailableOrders() {
         try {
             return ResponseEntity.ok().body(orderService.importOrders());
         } catch (ExcelException e) {
@@ -45,7 +45,7 @@ public class OrderController {
         return orderService.getInvoiceData(commandeRef);
     }
 
-    @RequestMapping(value = "/updateOrderLineItem.json", method = RequestMethod.PUT)
+    @PutMapping(value = "/updateOrderLineItem.json")
     public void updateLineItem(@RequestBody OrderDetailData orderDetailData) {
         orderService.updateLineItemPrice(orderDetailData);
     }
