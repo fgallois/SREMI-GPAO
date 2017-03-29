@@ -40,7 +40,7 @@ public class OrderController {
         return orderService.getOpenOrders();
     }
 
-    @RequestMapping(value = "/openOrder.json/{commandeRef}", method = RequestMethod.GET)
+    @GetMapping(value = "/openOrder.json/{commandeRef}")
     public InvoiceData getOpenOrderDetails(@PathVariable String commandeRef) {
         return orderService.getInvoiceData(commandeRef);
     }

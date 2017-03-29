@@ -78,9 +78,13 @@ public class OrderService {
     }
 
     public List<OrderDetailData> getOrderDetails(String orderRef) {
-        return orderRepository.findByReference(orderRef).getLineItems().stream()
-                .map(lineItem -> new OrderDetailData(lineItem))
-                .collect(Collectors.toList());
+        Order order = orderRepository.findByReference(orderRef);
+        if (order != null) {
+            return orderRepository.findByReference(orderRef).getLineItems().stream()
+                    .map(lineItem -> new OrderDetailData(lineItem))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 
     public void saveOrderReceipt(String orderRef, List<OrderDetailData> commands, int invoiceNumber) {
@@ -109,33 +113,27 @@ public class OrderService {
 
     public InvoiceData getInvoiceData(final String orderRef) {
         InvoiceData result = new InvoiceData();
-
         Order order = orderRepository.findByReference(orderRef);
-
         if (order != null) {
             result.setReference(order.getReference());
             result.setCertificateNumber(configurationService.getCertificateNumber());
             result.setWithVat(configurationService.isWithVat());
             result.setVatRate(configurationService.getVatRate());
 
-            List<ReceiptData> receipts = new ArrayList<>();
-            for (Receipt receipt : order.getReceipts()) {
-                if (InvoiceUtils.isForCurrentInvoice(receipt.getCreationDate())) {
-                    ReceiptData receiptData = new ReceiptData();
-                    receiptData.setId(receipt.getId());
-                    receiptData.setNumber(receipt.getNumber());
-                    receiptData.setCreationDate(receipt.getCreationDate());
+            result.setReceipts(order.getReceipts().stream()
+                    .filter(receipt -> InvoiceUtils.isForCurrentInvoice(receipt.getCreationDate()))
+                    .map(receipt -> {
+                        ReceiptData receiptData = new ReceiptData();
+                        receiptData.setId(receipt.getId());
+                        receiptData.setNumber(receipt.getNumber());
+                        receiptData.setCreationDate(receipt.getCreationDate());
 
-                    List<OrderDetailData> orderDetails = new ArrayList<>();
-                    for (LineItem lineItem : receipt.getLineItems()) {
-                        orderDetails.add(new OrderDetailData(lineItem));
-                    }
-                    receiptData.setOrderDetails(orderDetails);
-
-                    receipts.add(receiptData);
-                }
-            }
-            result.setReceipts(receipts);
+                        receiptData.setOrderDetails(receipt.getLineItems().stream()
+                                .map(lineItem -> new OrderDetailData(lineItem))
+                                .collect(Collectors.toList()));
+                        return receiptData;
+                    })
+                    .collect(Collectors.toList()));
         }
         return result;
     }
