@@ -47,16 +47,21 @@ public class Order {
     @JoinColumn(name = "buyerId")
     private Buyer buyer;
 
+    @ManyToOne
+    @JoinColumn(name = "clientId")
+    private Client client;
+
     private Date invoiceDate;
 
     protected Order() {
     }
 
-    public Order(String reference) {
+    public Order(String reference, Client client) {
         this.reference = reference;
         this.lineItems = new ArrayList<>();
         this.receipts = new ArrayList<>();
         this.open = Boolean.TRUE;
+        this.client = client;
     }
 
     public Long getId() {
@@ -105,6 +110,14 @@ public class Order {
 
     public void addReceipt(Receipt receipt) {
         this.receipts.add(receipt);
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public Buyer getBuyer() {

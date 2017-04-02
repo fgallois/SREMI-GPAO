@@ -6,10 +6,7 @@ import fr.sremi.data.OrderDetailData;
 import fr.sremi.data.invoice.InvoiceData;
 import fr.sremi.data.invoice.ReceiptData;
 import fr.sremi.exception.ExcelException;
-import fr.sremi.model.LineItem;
-import fr.sremi.model.Order;
-import fr.sremi.model.Part;
-import fr.sremi.model.Receipt;
+import fr.sremi.model.*;
 import fr.sremi.util.InvoiceUtils;
 import fr.sremi.vo.Command;
 import fr.sremi.vo.ItemCommand;
@@ -21,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by fgallois on 9/6/15.
@@ -30,6 +28,9 @@ public class OrderService {
 
     @Resource
     ConfigurationService configurationService;
+
+    @Resource
+    ExcelParserService excelParserService;
 
     @Resource
     OrderRepository orderRepository;
@@ -46,10 +47,21 @@ public class OrderService {
     @Resource
     ReceiptRepository receiptRepository;
 
-    public List<OrderData> importOrders() throws ExcelException {
-        File excelFile = new File(configurationService.getExcelPath());
-        List<Command> commands = new ExcelParserService().getCommandsFromExcelFile(excelFile);
-        persistCommands(commands);
+    @Resource
+    ClientRepository clientRepository;
+
+    public List<OrderData> importOrders() {
+        List<Command> commands = StreamSupport.stream(clientRepository.findAll().spliterator(), false)
+                .flatMap(client -> {
+                    try {
+                        List<Command> clientCommands = excelParserService.getClientCommands(client);
+                        persistCommands(clientCommands, client);
+                        return clientCommands.stream();
+                    } catch (ExcelException e) {
+                       throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
 
         return commands.stream()
                 .sorted(Comparator.comparing(Command::getReference))
@@ -57,10 +69,10 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    private void persistCommands(List<Command> commands) {
+    private void persistCommands(List<Command> commands, Client client) {
         for (Command command : commands) {
             if (orderRepository.findByReference(command.getReference()) == null) {
-                Order order = new Order(command.getReference());
+                Order order = new Order(command.getReference(), client);
                 order.setBuyer(buyerRepository.findByCode(command.getReference().substring(0, 2)));
                 for (ItemCommand itemCommand : command.getItems()) {
                     Part part = partRepository.findByReference(itemCommand.getItem().getReference());

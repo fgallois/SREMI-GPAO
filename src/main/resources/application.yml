@@ -33,7 +33,7 @@ bl:
       path: C:\Dev\archives\bl\
 excel:
   file:
-    path: C:\Dev\CBSREMI.xls
+    path: C:\Dev\
 
 ---
 spring:

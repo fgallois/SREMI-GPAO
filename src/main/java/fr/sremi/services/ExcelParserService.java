@@ -1,19 +1,32 @@
 package fr.sremi.services;
 
 import fr.sremi.exception.ExcelException;
+import fr.sremi.model.Client;
 import fr.sremi.vo.Command;
 import fr.sremi.vo.ItemCommand;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Component
 public class ExcelParserService {
 
-    public List<Command> getCommandsFromExcelFile(File file) throws ExcelException {
+    @Resource
+    ConfigurationService configurationService;
+
+
+    public List<Command> getClientCommands(Client client) throws ExcelException {
+        File excelFile = new File(configurationService.getExcelPath() + client.getOrderFilename());
+        return getCommandsFromExcelFile(excelFile);
+    }
+
+    private List<Command> getCommandsFromExcelFile(File file) throws ExcelException {
         try {
             InputStream inp = new FileInputStream(file);
             HSSFWorkbook wb = new HSSFWorkbook(new POIFSFileSystem(inp));

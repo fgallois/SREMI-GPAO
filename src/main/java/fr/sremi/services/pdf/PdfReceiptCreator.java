@@ -21,35 +21,54 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import fr.sremi.dao.ClientRepository;
+import fr.sremi.dao.OrderRepository;
 import fr.sremi.data.OrderDetailData;
+import fr.sremi.data.ReceiptData;
 import fr.sremi.exception.PdfException;
+import fr.sremi.model.Address;
+import fr.sremi.model.Client;
+import fr.sremi.model.Order;
+import fr.sremi.services.ConfigurationService;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 @Component
 public class PdfReceiptCreator {
 
-    public void createPdf(String receiptNumber, String referenceCommand, List<OrderDetailData> commands, File file)
+    @Resource
+    private ConfigurationService configurationService;
+
+    @Resource
+    private OrderRepository orderRepository;
+
+    public String createPdf(String receiptNumber, ReceiptData receiptData)
             throws PdfException {
         Document document = new Document(PageSize.A4);
 
+        String filename = "BL-" + receiptNumber + ".pdf";
         try {
-            FileOutputStream fileout = new FileOutputStream(file);
+            File archiveFile = new File(configurationService.getBlArchivePath() + filename);
+
+            FileOutputStream fileout = new FileOutputStream(archiveFile);
             PdfWriter writer = PdfWriter.getInstance(document, fileout);
             writer.setPageEvent(new PdfFooterEvent());
             writer.setPageEvent(new PdfHeaderEvent());
 
             document.open();
 
+            Order order = orderRepository.findByReference(receiptData.getOrderRef());
             // Page 1: Exemplaire client
-            document.add(createInformations());
-            document.add(createInfoCommand(referenceCommand, receiptNumber));
-            document.add(createCommandTable(commands));
+            document.add(createInformations(order.getClient()));
+            document.add(createInfoCommand(receiptData.getOrderRef(), receiptNumber));
+            document.add(createCommandTable(receiptData.getLines()));
             document.newPage();
 
             // Page 2: Exemplaire SREMI
-            document.add(createInformations());
-            document.add(createInfoCommand(referenceCommand, receiptNumber));
-            document.add(createCommandTable(commands));
+            document.add(createInformations(order.getClient()));
+            document.add(createInfoCommand(receiptData.getOrderRef(), receiptNumber));
+            document.add(createCommandTable(receiptData.getLines()));
             document.newPage();
 
         } catch (FileNotFoundException e) {
@@ -59,9 +78,10 @@ public class PdfReceiptCreator {
         } finally {
             document.close();
         }
+        return filename;
     }
 
-    private Element createInformations() {
+    private Element createInformations(Client client) {
         float[] colsWidth = { 58f, 42f };
         PdfPTable table = new PdfPTable(colsWidth);
         table.setWidthPercentage(100);
@@ -99,13 +119,14 @@ public class PdfReceiptCreator {
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("SERAC France", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+        paragraph.add(new Phrase(client.getName(), FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("12 Route de Mamers, BP 46,", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+        Address clientAddress = client.getAddress();
+        paragraph.add(new Phrase(clientAddress.getStreet1(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("72402 La Ferté-Bernard Cedex", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+        paragraph.add(new Phrase(clientAddress.getPostalCode() + " " + clientAddress.getCity(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("N° Intracommunautaire: FR 63 340 321 801", FontFactory.getFont(
+        paragraph.add(new Phrase("N° Intracommunautaire: " + client.getNumeroIntracommunautaire(), FontFactory.getFont(
                 FontFactory.TIMES_ROMAN, 12)));
 
         cell = new PdfPCell(paragraph);

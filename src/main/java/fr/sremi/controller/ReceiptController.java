@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import fr.sremi.data.ReceiptData;
 import fr.sremi.data.invoice.InvoiceData;
+import fr.sremi.exception.PdfException;
 import fr.sremi.services.GeneratorService;
 import fr.sremi.services.OrderService;
 import org.springframework.core.io.InputStreamResource;
@@ -41,13 +42,16 @@ public class ReceiptController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> createBonLivraison(@RequestBody ReceiptData receiptData) {
 
-        String filename = receiptService.createBL(receiptData);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{filename}")
-                .buildAndExpand(filename).toUri());
-        httpHeaders.set("receiptNumber", String.valueOf(generatorService.getNextReceiptNumber()));
-        return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+        try {
+            String filename = receiptService.createBL(receiptData);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{filename}")
+                    .buildAndExpand(filename).toUri());
+            httpHeaders.set("receiptNumber", String.valueOf(generatorService.getNextReceiptNumber()));
+            return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+        } catch (PdfException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @RequestMapping(value = "/{filename}", method = RequestMethod.GET, produces = "application/pdf")
