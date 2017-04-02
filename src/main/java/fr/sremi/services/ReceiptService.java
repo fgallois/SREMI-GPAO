@@ -16,7 +16,7 @@ import java.io.File;
 public class ReceiptService {
 
     @Resource
-    OrderService orderService;
+    private OrderService orderService;
     @Resource
     private PdfReceiptCreator pdfReceiptCreator;
     @Resource
@@ -41,5 +41,9 @@ public class ReceiptService {
             resource = new FileSystemResource(uri);
         }
         return resource;
+    }
+
+    public String getNextReceiptNumber() {
+        return String.valueOf(generatorService.getNextReceiptNumber());
     }
 }
