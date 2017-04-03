@@ -1,38 +1,53 @@
 <div class="container-fluid" ng-controller="InvoiceController as invoiceCtrl" class="ng-scope">
     <div class="row">
-        <div class="col-md-3">
-            <div class="btn-group">
-                <button class="btn btn-default dropdown-toggle" type="button" id="referenceCde"
-                        data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="true">
-                    {{invoiceCtrl.orderListLabel}}
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu scrollable-menu" aria-labelledby="referenceCde">
-                    <li ng-repeat="order in invoiceCtrl.orders">
-                        <a ng-click="invoiceCtrl.orderSelected(order)">{{order.orderReference}}</a>
-                    </li>
-                </ul>
-                <button class="btn btn-primary" ng-click="invoiceCtrl.refreshOrderList()">
-                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-                </button>
+        <div class="col-md-7">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="btn-group">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="referenceCde"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="true">
+                            {{invoiceCtrl.orderListLabel}}
+                            <span class="caret"></span>
+                            <span class="badge">{{filtered.length}}</span>
+                        </button>
+                        <ul class="dropdown-menu scrollable-menu" aria-labelledby="referenceCde">
+                            <li ng-repeat="order in invoiceCtrl.orders | filter : searchText as filtered">
+                                <a ng-click="invoiceCtrl.orderSelected(order)">{{order.orderReference}}</a>
+                            </li>
+                        </ul>
+                        <button class="btn btn-primary" ng-click="invoiceCtrl.refreshOrderList()">
+                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group has-feedback">
+                        <input class="form-control" placeholder="Chercher" ng-model="searchText"/>
+                        <i class="glyphicon glyphicon-search form-control-feedback"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <button id="blButton" class="btn btn-primary" ng-click="invoiceCtrl.printInvoice()">
+                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Facture
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Facture</span>
+                        <input type="number" class="form-control" id="invoiceNumber"
+                               ng-model="invoiceCtrl.invoiceNumber"
+                               ng-model-options="{ updateOn: 'blur' }" ng-change="invoiceCtrl.updateInvoiceNumber()"
+                               aria-describedby="basic-addon1">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-md-2">
-            <button id="blButton" class="btn btn-primary" ng-click="invoiceCtrl.printInvoice()">
-                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Facture
-            </button>
-        </div>
-        <div class="col-md-2">
-            <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Facture</span>
-                <input type="number" class="form-control" id="invoiceNumber" ng-model="invoiceCtrl.invoiceNumber"
-                       ng-model-options="{ updateOn: 'blur' }" ng-change="invoiceCtrl.updateInvoiceNumber()"
-                       aria-describedby="basic-addon1">
-            </div>
-        </div>
-        <div class="col-md-4 pull-right">
-            <div id="gridBlInvoice" class="grid" ui-grid="gridBlInvoice" ui-grid-edit ui-grid-row-edit ui-grid-cellNav style="height: 200px"></div>
+        <div class="col-md-5 pull-right">
+            <div id="gridBlInvoice" class="grid" ui-grid="gridBlInvoice" ui-grid-edit ui-grid-row-edit ui-grid-cellNav
+                 style="height: 200px"></div>
         </div>
     </div>
     <br>
@@ -40,7 +55,8 @@
     <br>
     <div class="row">
         <div class="col-md-12">
-            <div id="gridInvoice" ui-grid="gridInvoice" ui-grid-edit ui-grid-row-edit ui-grid-cellNav class="grid"></div>
+            <div id="gridInvoice" ui-grid="gridInvoice" ui-grid-edit ui-grid-row-edit ui-grid-cellNav
+                 class="grid"></div>
         </div>
     </div>
 
