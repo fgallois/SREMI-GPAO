@@ -4,6 +4,6 @@ grant all on sremi.* to sremi@localhost identified by 'sremi';
 insert into buyers (code, first_name, last_name) set('IH', 'Isabelle', 'Hrimel');
 insert into buyers (code, first_name, last_name) set('SB', 'Sebastien', 'Bolino');
 
-insert into addresses (street1, city, postalCode) values('12 Route de Mamers, BP 46', 'La Ferté-Bernard Cedex', '72402');
+insert into addresses (street1, city, postalCode) values('12 Route de Mamers, BP 46,', 'La Ferté-Bernard Cedex', '72402');
 
 insert into clients (name, address_id, numero_intracommunautaire, order_filename) values('SERAC France', 1, 'FR 63 340 321 801', 'CBSREMI.xls');

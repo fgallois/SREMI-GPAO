@@ -13,7 +13,6 @@ import fr.sremi.vo.ItemCommand;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -58,7 +57,7 @@ public class OrderService {
                         persistCommands(clientCommands, client);
                         return clientCommands.stream();
                     } catch (ExcelException e) {
-                       throw new RuntimeException(e);
+                        throw new RuntimeException(e);
                     }
                 })
                 .collect(Collectors.toList());
@@ -94,10 +93,10 @@ public class OrderService {
         Order order = orderRepository.findByReference(orderRef);
         if (order != null) {
             return orderRepository.findByReference(orderRef).getLineItems().stream()
-                    .map(lineItem -> new OrderDetailData(lineItem))
+                    .map(OrderDetailData::new)
                     .collect(Collectors.toList());
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public void saveOrderReceipt(String orderRef, List<OrderDetailData> commands, int invoiceNumber) {
@@ -142,7 +141,7 @@ public class OrderService {
                         receiptData.setCreationDate(receipt.getCreationDate());
 
                         receiptData.setOrderDetails(receipt.getLineItems().stream()
-                                .map(lineItem -> new OrderDetailData(lineItem))
+                                .map(OrderDetailData::new)
                                 .collect(Collectors.toList()));
                         return receiptData;
                     })

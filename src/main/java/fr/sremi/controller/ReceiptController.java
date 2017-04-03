@@ -30,7 +30,7 @@ public class ReceiptController {
     private OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<?> createBonLivraison(@RequestBody ReceiptData receiptData) {
+    public ResponseEntity createBonLivraison(@RequestBody ReceiptData receiptData) {
         try {
             String filename = receiptService.createBL(receiptData);
             HttpHeaders httpHeaders = new HttpHeaders();

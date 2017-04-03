@@ -1,24 +1,19 @@
 package fr.sremi.controller;
 
-import java.io.IOException;
-
-import javax.annotation.Resource;
-
+import fr.sremi.data.invoice.InvoiceData;
+import fr.sremi.exception.PdfException;
+import fr.sremi.services.GeneratorService;
+import fr.sremi.services.InvoiceService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import fr.sremi.data.invoice.InvoiceData;
-import fr.sremi.services.GeneratorService;
-import fr.sremi.services.InvoiceService;
+import javax.annotation.Resource;
+import java.io.IOException;
 
 /**
  * Created by fgallois on 11/8/15.
@@ -34,15 +29,18 @@ public class InvoiceController {
     private GeneratorService generatorService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> createInvoice(@RequestBody InvoiceData invoiceData) {
+    public ResponseEntity createInvoice(@RequestBody InvoiceData invoiceData) {
+        try {
+            String filename = invoiceService.createInvoice(invoiceData.getReference());
 
-        String filename = invoiceService.createInvoice(invoiceData.getReference());
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{filename}")
-                .buildAndExpand(filename).toUri());
-        httpHeaders.set("invoiceNumber", String.valueOf(generatorService.getNextInvoiceNumber()));
-        return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().path("/{filename}")
+                    .buildAndExpand(filename).toUri());
+            httpHeaders.set("invoiceNumber", String.valueOf(generatorService.getNextInvoiceNumber()));
+            return ResponseEntity.status(HttpStatus.CREATED).headers(httpHeaders).body(null);
+        } catch (PdfException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @RequestMapping(value = "/{filename}", method = RequestMethod.GET, produces = "application/pdf")

@@ -7,6 +7,11 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import fr.sremi.dao.OrderRepository;
+import fr.sremi.model.Address;
+import fr.sremi.model.Client;
+import fr.sremi.model.Order;
+import fr.sremi.services.ConfigurationService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -30,22 +35,35 @@ import fr.sremi.data.invoice.ReceiptData;
 import fr.sremi.exception.PdfException;
 import fr.sremi.util.InvoiceUtils;
 
+import javax.annotation.Resource;
+
 @Component
 public class PdfInvoiceCreator {
 
-    public void createPdf(String invoiceNumber, InvoiceData invoiceData, File file) throws PdfException {
+    @Resource
+    private ConfigurationService configurationService;
+
+    @Resource
+    private OrderRepository orderRepository;
+
+    public String createPdf(String invoiceNumber, InvoiceData invoiceData) throws PdfException {
         Document document = new Document(PageSize.A4);
 
+        String filename = "FACTURE-" + invoiceNumber + ".pdf";
         try {
-            FileOutputStream fileout = new FileOutputStream(file);
+            File archiveFile = new File(configurationService.getInvoiceArchivePath() + filename);
+
+            FileOutputStream fileout = new FileOutputStream(archiveFile);
             PdfWriter writer = PdfWriter.getInstance(document, fileout);
             writer.setPageEvent(new PdfInvoiceFooterEvent());
             writer.setPageEvent(new PdfHeaderEvent());
 
             document.open();
 
+            Order order = orderRepository.findByReference(invoiceData.getReference());
+
             // Page 1: Exemplaire client
-            document.add(createInformations());
+            document.add(createInformations(order.getClient()));
             document.add(createInfoCommand(invoiceData, invoiceNumber));
             document.add(createCommandTable(invoiceData.getAllOrderDetails()));
             PdfPTable table = (PdfPTable) createFooterTable(invoiceData);
@@ -58,7 +76,7 @@ public class PdfInvoiceCreator {
             document.newPage();
 
             // Page 2: Exemplaire SREMI
-            document.add(createInformations());
+            document.add(createInformations(order.getClient()));
             document.add(createInfoCommand(invoiceData, invoiceNumber));
             document.add(createCommandTable(invoiceData.getAllOrderDetails()));
             table = (PdfPTable) createFooterTable(invoiceData);
@@ -73,9 +91,10 @@ public class PdfInvoiceCreator {
         } finally {
             document.close();
         }
+        return filename;
     }
 
-    private Element createInformations() {
+    private Element createInformations(Client client) {
         float[] colsWidth = { 58f, 42f };
         PdfPTable table = new PdfPTable(colsWidth);
         table.setWidthPercentage(100);
@@ -113,13 +132,14 @@ public class PdfInvoiceCreator {
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(Chunk.NEWLINE);
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("SERAC France", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+        paragraph.add(new Phrase(client.getName(), FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("12 Route de Mamers, BP 46,", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+        Address clientAddress = client.getAddress();
+        paragraph.add(new Phrase(clientAddress.getStreet1(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("72402 La Ferté-Bernard Cedex", FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
+        paragraph.add(new Phrase(clientAddress.getPostalCode() + " " + clientAddress.getCity(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 12)));
         paragraph.add(Chunk.NEWLINE);
-        paragraph.add(new Phrase("N° Intracommunautaire: FR 63 340 321 801", FontFactory.getFont(
+        paragraph.add(new Phrase("N° Intracommunautaire: " + client.getNumeroIntracommunautaire(), FontFactory.getFont(
                 FontFactory.TIMES_ROMAN, 12)));
 
         cell = new PdfPCell(paragraph);
@@ -302,7 +322,7 @@ public class PdfInvoiceCreator {
             cell.setMinimumHeight(20);
             table.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(new Integer(command.getQuantity()).toString(), FontFactory.getFont(
+            cell = new PdfPCell(new Phrase(Integer.toString(command.getQuantity()), FontFactory.getFont(
                     FontFactory.TIMES_ROMAN, 12)));
             cell.setMinimumHeight(20);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
