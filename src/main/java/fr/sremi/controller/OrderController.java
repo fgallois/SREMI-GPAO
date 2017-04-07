@@ -3,8 +3,8 @@ package fr.sremi.controller;
 import fr.sremi.data.OrderData;
 import fr.sremi.data.OrderDetailData;
 import fr.sremi.data.invoice.InvoiceData;
-import fr.sremi.exception.ExcelException;
 import fr.sremi.services.OrderService;
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +18,8 @@ import java.util.List;
 @RestController
 public class OrderController {
 
+    private final Logger logger = Logger.getLogger(OrderController.class.getName());
+
     @Resource
     private OrderService orderService;
 
@@ -26,6 +28,7 @@ public class OrderController {
         try {
             return ResponseEntity.ok().body(orderService.importOrders());
         } catch (Exception e) {
+            logger.error("Could not import order", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
