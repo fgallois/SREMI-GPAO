@@ -13,25 +13,25 @@
                 gpaoConfig.config = response.data;
             });
 
-        this.updateCertificateNumber = function () {
-            var newNumber = JSON.stringify({documentNumber: gpaoConfig.config.certificateNumber});
-            $http.post('./certificateNumber', newNumber)
-                .then(function successCallback(response) {
-                    console.log("SUCCESS");
-                }, function errorCallback(response) {
-                    console.log("ERROR");
-                });
-        };
+        // this.updateCertificateNumber = function () {
+        //     var newNumber = JSON.stringify({documentNumber: gpaoConfig.config.certificateNumber});
+        //     $http.post('./certificateNumber', newNumber)
+        //         .then(function successCallback(response) {
+        //             console.log("SUCCESS");
+        //         }, function errorCallback(response) {
+        //             console.log("ERROR");
+        //         });
+        // };
 
-        this.updateWithVat = function () {
-            var newNumber = JSON.stringify({documentNumber: gpaoConfig.config.withVat});
-            $http.post('./withVat', newNumber)
-                .then(function successCallback(response) {
-                    console.log("SUCCESS");
-                }, function errorCallback(response) {
-                    console.log("ERROR");
-                });
-        };
+        // this.updateWithVat = function () {
+        //     var newNumber = JSON.stringify({documentNumber: gpaoConfig.config.withVat});
+        //     $http.post('./withVat', newNumber)
+        //         .then(function successCallback(response) {
+        //             console.log("SUCCESS");
+        //         }, function errorCallback(response) {
+        //             console.log("ERROR");
+        //         });
+        // };
 
         this.updateVatRate = function () {
             var newNumber = JSON.stringify({documentNumber: gpaoConfig.config.vatRate});

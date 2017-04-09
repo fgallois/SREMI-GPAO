@@ -1,12 +1,13 @@
 create database sremi CHARACTER SET=utf8 COLLATE=utf8_bin;
 grant all on sremi.* to sremi@localhost identified by 'sremi';
 
-insert into buyers (code, first_name, last_name) set('IH', 'Isabelle', 'Hrimel');
-insert into buyers (code, first_name, last_name) set('SB', 'Sebastien', 'Bolino');
+insert into buyers (code, first_name, last_name) values('IH', 'Isabelle', 'Hrimel');
+insert into buyers (code, first_name, last_name) values('SB', 'Sebastien', 'Bolino');
+insert into buyers (code, first_name, last_name) VALUES ('PO', 'Matthias', 'Kaser');
+insert into buyers (code, first_name, last_name) VALUES ('AP', 'Emilie', 'Renard');
 
-insert into addresses (street1, city, postalCode) values('12 Route de Mamers, BP 46,', 'La Ferté-Bernard Cedex', '72402');
+insert into addresses (street1, city, postal_code) values('12 Route de Mamers, BP 46,', 'La Ferté-Bernard Cedex', '72402');
+insert into clients (name, address_id, numero_intracommunautaire, order_filename, with_vat, certificate_number) values('SERAC France', 1, 'FR 63 340 321 801', 'CBSREMI.xls', 0, '03/2016');
 
-insert into clients (name, address_id, numero_intracommunautaire, order_filename) values('SERAC France', 1, 'FR 63 340 321 801', 'CBSREMI.xls');
-
-insert into addresses (street1, city, postalCode) values('12 Route de Mamers, BP 46,', 'La Ferté-Bernard Cedex', '72402');
-insert into clients (name, address_id, numero_intracommunautaire, order_filename) values('G2S - Group Supply And Support', 1, 'FR 20 538 041 187', 'CBG2S.xls');
+insert into addresses (street1, city, postal_code) values('ZA de la Cibole', 'La Chapelle du Bois', '72400');
+insert into clients (name, address_id, numero_intracommunautaire, order_filename, with_vat) values('SERAC - Group Supply And Support', 2, 'FR 20 538 041 187', 'CBG2S.xls', 1);

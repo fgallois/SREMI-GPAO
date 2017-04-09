@@ -63,24 +63,24 @@
                                    value="{{adminCtrl.config.invoiceArchivePath}}">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-md-5">
-                            <label for="attestation">Numéro d'Attestation</label>
-                            <input type="text" class="form-control" id="attestation"
-                                   ng-model="adminCtrl.config.certificateNumber"
-                                   ng-model-options="{ updateOn: 'blur' }"
-                                   ng-change="adminCtrl.updateCertificateNumber()"
-                                   aria-describedby="basic-addon1">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-3">
-                            <label for="withVat">Facture avec TVA</label>
-                            <input type="checkbox" id="withVat" ng-model="adminCtrl.config.withVat"
-                                   ng-model-options="{ updateOn: 'blur' }" ng-change="adminCtrl.updateWithVat()"
-                                   aria-describedby="basic-addon1">
-                        </div>
-                    </div>
+                    <!--<div class="row">-->
+                        <!--<div class="form-group col-md-5">-->
+                            <!--<label for="attestation">Numéro d'Attestation</label>-->
+                            <!--<input type="text" class="form-control" id="attestation"-->
+                                   <!--ng-model="adminCtrl.config.certificateNumber"-->
+                                   <!--ng-model-options="{ updateOn: 'blur' }"-->
+                                   <!--ng-change="adminCtrl.updateCertificateNumber()"-->
+                                   <!--aria-describedby="basic-addon1">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="row">-->
+                        <!--<div class="form-group col-md-3">-->
+                            <!--<label for="withVat">Facture avec TVA</label>-->
+                            <!--<input type="checkbox" id="withVat" ng-model="adminCtrl.config.withVat"-->
+                                   <!--ng-model-options="{ updateOn: 'blur' }" ng-change="adminCtrl.updateWithVat()"-->
+                                   <!--aria-describedby="basic-addon1">-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div class="row">
                         <div class="form-group col-md-3">
                             <label for="tva">Taux de TVA</label>

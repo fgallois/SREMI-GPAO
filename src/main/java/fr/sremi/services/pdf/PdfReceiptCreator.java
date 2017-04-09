@@ -1,27 +1,9 @@
 package fr.sremi.services.pdf;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
-import fr.sremi.dao.ClientRepository;
 import fr.sremi.dao.OrderRepository;
 import fr.sremi.data.OrderDetailData;
 import fr.sremi.data.ReceiptData;
@@ -33,6 +15,12 @@ import fr.sremi.services.ConfigurationService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @Component
 public class PdfReceiptCreator {
@@ -82,7 +70,7 @@ public class PdfReceiptCreator {
     }
 
     private Element createInformations(Client client) {
-        float[] colsWidth = { 58f, 42f };
+        float[] colsWidth = {58f, 42f};
         PdfPTable table = new PdfPTable(colsWidth);
         table.setWidthPercentage(100);
 
@@ -141,7 +129,7 @@ public class PdfReceiptCreator {
         paragraph.setSpacingBefore(20);
         paragraph.add(new Phrase("BON DE LIVRAISON", FontFactory.getFont(FontFactory.TIMES_BOLDITALIC, 14)));
 
-        float[] colsWidth = { 25f, 30f, 45f };
+        float[] colsWidth = {25f, 30f, 45f};
         PdfPTable table = new PdfPTable(colsWidth);
         table.setWidthPercentage(50);
         table.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -169,7 +157,7 @@ public class PdfReceiptCreator {
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         table.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(SimpleDateFormat.getDateInstance().format(new Date()), FontFactory.getFont(
+        cell = new PdfPCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy").format(new Date()), FontFactory.getFont(
                 FontFactory.TIMES_ROMAN, 12)));
         cell.setMinimumHeight(20);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
@@ -186,7 +174,7 @@ public class PdfReceiptCreator {
     }
 
     private Element createCommandTable(List<OrderDetailData> commands) {
-        float[] colsWidth = { 7f, 23f, 60f, 10f };
+        float[] colsWidth = {7f, 23f, 60f, 10f};
         PdfPTable table = new PdfPTable(colsWidth);
         table.setWidthPercentage(100);
         table.setSpacingBefore(40);

@@ -22,6 +22,11 @@ public class Client {
 
     private String numeroIntracommunautaire;
 
+    private String certificateNumber;
+
+    @NotNull
+    private Boolean withVat;
+
     @NotNull
     private String orderFilename;
 
@@ -55,6 +60,22 @@ public class Client {
 
     public void setNumeroIntracommunautaire(String numeroIntracommunautaire) {
         this.numeroIntracommunautaire = numeroIntracommunautaire;
+    }
+
+    public String getCertificateNumber() {
+        return certificateNumber;
+    }
+
+    public void setCertificateNumber(String certificateNumber) {
+        this.certificateNumber = certificateNumber;
+    }
+
+    public Boolean isWithVat() {
+        return withVat;
+    }
+
+    public void setWithVat(Boolean withVat) {
+        this.withVat = withVat;
     }
 
     public String getOrderFilename() {

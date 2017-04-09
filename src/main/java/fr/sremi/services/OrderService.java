@@ -70,9 +70,9 @@ public class OrderService {
 
     private void persistCommands(List<Command> commands, Client client) {
         for (Command command : commands) {
-            if (orderRepository.findByReference(command.getReference()) == null) {
-                Order order = new Order(command.getReference(), client);
-                order.setBuyer(buyerRepository.findByCode(command.getReference().substring(0, 2)));
+            Order order = orderRepository.findByReference(command.getReference());
+            if (order == null) {
+                order = new Order(command.getReference());
                 for (ItemCommand itemCommand : command.getItems()) {
                     Part part = partRepository.findByReference(itemCommand.getItem().getReference());
                     if (part == null) {
@@ -84,8 +84,10 @@ public class OrderService {
                             itemCommand.getDueDate());
                     order.addLineItem(lineItem);
                 }
-                orderRepository.save(order);
             }
+            order.setClient(client);
+            order.setBuyer(buyerRepository.findByCode(command.getReference().substring(0, 2)));
+            orderRepository.save(order);
         }
     }
 
@@ -128,8 +130,8 @@ public class OrderService {
         Order order = orderRepository.findByReference(orderRef);
         if (order != null) {
             result.setReference(order.getReference());
-            result.setCertificateNumber(configurationService.getCertificateNumber());
-            result.setWithVat(configurationService.isWithVat());
+            result.setCertificateNumber(order.getClient().getCertificateNumber());
+            result.setWithVat(order.getClient().isWithVat());
             result.setVatRate(configurationService.getVatRate());
 
             result.setReceipts(order.getReceipts().stream()

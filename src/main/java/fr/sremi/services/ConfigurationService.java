@@ -1,6 +1,5 @@
 package fr.sremi.services;
 
-import javafx.beans.binding.DoubleExpression;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +18,11 @@ public class ConfigurationService {
     @Value("${invoice.archive.file.path}")
     private String invoiceArchivePath;
 
-    @Value("${invoice.certificateNumber}")
-    private String certificateNumber;
-
-    @Value("${invoice.withVat}")
-    private boolean withVat;
+//    @Value("${invoice.certificateNumber}")
+//    private String certificateNumber;
+//
+//    @Value("${invoice.withVat}")
+//    private boolean withVat;
 
     @Value("${invoice.vatRate}")
     private Double vatRate;
@@ -52,21 +51,21 @@ public class ConfigurationService {
         this.invoiceArchivePath = invoiceArchivePath;
     }
 
-    public String getCertificateNumber() {
-        return certificateNumber;
-    }
+//    public String getCertificateNumber() {
+//        return certificateNumber;
+//    }
+//
+//    public void setCertificateNumber(String certificateNumber) {
+//        this.certificateNumber = certificateNumber;
+//    }
 
-    public void setCertificateNumber(String certificateNumber) {
-        this.certificateNumber = certificateNumber;
-    }
-
-    public boolean isWithVat() {
-        return withVat;
-    }
-
-    public void setWithVat(boolean withVat) {
-        this.withVat = withVat;
-    }
+//    public boolean isWithVat() {
+//        return withVat;
+//    }
+//
+//    public void setWithVat(boolean withVat) {
+//        this.withVat = withVat;
+//    }
 
     public Double getVatRate() {
         return vatRate;

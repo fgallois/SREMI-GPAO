@@ -1,15 +1,14 @@
 package fr.sremi.controller;
 
-import javax.annotation.Resource;
-
+import fr.sremi.data.DocumentNumber;
+import fr.sremi.services.ConfigurationService;
+import fr.sremi.services.GeneratorService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.sremi.data.DocumentNumber;
-import fr.sremi.services.ConfigurationService;
-import fr.sremi.services.GeneratorService;
+import javax.annotation.Resource;
 
 /**
  * Created by fgallois on 8/23/15.
@@ -28,7 +27,6 @@ public class ConfigurationController {
         return new GpaoConfiguration(generatorService.getCurrentReceiptNumber(),
                 generatorService.getCurrentInvoiceNumber(), configurationService.getBlArchivePath(),
                 configurationService.getInvoiceArchivePath(), configurationService.getExcelPath(),
-                configurationService.getCertificateNumber(), configurationService.isWithVat(),
                 configurationService.getVatRate());
     }
 
@@ -52,16 +50,6 @@ public class ConfigurationController {
         generatorService.saveInvoiceNumber(Integer.valueOf(invoiceNumber.getDocumentNumber()) - 1);
     }
 
-    @RequestMapping(value = "/certificateNumber", method = RequestMethod.POST)
-    public void updateCertificateNumber(@RequestBody DocumentNumber certificateNumber) {
-        configurationService.setCertificateNumber(certificateNumber.getDocumentNumber());
-    }
-
-    @RequestMapping(value = "/withVat", method = RequestMethod.POST)
-    public void updateWithVat(@RequestBody DocumentNumber certificateNumber) {
-        configurationService.setWithVat(Boolean.valueOf(certificateNumber.getDocumentNumber()));
-    }
-
     @RequestMapping(value = "/vatRate", method = RequestMethod.POST)
     public void updateVatRate(@RequestBody DocumentNumber certificateNumber) {
         configurationService.setVatRate(Double.valueOf(certificateNumber.getDocumentNumber()));
@@ -73,19 +61,15 @@ public class ConfigurationController {
         private final String receiptArchivePath;
         private final String invoiceArchivePath;
         private final String excelPath;
-        private final String certificateNumber;
-        private final Boolean withVat;
         private final Double vatRate;
 
         private GpaoConfiguration(int receiptNumber, int invoiceNumber, String receiptArchivePath,
-                String invoiceArchivePath, String excelPath, String certificateNumber, Boolean withVat, Double vatRate) {
+                                  String invoiceArchivePath, String excelPath, Double vatRate) {
             this.receiptNumber = receiptNumber;
             this.invoiceNumber = invoiceNumber;
             this.receiptArchivePath = receiptArchivePath;
             this.invoiceArchivePath = invoiceArchivePath;
             this.excelPath = excelPath;
-            this.certificateNumber = certificateNumber;
-            this.withVat = withVat;
             this.vatRate = vatRate;
 
         }
@@ -108,14 +92,6 @@ public class ConfigurationController {
 
         public String getExcelPath() {
             return excelPath;
-        }
-
-        public String getCertificateNumber() {
-            return certificateNumber;
-        }
-
-        public Boolean getWithVat() {
-            return withVat;
         }
 
         public Double getVatRate() {
