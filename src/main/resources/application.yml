@@ -15,10 +15,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
 
----
-spring:
-  profiles: default
-
 invoice:
   archive:
     file:
@@ -35,6 +31,3 @@ excel:
   file:
     path: C:\Dev\
 
----
-spring:
-  profiles: prod
