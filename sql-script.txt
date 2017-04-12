@@ -7,7 +7,10 @@ insert into buyers (code, first_name, last_name) VALUES ('PO', 'Matthias', 'Kase
 insert into buyers (code, first_name, last_name) VALUES ('AP', 'Emilie', 'Renard');
 
 insert into addresses (street1, city, postal_code) values('12 Route de Mamers, BP 46,', 'La Ferté-Bernard Cedex', '72402');
-insert into clients (name, address_id, numero_intracommunautaire, order_filename, with_vat, certificate_number) values('SERAC France', 1, 'FR 63 340 321 801', 'CBSREMI.xls', 0, '03/2016');
+insert into clients (name, address_id, numero_intracommunautaire, order_filename, with_vat, certificate_number) values('SERAC France', 1, 'FR 63 340 321 801', 'CBSREMI.xls', 0, '04/2017');
 
 insert into addresses (street1, city, postal_code) values('ZA de la Cibole', 'La Chapelle du Bois', '72400');
 insert into clients (name, address_id, numero_intracommunautaire, order_filename, with_vat) values('SERAC - Group Supply And Support', 2, 'FR 20 538 041 187', 'CBG2S.xls', 1);
+
+
+

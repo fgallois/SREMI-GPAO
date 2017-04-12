@@ -84,6 +84,40 @@ public class OrderService {
                             itemCommand.getDueDate());
                     order.addLineItem(lineItem);
                 }
+            } else {
+                List<LineItem> lineItems = order.getLineItems();
+                for (LineItem lineItem: lineItems) {
+                    boolean found = false;
+                    for (ItemCommand itemCommand: command.getItems()) {
+                        if (itemCommand.getItem().getReference().compareTo(lineItem.getPart().getReference()) == 0) {
+                            lineItem.setDueDate(itemCommand.getDueDate());
+                            found = true;
+                        }
+                    }
+                    if (!found) {
+                        // Line item has been delivered
+                        lineItem.setDelivered(Boolean.TRUE);
+                    }
+                }
+                for (ItemCommand itemCommand: command.getItems()) {
+                    boolean found = false;
+                    for (LineItem lineItem: lineItems) {
+                        if (lineItem.getPart().getReference().compareTo(itemCommand.getItem().getReference()) == 0) {
+                            found = true;
+                        }
+                    }
+                    if (!found) {
+                        Part part = partRepository.findByReference(itemCommand.getItem().getReference());
+                        if (part == null) {
+                            part = new Part(itemCommand.getItem().getReference(), itemCommand.getItem()
+                                    .getDescription());
+                            partRepository.save(part);
+                        }
+                        LineItem lineItem = new LineItem(itemCommand.getLine(), part, itemCommand.getQuantity(),
+                                itemCommand.getDueDate());
+                        order.addLineItem(lineItem);
+                    }
+                }
             }
             order.setClient(client);
             order.setBuyer(buyerRepository.findByCode(command.getReference().substring(0, 2)));
@@ -95,6 +129,7 @@ public class OrderService {
         Order order = orderRepository.findByReference(orderRef);
         if (order != null) {
             return orderRepository.findByReference(orderRef).getLineItems().stream()
+                    .filter(lineItem -> lineItem.getDelivered() == null || !lineItem.getDelivered())
                     .map(OrderDetailData::new)
                     .collect(Collectors.toList());
         }

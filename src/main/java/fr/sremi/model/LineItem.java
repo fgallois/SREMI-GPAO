@@ -36,6 +36,8 @@ public class LineItem {
 
     private Double unitPrice;
 
+    private Boolean delivered;
+
     protected LineItem() {
     }
 
@@ -92,5 +94,13 @@ public class LineItem {
 
     public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public Boolean getDelivered() {
+        return delivered;
+    }
+
+    public void setDelivered(Boolean delivered) {
+        this.delivered = delivered;
     }
 }
