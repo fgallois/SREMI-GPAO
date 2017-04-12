@@ -39,7 +39,7 @@ public class ExcelParserService {
                                     Collectors.mapping(row -> new ItemCommandBuilder()
                                                 .setLine(row.getCell(2))
                                                 .setReference(row.getCell(3))
-                                                .setDescription(row.getCell(7))
+                                                .setDescription(row.getCell(4))
                                                 .setEmplacement(row.getCell(5))
                                                 .setQuantity(row.getCell(6))
                                                 .setDueDate(row.getCell(7))
