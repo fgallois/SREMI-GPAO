@@ -10,6 +10,7 @@ import fr.sremi.model.*;
 import fr.sremi.util.InvoiceUtils;
 import fr.sremi.vo.Command;
 import fr.sremi.vo.ItemCommand;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -24,6 +25,7 @@ import java.util.stream.StreamSupport;
  */
 @Component
 public class OrderService {
+    private final Logger logger = Logger.getLogger(OrderService.class.getName());
 
     @Resource
     ConfigurationService configurationService;
@@ -57,7 +59,8 @@ public class OrderService {
                         persistCommands(clientCommands, client);
                         return clientCommands.stream();
                     } catch (ExcelException e) {
-                        throw new RuntimeException(e);
+                        logger.error("Failed importing commands for client: " + client.getName(), e);
+                        return null;
                     }
                 })
                 .collect(Collectors.toList());
@@ -86,9 +89,9 @@ public class OrderService {
                 }
             } else {
                 List<LineItem> lineItems = order.getLineItems();
-                for (LineItem lineItem: lineItems) {
+                for (LineItem lineItem : lineItems) {
                     boolean found = false;
-                    for (ItemCommand itemCommand: command.getItems()) {
+                    for (ItemCommand itemCommand : command.getItems()) {
                         if (itemCommand.getItem().getReference().compareTo(lineItem.getPart().getReference()) == 0) {
                             lineItem.setDueDate(itemCommand.getDueDate());
                             found = true;
@@ -99,9 +102,9 @@ public class OrderService {
                         lineItem.setDelivered(Boolean.TRUE);
                     }
                 }
-                for (ItemCommand itemCommand: command.getItems()) {
+                for (ItemCommand itemCommand : command.getItems()) {
                     boolean found = false;
-                    for (LineItem lineItem: lineItems) {
+                    for (LineItem lineItem : lineItems) {
                         if (lineItem.getPart().getReference().compareTo(itemCommand.getItem().getReference()) == 0) {
                             found = true;
                         }
